@@ -1,19 +1,18 @@
-from util import *
 import math
+
 # Add your import statements here
 
 
 class Evaluation():
 
-	def _get_true_doc_ids(self, qrels, query_id):
-		query_id = str(query_id)
-		return [item["id"] for item in qrels if str(item["query_num"]) == query_id]
-	def _get_true_doc_ids_with_position(self, qrels, query_id):
-		query_id = str(query_id)
+	def _normalize_id(self, value):
+		return str(value)
 
-		l = [(item["id"], item["position"]) for item in qrels if str(item["query_num"]) == query_id]
-		l.sort(key=lambda x: x[1])
-		return l
+
+	def _get_true_doc_ids(self, qrels, query_id):
+		query_id = self._normalize_id(query_id)
+		return [item["id"] for item in qrels if self._normalize_id(item["query_num"]) == query_id]
+
 	def queryPrecision(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
 		"""
 		Computation of precision of the Information Retrieval System
@@ -37,23 +36,26 @@ class Evaluation():
 			The precision value as a number between 0 and 1
 		"""
 
-		precision = -1
-		
-		retrieved = set(query_doc_IDs_ordered[:k])
-		retrieved = set([str(doc_id) for doc_id in retrieved])
-		relevant = set(true_doc_IDs).intersection(retrieved)
-		if len(retrieved) == 0:
+		if k <= 0:
 			return 0.0
-		precision = len(relevant) / len(retrieved)
-		
-		return precision
+
+		top_k = [self._normalize_id(doc_id) for doc_id in query_doc_IDs_ordered[:k]]
+		if not top_k:
+			return 0.0
+
+		relevant_docs = {self._normalize_id(doc_id) for doc_id in true_doc_IDs}
+		hits = sum(1 for doc_id in top_k if doc_id in relevant_docs)
+
+		return hits / float(len(top_k))
+
 
 	def meanPrecision(self, doc_IDs_ordered, query_ids, qrels, k):
 		"""
 		Computation of precision of the Information Retrieval System
 		at a given value of k, averaged over all the queries
 		"""
-		meanPrecision = -1
+		if not query_ids:
+			return 0.0
 
 		total_precision = 0.0
 		num_queries = min(len(doc_IDs_ordered), len(query_ids))
@@ -62,29 +64,25 @@ class Evaluation():
 			true_doc_IDs = self._get_true_doc_ids(qrels, query_id)
 			total_precision += self.queryPrecision(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		meanPrecision = total_precision / float(num_queries)
+		return total_precision / float(num_queries)
 
-
-		return meanPrecision
-
-
+	
 	def queryRecall(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
 		"""
 		Computation of recall of the Information Retrieval System
 		at a given value of k for a single query
 		"""
-		recall = -1
-		
-		retrieved = set(query_doc_IDs_ordered[:k])
-		retrieved = set([str(doc_id) for doc_id in retrieved])
-		relevant = set(true_doc_IDs).intersection(retrieved)
-		if len(retrieved) == 0:
+		if k <= 0:
 			return 0.0
-		recall = len(relevant) / len(true_doc_IDs)
-		
-		#Fill in code here
 
-		return recall
+		top_k = [self._normalize_id(doc_id) for doc_id in query_doc_IDs_ordered[:k]]
+		relevant_docs = {self._normalize_id(doc_id) for doc_id in true_doc_IDs}
+		if not relevant_docs:
+			return 0.0
+
+		hits = sum(1 for doc_id in top_k if doc_id in relevant_docs)
+
+		return hits / float(len(relevant_docs))
 
 
 	def meanRecall(self, doc_IDs_ordered, query_ids, qrels, k):
@@ -92,9 +90,9 @@ class Evaluation():
 		Computation of recall of the Information Retrieval System
 		at a given value of k, averaged over all the queries
 		"""
-		meanRecall = -1
+		if not query_ids:
+			return 0.0
 
-		#Fill in code here
 		total_recall = 0.0
 		num_queries = min(len(doc_IDs_ordered), len(query_ids))
 		for index in range(num_queries):
@@ -102,9 +100,7 @@ class Evaluation():
 			true_doc_IDs = self._get_true_doc_ids(qrels, query_id)
 			total_recall += self.queryRecall(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		meanRecall = total_recall / float(num_queries)
-
-		return meanRecall
+		return total_recall / float(num_queries)
 
 
 	def queryFscore(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
@@ -112,18 +108,12 @@ class Evaluation():
 		Computation of fscore of the Information Retrieval System
 		at a given value of k for a single query
 		"""
-		fscore = -1
-		retrieved = set(query_doc_IDs_ordered[:k])
-		retrieved = set([str(doc_id) for doc_id in retrieved])
-		relevant = set(true_doc_IDs).intersection(retrieved)
-		if len(retrieved) == 0:
-			return 0.0
-		recall = len(relevant) / len(true_doc_IDs)
-		precision = len(relevant) / len(retrieved)
+		precision = self.queryPrecision(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
+		recall = self.queryRecall(query_doc_IDs_ordered, query_id, true_doc_IDs, k)
 		if precision + recall == 0:
 			return 0.0
-		fscore = 2 * (precision * recall) / (precision + recall)
-		return fscore
+
+		return 2.0 * precision * recall / (precision + recall)
 
 
 	def meanFscore(self, doc_IDs_ordered, query_ids, qrels, k):
@@ -131,42 +121,44 @@ class Evaluation():
 		Computation of fscore of the Information Retrieval System
 		at a given value of k, averaged over all the queries
 		"""
-		meanFscore = -1
+		if not query_ids:
+			return 0.0
 
-		#Fill in code here
 		total_fscore = 0.0
 		num_queries = min(len(doc_IDs_ordered), len(query_ids))
 		for index in range(num_queries):
 			query_id = query_ids[index]
 			true_doc_IDs = self._get_true_doc_ids(qrels, query_id)
 			total_fscore += self.queryFscore(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
-		meanFscore = total_fscore / float(num_queries)
-		return meanFscore
 
+		return total_fscore / float(num_queries)
+	
 
 	def queryNDCG(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
 		"""
 		Computation of nDCG of the Information Retrieval System
 		at given value of k for a single query
 		"""
-		nDCG = -1
-		true_reli = {k:j for k,j in true_doc_IDs}
-		query_doc_IDs_ordered = ([str(doc_id) for doc_id in query_doc_IDs_ordered])
-		relevant_docs = set([(doc_id) for doc_id, _ in true_doc_IDs])
+		top_k = [self._normalize_id(doc_id) for doc_id in query_doc_IDs_ordered[:k]]
+		relevant_docs = {self._normalize_id(doc_id) for doc_id in true_doc_IDs}
+		if not relevant_docs:
+			return 0.0
+
 		def dcg(retrieved_docs):
 			score = 0.0
 			for rank, doc_id in enumerate(retrieved_docs, start=1):
 				if doc_id in relevant_docs:
-					score += (5-true_reli[doc_id]) / math.log2(rank + 1)
+					score += 1.0 / math.log2(rank + 1)
 			return score
 
-		ideal = sorted(true_doc_IDs, key=lambda x: x[1], reverse=False)[:k]
-		ideal_dcg = dcg([doc_id for doc_id, _ in ideal])
+		ideal_dcg = 0.0
+		for rank in range(1, min(k, len(relevant_docs)) + 1):
+			ideal_dcg += 1.0 / math.log2(rank + 1)
+
 		if ideal_dcg == 0:
 			return 0.0
-		d = dcg(query_doc_IDs_ordered[:k])
-		nDCG = d / ideal_dcg
-		return nDCG
+
+		return dcg(top_k) / ideal_dcg
 
 
 	def meanNDCG(self, doc_IDs_ordered, query_ids, qrels, k):
@@ -174,19 +166,17 @@ class Evaluation():
 		Computation of nDCG of the Information Retrieval System
 		at a given value of k, averaged over all the queries
 		"""
-		meanNDCG = -1
+		if not query_ids:
+			return 0.0
 
-		#Fill in code here
 		total_ndcg = 0.0
 		num_queries = min(len(doc_IDs_ordered), len(query_ids))
 		for index in range(num_queries):
 			query_id = query_ids[index]
-			true_doc_IDs = self._get_true_doc_ids_with_position(qrels, query_id)
+			true_doc_IDs = self._get_true_doc_ids(qrels, query_id)
 			total_ndcg += self.queryNDCG(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		meanNDCG = total_ndcg / float(num_queries)
-
-		return meanNDCG
+		return total_ndcg / float(num_queries)
 
 
 	def queryAveragePrecision(self, query_doc_IDs_ordered, query_id, true_doc_IDs, k):
@@ -195,11 +185,24 @@ class Evaluation():
 		at a given value of k for a single query (the average of precision@i
 		values for i such that the ith document is truly relevant)
 		"""
-		avgPrecision = -1
+		if k <= 0:
+			return 0.0
 
-		#Fill in code here
+		top_k = [self._normalize_id(doc_id) for doc_id in query_doc_IDs_ordered[:k]]
+		relevant_docs = {self._normalize_id(doc_id) for doc_id in true_doc_IDs}
+		if not relevant_docs:
+			return 0.0
 
-		return avgPrecision
+		hits = 0
+		sum_precision = 0.0
+		seen_relevant = set()
+		for rank, doc_id in enumerate(top_k, start=1):
+			if doc_id in relevant_docs and doc_id not in seen_relevant:
+				hits += 1
+				sum_precision += hits / float(rank)
+				seen_relevant.add(doc_id)
+
+		return sum_precision / float(len(relevant_docs))
 
 
 	def meanAveragePrecision(self, doc_IDs_ordered, query_ids, q_rels, k):
@@ -207,11 +210,17 @@ class Evaluation():
 		Computation of MAP of the Information Retrieval System
 		at given value of k, averaged over all the queries
 		"""
-		meanAveragePrecision = -1
+		if not query_ids:
+			return 0.0
 
-		#Fill in code here
+		total_average_precision = 0.0
+		num_queries = min(len(doc_IDs_ordered), len(query_ids))
+		for index in range(num_queries):
+			query_id = query_ids[index]
+			true_doc_IDs = self._get_true_doc_ids(q_rels, query_id)
+			total_average_precision += self.queryAveragePrecision(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		return meanAveragePrecision
+		return total_average_precision / float(num_queries)
 
 
 
@@ -236,11 +245,14 @@ class Evaluation():
 			Reciprocal rank value
 		"""
 
-		reciprocalRank = -1
+		top_k = [self._normalize_id(doc_id) for doc_id in query_doc_IDs_ordered[:k]]
+		relevant_docs = {self._normalize_id(doc_id) for doc_id in true_doc_IDs}
 
-		#Fill in code here
+		for rank, doc_id in enumerate(top_k, start=1):
+			if doc_id in relevant_docs:
+				return 1.0 / float(rank)
 
-		return reciprocalRank
+		return 0.0
 
 
 	def meanReciprocalRank(self, doc_IDs_ordered, query_ids, qrels, k):
@@ -265,8 +277,14 @@ class Evaluation():
 			MRR value
 		"""
 
-		meanReciprocalRank = -1
+		if not query_ids:
+			return 0.0
 
-		#Fill in code here
+		total_reciprocal_rank = 0.0
+		num_queries = min(len(doc_IDs_ordered), len(query_ids))
+		for index in range(num_queries):
+			query_id = query_ids[index]
+			true_doc_IDs = self._get_true_doc_ids(qrels, query_id)
+			total_reciprocal_rank += self.queryReciprocalRank(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		return meanReciprocalRank
+		return total_reciprocal_rank / float(num_queries)
