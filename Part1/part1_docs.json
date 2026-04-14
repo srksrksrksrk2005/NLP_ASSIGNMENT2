@@ -1,0 +1,30 @@
+[
+  {
+
+      "id" : 1,
+      "author" : "",
+      "bibliography" : "j. ae. scs. 25, 1958, 324.",
+      "body" : "The star in our solar system provides heat and light.",
+      "title" : "The star in our solar system provides heat and light."
+
+  },
+  {
+
+      "id" : 2,
+      "author" : "",
+      "bibliography" : "department of aeronautical engineering, rensselaer polytechnic institute troy, n.y.",
+      "body" : "That Hollywood star walked the red carpet for the movie premiere.",
+      "title" : "That Hollywood star walked the red carpet for the movie premiere."
+
+  },
+  {
+
+      "id" : 3,
+      "author" : "",
+      "bibliography" : "department of mathematics, university of manchester, manchester, england",
+      "body" : "Astronomers observe distant stars and galaxies using telescopes.",
+      "title" : "Astronomers observe distant stars and galaxies using telescopes."
+
+  }
+]
+
