@@ -197,7 +197,15 @@ class Evaluation():
 		"""
 		avgPrecision = -1
 
-		#Fill in code here
+		query_doc_IDs_ordered = ([str(doc_id) for doc_id in query_doc_IDs_ordered][:k])
+		relevant_docs = set([str(doc_id) for doc_id in true_doc_IDs])
+		num_relevant = 0
+		sum_precision = 0.0
+		for i in range(len(query_doc_IDs_ordered)):
+			if query_doc_IDs_ordered[i] in relevant_docs:
+				num_relevant += 1
+				sum_precision += num_relevant / (i + 1)
+		avgPrecision = sum_precision / len(relevant_docs) if len(relevant_docs) > 0 else 0.0
 
 		return avgPrecision
 
@@ -208,8 +216,15 @@ class Evaluation():
 		at given value of k, averaged over all the queries
 		"""
 		meanAveragePrecision = -1
+		
+		total_map = 0.0
+		num_queries = min(len(doc_IDs_ordered), len(query_ids))
+		for index in range(num_queries):
+			query_id = query_ids[index]
+			true_doc_IDs = self._get_true_doc_ids_with_position(q_rels, query_id)
+			total_map += self.queryAveragePrecision(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		#Fill in code here
+		meanAveragePrecision = total_map / float(num_queries)
 
 		return meanAveragePrecision
 
