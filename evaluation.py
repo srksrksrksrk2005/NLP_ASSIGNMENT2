@@ -196,9 +196,8 @@ class Evaluation():
 		values for i such that the ith document is truly relevant)
 		"""
 		avgPrecision = -1
-
 		query_doc_IDs_ordered = ([str(doc_id) for doc_id in query_doc_IDs_ordered][:k])
-		relevant_docs = set([str(doc_id) for doc_id in true_doc_IDs])
+		relevant_docs = set([(doc_id) for doc_id, _ in true_doc_IDs])
 		num_relevant = 0
 		sum_precision = 0.0
 		for i in range(len(query_doc_IDs_ordered)):

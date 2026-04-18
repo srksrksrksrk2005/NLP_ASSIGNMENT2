@@ -4,7 +4,7 @@ from inflectionReduction import InflectionReduction
 from stopwordRemoval import StopwordRemoval
 from informationRetrieval import InformationRetrieval
 from evaluation import Evaluation
-
+import time
 from sys import version_info
 import argparse
 import json
@@ -198,7 +198,7 @@ class SearchEngine:
 
 
 if __name__ == "__main__":
-
+    start_time = time.time()
     parser = argparse.ArgumentParser(description='main.py')
 
     parser.add_argument('-dataset', default="cranfield/")
@@ -215,3 +215,5 @@ if __name__ == "__main__":
         searchEngine.handleCustomQuery()
     else:
         searchEngine.evaluateDataset()
+    end_time = time.time()
+    print(f"Total execution time: {end_time - start_time} seconds")
