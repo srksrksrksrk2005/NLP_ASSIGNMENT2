@@ -1,0 +1,148 @@
+% Project report template for CS6370 — Parts 1–4 (Cranfield IR)
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\title{Project Report: Improving a Vector-Space IR System\\(Parts 1--4)}
+\author{Name: \underline{\hspace{6cm}} \\
+Roll No.: \underline{\hspace{4cm}}}
+\date{}
+
+\begin{document}
+\maketitle
+\begin{center}
+\textbf{Course:} CS6370 -- Natural Language Processing\\
+\textbf{Dataset:} Cranfield (1400 documents, 225 queries)
+\end{center}
+
+\begin{abstract}
+This document is a working LaTeX template for the CS6370 project report. It contains
+the report structure required by the assignment and an initial draft for Parts 1--4.
+Fill in code snippets, figures, tables, and results produced by your implementation.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+This project implements and analyses an Information Retrieval (IR) system based on the
+Vector Space Model (VSM) using the Cranfield dataset. Parts 1--4 of the project cover:
+preprocessing and indexing, the TF--IDF representation and retrieval, evaluation of the
+basic IR system using standard metrics, and an analysis of VSM limitations with concrete
+examples. Subsequent parts will investigate improvements to the baseline system.
+
+\subsection{Objectives}
+\begin{itemize}[noitemsep]
+  \item Build a reproducible pipeline for preprocessing (segmentation, tokenization,
+    stopword removal, stemming/lemmatization) and inverted index construction.
+  \item Represent documents and queries with TF--IDF vectors and implement retrieval
+    using cosine similarity and ranking.
+  \item Evaluate retrieval with Precision@k, Recall@k, F0.5@k, AP@k, nDCG@k, MAP and MRR.
+  \item Analyse limitations of VSM and propose concrete improvements for the project.
+\end{itemize}
+
+\section{Limitations of the Vector Space Model (VSM)}
+Below we summarise key limitations of the classical TF--IDF VSM and illustrate them
+using examples drawn from the Cranfield dataset and the assignment's toy examples.
+
+\subsection{Term independence and lack of semantics}
+VSM treats terms as independent dimensions. This prevents the model from capturing
+semantic relations (synonymy) or disambiguating multiple senses (polysemy). For
+example, the word \emph{"star"} is ambiguous: it can mean an astronomical star or
+a movie star. A query like ``movie star'' should ideally retrieve documents about
+celebrities (assignment's d2), but a naive VSM may return documents about the sun
+if those documents share the token \textit{star} and related words.
+
+\subsection{Zero-result / OOV (Out-of-Vocabulary) problem}
+When a query contains terms not present in the indexed vocabulary, the standard
+TF--IDF implementation yields zero overlap and hence no matches. For example, a
+specialised technical term absent from the Cranfield vocabulary will cause the
+system to return no results unless query-expansion or robust matching is used.
+
+\subsection{Sensitivity to surface form and morphology}
+Differences such as plurals, inflections, or spelling variants (``computer'' vs
+``computers'' or misspellings) reduce matching quality unless normalization like
+stemming or lemmatization is applied. Stemming may help but can also over-conflate
+distinct terms.
+
+\subsection{Document length and term weighting issues}
+Raw TF favors longer documents; TF--IDF mitigates this but requires careful
+normalization (e.g., cosine normalization). Ranking can still be suboptimal when
+documents differ widely in length or in the amount of topical vs filler text.
+
+\subsection{Lack of phrase/positional information}
+VSM typically discards term order and proximity, making it unable to distinguish
+``information retrieval'' from documents that contain the words far apart.
+
+\section{Proposed Approaches to Address These Issues}
+This section lists candidate methods to address the limitations above. These are
+not all required to be implemented; they serve as a roadmap for Part 5 (project).
+
+\subsection{Semantic representations}
+\begin{itemize}[noitemsep]
+  \item Latent Semantic Analysis (LSA): SVD on the term-document matrix to capture
+    latent concepts (reduces synonymy effects).
+  \item Word embeddings (Word2Vec, GloVe) or contextual embeddings (BERT): represent
+    terms and queries in dense semantic space and use cosine similarity there.
+\end{itemize}
+
+\subsection{Improved retrieval models}
+\begin{itemize}[noitemsep]
+  \item BM25 / Language models: probabilistic scoring functions that often outperform
+    plain TF--IDF in practice.
+  \item Query expansion and pseudo-relevance feedback: expand queries with related
+    terms or top-retrieved terms to improve recall.
+\end{itemize}
+
+\subsection{Robust preprocessing}
+Better tokenization, lemmatization, spelling correction, and handling of multi-word
+expressions (n-grams / phrases) reduce surface-form mismatches.
+
+\section{Dataset Description}
+We use the Cranfield dataset provided with the assignment. Key statistics (computed
+from the provided JSON files):
+\begin{itemize}[noitemsep]
+  \item Documents: 1400 (see cranfield/cran_docs.json)
+  \item Queries: 225 (see cranfield/cran_queries.json)
+  \item Relevance judgments: cranfield/cran_qrels.json (use relevance > 0 as relevant)
+\end{itemize}
+
+Include in this section a short description of the JSON fields you use (e.g., id,
+title, body) and any preprocessing steps (lowercasing, punctuation removal, tokenization,
+stopword list, stemmer choice).
+
+\subsection{Practical notes}
+Place code and outputs in a single folder for submission: \texttt{RollNo.zip} containing
+the code folder and a PDF with textual answers, as required by the assignment.
+
+\section*{How to compile this template}
+Run the following from the folder containing \texttt{project_report.tex}:
+\begin{verbatim}
+pdflatex project_report.tex
+pdflatex project_report.tex
+\end{verbatim}
+
+\section*{Next steps}
+Complete Part 1--4 artifacts by:
+\begin{itemize}[noitemsep]
+  \item Adding the implemented code screenshots and key snippets into an \texttt{appendix}.
+  \item Populating the evaluation section with plots for metrics vs k (Part 3).
+  \item Adding concrete retrieval examples (tables) that show failure cases for VSM.
+\end{itemize}
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+\bibitem{salton1996}
+G. Salton and C. Buckley. Term-weighting approaches in automatic text retrieval.
+\emph{Information Processing & Management}, 1996.
+\end{thebibliography}
+
+\end{document}
