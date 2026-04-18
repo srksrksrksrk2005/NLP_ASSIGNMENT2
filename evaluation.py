@@ -250,9 +250,14 @@ class Evaluation():
 			Reciprocal rank value
 		"""
 
-		reciprocalRank = -1
+		reciprocalRank = 0
 
-		#Fill in code here
+		query_doc_IDs_ordered = ([str(doc_id) for doc_id in query_doc_IDs_ordered][:k])
+		relevant_docs = set([(doc_id) for doc_id, _ in true_doc_IDs])
+		for i, doc_id in enumerate(query_doc_IDs_ordered):
+			if doc_id in relevant_docs:
+				reciprocalRank = 1 / (i + 1)
+				break
 
 		return reciprocalRank
 
@@ -280,7 +285,14 @@ class Evaluation():
 		"""
 
 		meanReciprocalRank = -1
+		
+		total_rr = 0.0
+		num_queries = min(len(doc_IDs_ordered), len(query_ids))
+		for index in range(num_queries):
+			query_id = query_ids[index]	
+			true_doc_IDs = self._get_true_doc_ids_with_position(qrels, query_id)
+			total_rr += self.queryReciprocalRank(doc_IDs_ordered[index], query_id, true_doc_IDs, k)
 
-		#Fill in code here
+		meanReciprocalRank = total_rr / float(num_queries)
 
 		return meanReciprocalRank
