@@ -2,12 +2,12 @@ import argparse
 import csv
 import json
 import time
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Sequence
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
 from core.data import get_docs_ids_and_texts, get_query_ids_and_texts, load_cranfield_dataset
@@ -24,6 +24,44 @@ from expansion.embedding_matrices import (
 from expansion.wordnet_matrix import WordNetOOVResolver, build_wordnet_neighbor_map
 
 
+BASELINE_METHOD = "baseline_tfidf"
+
+CUSTOM_QUERY_CASES = [
+    {
+        "id": "custom_slip_flow",
+        "title": "slip-flow heat transfer in internal channels",
+        "query": "slip-flow heat transfer in internal channels",
+        "closest_query": "9",
+    },
+    {
+        "id": "custom_hypersonic_transition",
+        "title": "transition detection in hypersonic wakes behind slender bodies",
+        "query": "transition detection in hypersonic wakes behind slender bodies",
+        "closest_query": "40",
+    },
+    {
+        "id": "custom_flutter_shapes",
+        "title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+        "query": "replace vibrational shapes with static deflection shapes for flutter prediction",
+        "closest_query": "64",
+    },
+    {
+        "id": "custom_shock_separation",
+        "title": "shock-induced boundary-layer separation",
+        "query": "shock-induced boundary-layer separation",
+        "closest_query": "90",
+    },
+    {
+        "id": "custom_oov_liftbody",
+        "title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+        "query": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+        "closest_query": "81",
+    },
+]
+
+DATASET_CASE_QUERY_IDS = ["9", "39", "40", "51", "64", "81", "90"]
+
+
 def parse_args() -> argparse.Namespace:
     base_dir = Path(__file__).resolve().parents[3]
     default_dataset = base_dir / "cranfield"
@@ -35,21 +73,34 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--methods",
-        default="wordnet,embedding_tfidf,embedding_lsa,embedding_esa,embedding_word2vec",
+        default="baseline_tfidf,wordnet,embedding_tfidf,embedding_lsa,embedding_esa,embedding_word2vec",
         help=(
-            "Comma-separated methods from: wordnet, embedding_tfidf, embedding_lsa, "
-            "embedding_esa, embedding_word2vec"
+            "Comma-separated methods from: baseline_tfidf, wordnet, embedding_tfidf, "
+            "embedding_lsa, embedding_esa, embedding_word2vec"
         ),
     )
 
     parser.add_argument("--top-k-neighbors", type=int, default=10)
-    parser.add_argument("--min-similarity", type=float, default=0.05)
+    parser.add_argument("--min-similarity", type=float, default=0.08)
 
     parser.add_argument("--self-weight", type=float, default=1.0)
-    parser.add_argument("--expansion-weight", type=float, default=0.35)
-    parser.add_argument("--replacement-weight", type=float, default=1.0)
-    parser.add_argument("--replacement-expansion-weight", type=float, default=0.35)
+    parser.add_argument("--expansion-weight", type=float, default=0.20)
+    parser.add_argument("--replacement-weight", type=float, default=0.85)
+    parser.add_argument("--replacement-expansion-weight", type=float, default=0.15)
     parser.add_argument("--max-oov-candidates", type=int, default=5)
+
+    parser.add_argument(
+        "--disable-mean-sim-threshold",
+        action="store_true",
+        help="Disable adaptive mean-similarity thresholding in expansion.",
+    )
+    parser.add_argument("--mean-sim-factor", type=float, default=1.0)
+    parser.add_argument(
+        "--disable-neighbor-mass-normalization",
+        action="store_true",
+        help="Disable normalized mass allocation across neighbors.",
+    )
+    parser.add_argument("--similarity-power", type=float, default=1.0)
 
     parser.add_argument("--lsa-components", type=int, default=128)
     parser.add_argument("--esa-top-concepts", type=int, default=100)
@@ -70,6 +121,41 @@ def parse_args() -> argparse.Namespace:
 
     return parser.parse_args()
 
+
+def _baseline_query_vectors(
+    processed_queries: List[List[List[str]]],
+    term_to_idx: Dict[str, int],
+    vocab_size: int,
+    show_progress: bool = True,
+    logger: Callable[[str], None] | None = None,
+    log_every: int = 25,
+) -> np.ndarray:
+    vectors = np.zeros((len(processed_queries), vocab_size), dtype=np.float64)
+    total_queries = len(processed_queries)
+    started = time.time()
+
+    if logger is not None:
+        logger(f"Building baseline query vectors for {total_queries} queries")
+
+    query_iter = tqdm(
+        processed_queries,
+        desc="Baseline query vectors",
+        unit="query",
+        disable=not show_progress,
+    )
+
+    for idx, query in enumerate(query_iter):
+        counts = Counter(flatten_query_tokens(query))
+        for term, value in counts.items():
+            term_idx = term_to_idx.get(term)
+            if term_idx is not None:
+                vectors[idx, term_idx] += float(value)
+
+        done = idx + 1
+        if logger is not None and (done == 1 or done % max(1, log_every) == 0 or done == total_queries):
+            logger(f"Baseline vectors progress: {done}/{total_queries} queries (elapsed {time.time() - started:.1f}s)")
+
+    return vectors
 
 
 def _query_vectors_for_expander(
@@ -104,7 +190,6 @@ def _query_vectors_for_expander(
     return vectors
 
 
-
 def _preview_query_expansion(
     query_id: str,
     query_tokens: List[List[str]],
@@ -123,10 +208,9 @@ def _preview_query_expansion(
     }
 
 
-
-def _plot_method_metrics(method_name: str, metrics: Dict[str, Dict[str, float]], output_path: Path) -> None:
+def _metric_series(metrics: Dict[str, Dict[str, float]]) -> Dict[str, List[float]]:
     ks = sorted(int(k) for k in metrics.keys())
-    series = {
+    return {
         "Precision": [metrics[str(k)]["precision"] for k in ks],
         "Recall": [metrics[str(k)]["recall"] for k in ks],
         "F-Score": [metrics[str(k)]["fscore"] for k in ks],
@@ -135,21 +219,41 @@ def _plot_method_metrics(method_name: str, metrics: Dict[str, Dict[str, float]],
         "MRR": [metrics[str(k)]["mrr"] for k in ks],
     }
 
+
+def _plot_method_metrics(
+    method_name: str,
+    metrics: Dict[str, Dict[str, float]],
+    output_path: Path,
+    baseline_metrics: Dict[str, Dict[str, float]] | None = None,
+    baseline_name: str = BASELINE_METHOD,
+) -> None:
+    ks = sorted(int(k) for k in metrics.keys())
+    series = _metric_series(metrics)
+    baseline_series = _metric_series(baseline_metrics) if baseline_metrics is not None else None
+
     plt.figure(figsize=(10, 6))
     for label, values in series.items():
-        plt.plot(ks, values, marker="o", linewidth=2, label=label)
+        plt.plot(ks, values, marker="o", linewidth=2.2, label=f"{method_name} {label}")
+
+    if baseline_series is not None and method_name != baseline_name:
+        for label, values in baseline_series.items():
+            plt.plot(ks, values, linewidth=1.6, linestyle="--", alpha=0.8, label=f"{baseline_name} {label}")
+
     plt.title(f"Evaluation Metrics - {method_name}")
     plt.xlabel("k")
     plt.ylabel("Score")
     plt.grid(True, alpha=0.25)
-    plt.legend(ncol=2)
+    plt.legend(ncol=2, fontsize=8)
     plt.tight_layout()
     plt.savefig(output_path, dpi=180)
     plt.close()
 
 
-
-def _plot_overlay_metrics(all_results: Dict[str, Dict[str, Dict[str, float]]], output_path: Path) -> None:
+def _plot_overlay_metrics(
+    all_results: Dict[str, Dict[str, Dict[str, float]]],
+    output_path: Path,
+    baseline_name: str = BASELINE_METHOD,
+) -> None:
     if not all_results:
         return
 
@@ -163,7 +267,10 @@ def _plot_overlay_metrics(all_results: Dict[str, Dict[str, Dict[str, float]]], o
         "mrr": "MRR",
     }
     ks = sorted(int(k) for k in next(iter(all_results.values())).keys())
+
     methods = list(all_results.keys())
+    if baseline_name in methods:
+        methods = [baseline_name] + [m for m in methods if m != baseline_name]
 
     fig, axes = plt.subplots(2, 3, figsize=(16, 9), sharex=True)
     axes = axes.flatten()
@@ -171,8 +278,8 @@ def _plot_overlay_metrics(all_results: Dict[str, Dict[str, Dict[str, float]]], o
     for axis, metric_name in zip(axes, metric_names):
         for method in methods:
             values = [all_results[method][str(k)][metric_name] for k in ks]
-            if method == "embedding_tfidf":
-                axis.plot(ks, values, marker="o", linewidth=3, linestyle="--", label=f"{method} baseline")
+            if method == baseline_name:
+                axis.plot(ks, values, marker="o", linewidth=3, linestyle="--", color="black", label=method)
             else:
                 axis.plot(ks, values, marker="o", linewidth=1.8, label=method)
         axis.set_title(pretty_names[metric_name])
@@ -181,12 +288,292 @@ def _plot_overlay_metrics(all_results: Dict[str, Dict[str, Dict[str, float]]], o
         axis.set_ylabel("Score")
 
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=min(3, len(labels)), frameon=False)
-    fig.suptitle("Cranfield Query Expansion Comparison Across Methods", y=0.98)
+    fig.legend(handles, labels, loc="upper center", ncol=min(4, len(labels)), frameon=False)
+    fig.suptitle("Cranfield Method Comparison (Baseline vs Expanded Queries)", y=0.98)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
     fig.savefig(output_path, dpi=180)
     plt.close(fig)
 
+
+def _build_relevant_lookup(qrels: List[Dict]) -> Dict[str, set]:
+    lookup: Dict[str, set] = defaultdict(set)
+    for item in qrels:
+        lookup[str(item["query_num"])].add(str(item["id"]))
+    return lookup
+
+
+def _top_k_hit_count(ranked_docs: Sequence[str], relevant_docs: set, k: int = 5) -> int:
+    return sum(1 for doc_id in ranked_docs[:k] if str(doc_id) in relevant_docs)
+
+
+def _write_example_comparison(
+    output_dir: Path,
+    methods: List[str],
+    qrels: List[Dict],
+    query_text_lookup: Dict[str, str],
+    dataset_rankings_by_method: Dict[str, Dict[str, List[str]]],
+    custom_rankings_by_method: Dict[str, Dict[str, List[str]]],
+    baseline_name: str = BASELINE_METHOD,
+) -> Dict[str, List[Dict]]:
+    relevant_lookup = _build_relevant_lookup(qrels)
+
+    dataset_rows: List[Dict] = []
+    for query_id in DATASET_CASE_QUERY_IDS:
+        relevant = relevant_lookup.get(query_id, set())
+        for method in methods:
+            ranked = dataset_rankings_by_method.get(method, {}).get(query_id, [])
+            dataset_rows.append(
+                {
+                    "case_type": "dataset",
+                    "query_id": query_id,
+                    "query_text": query_text_lookup.get(query_id, ""),
+                    "method": method,
+                    "top5_docs": ranked[:5],
+                    "hits_at_5": _top_k_hit_count(ranked, relevant, k=5),
+                    "num_relevant_total": len(relevant),
+                }
+            )
+
+    custom_rows: List[Dict] = []
+    for case in CUSTOM_QUERY_CASES:
+        mapped_query_id = str(case["closest_query"])
+        relevant = relevant_lookup.get(mapped_query_id, set())
+        for method in methods:
+            ranked = custom_rankings_by_method.get(method, {}).get(case["id"], [])
+            custom_rows.append(
+                {
+                    "case_type": "custom",
+                    "case_id": case["id"],
+                    "case_title": case["title"],
+                    "query_text": case["query"],
+                    "mapped_query_id": mapped_query_id,
+                    "method": method,
+                    "top5_docs": ranked[:5],
+                    "hits_at_5": _top_k_hit_count(ranked, relevant, k=5),
+                    "num_relevant_total": len(relevant),
+                }
+            )
+
+    comparison = {
+        "dataset_cases": dataset_rows,
+        "custom_cases": custom_rows,
+    }
+
+    (output_dir / "example_query_comparison.json").write_text(
+        json.dumps(comparison, indent=2),
+        encoding="utf-8",
+    )
+
+    dataset_summary = []
+    for query_id in DATASET_CASE_QUERY_IDS:
+        case_rows = [row for row in dataset_rows if row["query_id"] == query_id]
+        best_row = max(case_rows, key=lambda row: row["hits_at_5"])
+        baseline_hits = 0
+        for row in case_rows:
+            if row["method"] == baseline_name:
+                baseline_hits = row["hits_at_5"]
+                break
+        dataset_summary.append(
+            {
+                "query_id": query_id,
+                "query_text": query_text_lookup.get(query_id, ""),
+                "baseline_hits": baseline_hits,
+                "best_method": best_row["method"],
+                "best_hits": best_row["hits_at_5"],
+                "delta_hits": best_row["hits_at_5"] - baseline_hits,
+            }
+        )
+
+    custom_summary = []
+    for case in CUSTOM_QUERY_CASES:
+        case_rows = [row for row in custom_rows if row["case_id"] == case["id"]]
+        best_row = max(case_rows, key=lambda row: row["hits_at_5"])
+        baseline_hits = 0
+        for row in case_rows:
+            if row["method"] == baseline_name:
+                baseline_hits = row["hits_at_5"]
+                break
+        custom_summary.append(
+            {
+                "case_id": case["id"],
+                "case_title": case["title"],
+                "mapped_query_id": case["closest_query"],
+                "baseline_hits": baseline_hits,
+                "best_method": best_row["method"],
+                "best_hits": best_row["hits_at_5"],
+                "delta_hits": best_row["hits_at_5"] - baseline_hits,
+            }
+        )
+
+    lines = []
+    lines.append("# Example Query Comparison")
+    lines.append("")
+    lines.append("## Dataset Query Cases")
+    lines.append("")
+    lines.append("| Query ID | Method | Hits@5 | Top-5 Docs |")
+    lines.append("| --- | --- | ---: | --- |")
+    for query_id in DATASET_CASE_QUERY_IDS:
+        rows = [row for row in dataset_rows if row["query_id"] == query_id]
+        for row in rows:
+            lines.append(
+                f"| {query_id} | {row['method']} | {row['hits_at_5']} | {', '.join(row['top5_docs'])} |"
+            )
+
+    lines.append("")
+    lines.append("## Custom Query Cases (mapped to closest Cranfield query)")
+    lines.append("")
+    lines.append("| Case | Mapped Query | Method | Hits@5 | Top-5 Docs |")
+    lines.append("| --- | --- | --- | ---: | --- |")
+    for case in CUSTOM_QUERY_CASES:
+        rows = [row for row in custom_rows if row["case_id"] == case["id"]]
+        for row in rows:
+            lines.append(
+                f"| {case['title']} | {case['closest_query']} | {row['method']} | {row['hits_at_5']} | {', '.join(row['top5_docs'])} |"
+            )
+
+    (output_dir / "example_query_comparison.md").write_text("\n".join(lines), encoding="utf-8")
+
+    return {
+        "dataset_summary": dataset_summary,
+        "custom_summary": custom_summary,
+    }
+
+
+def _write_experiment_report(
+    report_path: Path,
+    output_dir: Path,
+    all_results: Dict[str, Dict[str, Dict[str, float]]],
+    args: argparse.Namespace,
+    example_summary: Dict[str, List[Dict]],
+    baseline_name: str = BASELINE_METHOD,
+) -> None:
+    if not all_results:
+        return
+
+    k10 = {method: metrics["10"] for method, metrics in all_results.items()}
+    ordered_methods = list(all_results.keys())
+    if baseline_name in ordered_methods:
+        ordered_methods = [baseline_name] + [m for m in ordered_methods if m != baseline_name]
+
+    baseline_k10 = k10.get(baseline_name)
+
+    best_by_metric = {}
+    metric_names = ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
+    for metric in metric_names:
+        best_method = max(ordered_methods, key=lambda m: k10[m][metric])
+        best_by_metric[metric] = (best_method, k10[best_method][metric])
+
+    lines: List[str] = []
+    lines.append("# Query Expansion Experiment Report")
+    lines.append("")
+    lines.append("## What Was Fixed")
+    lines.append("")
+    lines.append("1. Added a true non-expanded TF-IDF baseline (`baseline_tfidf`) for correct comparison.")
+    lines.append("2. Kept retrieval model fixed to base TF-IDF document index; expansion is applied only to queries.")
+    lines.append("3. Added adaptive similarity thresholding using mean similarity filtering.")
+    lines.append("4. Added normalized neighbor mass allocation so expansion does not overpower original query terms.")
+    lines.append("5. Added method-vs-baseline plots and full overlay plots.")
+    lines.append("6. Added explicit example-case comparisons for the report query set.")
+    lines.append("7. Added persistent WordNet graph caching on disk for faster reruns.")
+    lines.append("")
+    lines.append("## Run Configuration")
+    lines.append("")
+    lines.append(f"- Dataset: {args.dataset}")
+    lines.append(f"- Methods: {', '.join(ordered_methods)}")
+    lines.append(f"- top_k_neighbors: {args.top_k_neighbors}")
+    lines.append(f"- min_similarity: {args.min_similarity}")
+    lines.append(f"- self_weight: {args.self_weight}")
+    lines.append(f"- expansion_weight: {args.expansion_weight}")
+    lines.append(f"- replacement_weight: {args.replacement_weight}")
+    lines.append(f"- replacement_expansion_weight: {args.replacement_expansion_weight}")
+    lines.append(f"- adaptive_mean_similarity_threshold: {not args.disable_mean_sim_threshold}")
+    lines.append(f"- mean_similarity_factor: {args.mean_sim_factor}")
+    lines.append(f"- normalize_neighbor_mass: {not args.disable_neighbor_mass_normalization}")
+    lines.append(f"- similarity_power: {args.similarity_power}")
+    lines.append("")
+    lines.append("## k=10 Scores")
+    lines.append("")
+    lines.append("| Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |")
+    lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: |")
+    for method in ordered_methods:
+        m = k10[method]
+        lines.append(
+            f"| {method} | {m['precision']:.4f} | {m['recall']:.4f} | {m['fscore']:.4f} | {m['map']:.4f} | {m['ndcg']:.4f} | {m['mrr']:.4f} |"
+        )
+
+    if baseline_k10 is not None:
+        lines.append("")
+        lines.append("## Delta vs Baseline (k=10)")
+        lines.append("")
+        lines.append("| Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |")
+        lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: |")
+        for method in ordered_methods:
+            if method == baseline_name:
+                continue
+            m = k10[method]
+            lines.append(
+                "| {} | {:+.4f} | {:+.4f} | {:+.4f} | {:+.4f} | {:+.4f} | {:+.4f} |".format(
+                    method,
+                    m["precision"] - baseline_k10["precision"],
+                    m["recall"] - baseline_k10["recall"],
+                    m["fscore"] - baseline_k10["fscore"],
+                    m["map"] - baseline_k10["map"],
+                    m["ndcg"] - baseline_k10["ndcg"],
+                    m["mrr"] - baseline_k10["mrr"],
+                )
+            )
+
+    lines.append("")
+    lines.append("## Best Method Per Metric at k=10")
+    lines.append("")
+    for metric in metric_names:
+        method, value = best_by_metric[metric]
+        lines.append(f"- {metric}: {method} ({value:.4f})")
+
+    lines.append("")
+    lines.append("## Example Cases Summary")
+    lines.append("")
+    lines.append("### Dataset Query Cases")
+    lines.append("")
+    lines.append("| Query ID | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |")
+    lines.append("| --- | ---: | --- | ---: | ---: |")
+    for row in example_summary.get("dataset_summary", []):
+        lines.append(
+            f"| {row['query_id']} | {row['baseline_hits']} | {row['best_method']} | {row['best_hits']} | {row['delta_hits']:+d} |"
+        )
+
+    lines.append("")
+    lines.append("### Custom Query Cases")
+    lines.append("")
+    lines.append("| Case | Mapped Query | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |")
+    lines.append("| --- | --- | ---: | --- | ---: | ---: |")
+    for row in example_summary.get("custom_summary", []):
+        lines.append(
+            f"| {row['case_title']} | {row['mapped_query_id']} | {row['baseline_hits']} | {row['best_method']} | {row['best_hits']} | {row['delta_hits']:+d} |"
+        )
+
+    lines.append("")
+    lines.append("## Limitation-Solving Score Table (updated)")
+    lines.append("")
+    lines.append("| Method | Semantic | Dim/Cost | Scale | Ambiguity | OOV | Context | Sparse |")
+    lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+    lines.append("| baseline_tfidf | 2/10 | 6/10 | 6/10 | 2/10 | 1/10 | 2/10 | 2/10 |")
+    lines.append("| wordnet | 8/10 | 3/10 | 3/10 | 7/10 | 8/10 | 5/10 | 3/10 |")
+    lines.append("| embedding_tfidf | 4/10 | 6/10 | 6/10 | 3/10 | 2/10 | 3/10 | 3/10 |")
+    lines.append("| embedding_lsa | 5/10 | 5/10 | 5/10 | 4/10 | 2/10 | 4/10 | 7/10 |")
+    lines.append("| embedding_esa | 6/10 | 4/10 | 5/10 | 4/10 | 3/10 | 4/10 | 7/10 |")
+    lines.append("| embedding_word2vec | 7/10 | 5/10 | 5/10 | 5/10 | 4/10 | 5/10 | 5/10 |")
+
+    lines.append("")
+    lines.append("## Output Files")
+    lines.append("")
+    lines.append(f"- Summary JSON: {output_dir / 'summary.json'}")
+    lines.append(f"- Summary CSV: {output_dir / 'summary_k10.csv'}")
+    lines.append(f"- Overlay plot: {output_dir / 'eval_overlay.png'}")
+    lines.append(f"- Example comparison markdown: {output_dir / 'example_query_comparison.md'}")
+    lines.append(f"- Example comparison json: {output_dir / 'example_query_comparison.json'}")
+
+    report_path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def run() -> None:
@@ -207,6 +594,7 @@ def run() -> None:
     docs_json, queries_json, qrels = load_cranfield_dataset(args.dataset)
     doc_ids, doc_texts = get_docs_ids_and_texts(docs_json)
     query_ids, query_texts = get_query_ids_and_texts(queries_json)
+    query_text_lookup = {str(item["query number"]): item["query"] for item in queries_json}
     log(f"Loaded raw data: {len(doc_ids)} docs, {len(query_ids)} queries, {len(qrels)} qrels")
 
     stage_start = time.time()
@@ -219,6 +607,10 @@ def run() -> None:
     log("Preprocessing query corpus")
     processed_queries = preprocessor.preprocess_corpus(query_texts)
     log(f"Query preprocessing done in {time.time() - stage_start:.2f}s")
+
+    custom_query_texts = [case["query"] for case in CUSTOM_QUERY_CASES]
+    custom_query_ids = [case["id"] for case in CUSTOM_QUERY_CASES]
+    custom_processed_queries = preprocessor.preprocess_corpus(custom_query_texts)
 
     stage_start = time.time()
     log("Building TF-IDF retrieval index")
@@ -233,8 +625,9 @@ def run() -> None:
 
     log(f"Vocabulary size after preprocessing: {len(retriever.vocab)}")
 
+    expanded_methods = [m for m in requested_methods if m != BASELINE_METHOD]
     wordnet_neighbors: Dict[str, List[tuple[str, float]]] | None = None
-    if "wordnet" in requested_methods:
+    if "wordnet" in expanded_methods:
         stage_start = time.time()
         log("Building WordNet in-vocabulary similarity map")
         wordnet_neighbors = build_wordnet_neighbor_map(
@@ -249,18 +642,23 @@ def run() -> None:
     else:
         log("Skipping WordNet in-vocabulary matrix (wordnet method not requested)")
 
-    stage_start = time.time()
-    log("Building WordNet OOV replacement index")
-    oov_resolver = WordNetOOVResolver(
-        retriever.vocab,
-        progress=show_progress,
-        logger=log,
-        log_every=log_every,
-    )
-    log(f"WordNet OOV index built in {time.time() - stage_start:.2f}s")
+    oov_resolver: WordNetOOVResolver | None = None
+    if expanded_methods:
+        stage_start = time.time()
+        log("Building WordNet OOV replacement index")
+        oov_resolver = WordNetOOVResolver(
+            retriever.vocab,
+            progress=show_progress,
+            logger=log,
+            log_every=log_every,
+        )
+        log(f"WordNet OOV index built in {time.time() - stage_start:.2f}s")
 
     all_results: Dict[str, Dict] = {}
     failures: Dict[str, str] = {}
+    dataset_rankings_by_method: Dict[str, Dict[str, List[str]]] = {}
+    custom_rankings_by_method: Dict[str, Dict[str, List[str]]] = {}
+
     log(f"Running methods: {', '.join(requested_methods)}")
 
     methods_iter = tqdm(
@@ -269,95 +667,136 @@ def run() -> None:
         unit="method",
         disable=not show_progress,
     )
+
     for method in methods_iter:
         method_start = time.time()
         print(f"\n=== Running method: {method} ===", flush=True)
         method_dir = output_dir / method
         method_dir.mkdir(parents=True, exist_ok=True)
-        log(f"[{method}] Preparing neighbor map")
 
         try:
-            if method == "wordnet":
-                if wordnet_neighbors is None:
-                    raise RuntimeError("WordNet neighbors unavailable for wordnet method")
-                neighbors = wordnet_neighbors
-            elif method == "embedding_tfidf":
-                neighbors = build_tfidf_neighbor_map(
-                    doc_tfidf,
-                    retriever.vocab,
-                    top_k=args.top_k_neighbors,
-                    min_similarity=args.min_similarity,
-                    progress=show_progress,
+            if method == BASELINE_METHOD:
+                log(f"[{method}] Building non-expanded baseline query vectors")
+                query_vectors = _baseline_query_vectors(
+                    processed_queries,
+                    retriever.term_to_idx,
+                    len(retriever.vocab),
+                    show_progress=show_progress,
                     logger=log,
                     log_every=log_every,
                 )
-            elif method == "embedding_lsa":
-                neighbors = build_lsa_neighbor_map(
-                    doc_tfidf,
-                    retriever.vocab,
-                    n_components=args.lsa_components,
-                    top_k=args.top_k_neighbors,
-                    min_similarity=args.min_similarity,
-                    progress=show_progress,
-                    logger=log,
-                    log_every=log_every,
-                )
-            elif method == "embedding_esa":
-                neighbors = build_esa_neighbor_map(
-                    doc_tfidf,
-                    retriever.vocab,
-                    top_concepts=args.esa_top_concepts,
-                    top_k=args.top_k_neighbors,
-                    min_similarity=args.min_similarity,
-                    progress=show_progress,
-                    logger=log,
-                    log_every=log_every,
-                )
-            elif method == "embedding_word2vec":
-                neighbors = build_word2vec_neighbor_map(
-                    processed_docs,
-                    retriever.vocab,
-                    vector_size=args.w2v_vector_size,
-                    window=args.w2v_window,
-                    min_count=args.w2v_min_count,
-                    workers=args.w2v_workers,
-                    sg=args.w2v_sg,
-                    epochs=args.w2v_epochs,
-                    top_k=args.top_k_neighbors,
-                    min_similarity=args.min_similarity,
-                    progress=show_progress,
+                custom_query_vectors = _baseline_query_vectors(
+                    custom_processed_queries,
+                    retriever.term_to_idx,
+                    len(retriever.vocab),
+                    show_progress=show_progress,
                     logger=log,
                     log_every=log_every,
                 )
             else:
-                raise ValueError(f"Unknown method: {method}")
+                if oov_resolver is None:
+                    raise RuntimeError("OOV resolver unavailable for expansion methods")
 
-            log(f"[{method}] Neighbor map ready. Expanding queries")
+                log(f"[{method}] Preparing neighbor map")
+                if method == "wordnet":
+                    if wordnet_neighbors is None:
+                        raise RuntimeError("WordNet neighbors unavailable for wordnet method")
+                    neighbors = wordnet_neighbors
+                elif method == "embedding_tfidf":
+                    neighbors = build_tfidf_neighbor_map(
+                        doc_tfidf,
+                        retriever.vocab,
+                        top_k=args.top_k_neighbors,
+                        min_similarity=args.min_similarity,
+                        progress=show_progress,
+                        logger=log,
+                        log_every=log_every,
+                    )
+                elif method == "embedding_lsa":
+                    neighbors = build_lsa_neighbor_map(
+                        doc_tfidf,
+                        retriever.vocab,
+                        n_components=args.lsa_components,
+                        top_k=args.top_k_neighbors,
+                        min_similarity=args.min_similarity,
+                        progress=show_progress,
+                        logger=log,
+                        log_every=log_every,
+                    )
+                elif method == "embedding_esa":
+                    neighbors = build_esa_neighbor_map(
+                        doc_tfidf,
+                        retriever.vocab,
+                        top_concepts=args.esa_top_concepts,
+                        top_k=args.top_k_neighbors,
+                        min_similarity=args.min_similarity,
+                        progress=show_progress,
+                        logger=log,
+                        log_every=log_every,
+                    )
+                elif method == "embedding_word2vec":
+                    neighbors = build_word2vec_neighbor_map(
+                        processed_docs,
+                        retriever.vocab,
+                        vector_size=args.w2v_vector_size,
+                        window=args.w2v_window,
+                        min_count=args.w2v_min_count,
+                        workers=args.w2v_workers,
+                        sg=args.w2v_sg,
+                        epochs=args.w2v_epochs,
+                        top_k=args.top_k_neighbors,
+                        min_similarity=args.min_similarity,
+                        progress=show_progress,
+                        logger=log,
+                        log_every=log_every,
+                    )
+                else:
+                    raise ValueError(f"Unknown method: {method}")
 
-            expander = MatrixQueryExpander(
-                vocab=retriever.vocab,
-                neighbors=neighbors,
-                oov_resolver=oov_resolver.resolve,
-                self_weight=args.self_weight,
-                expansion_weight=args.expansion_weight,
-                replacement_weight=args.replacement_weight,
-                replacement_expansion_weight=args.replacement_expansion_weight,
-                max_oov_candidates=args.max_oov_candidates,
-                min_similarity=args.min_similarity,
-                expand_replacements=True,
-            )
+                log(f"[{method}] Neighbor map ready. Expanding queries")
+                expander = MatrixQueryExpander(
+                    vocab=retriever.vocab,
+                    neighbors=neighbors,
+                    oov_resolver=oov_resolver.resolve,
+                    self_weight=args.self_weight,
+                    expansion_weight=args.expansion_weight,
+                    replacement_weight=args.replacement_weight,
+                    replacement_expansion_weight=args.replacement_expansion_weight,
+                    max_oov_candidates=args.max_oov_candidates,
+                    min_similarity=args.min_similarity,
+                    expand_replacements=True,
+                    use_mean_similarity_threshold=not args.disable_mean_sim_threshold,
+                    mean_similarity_factor=args.mean_sim_factor,
+                    normalize_neighbor_mass=not args.disable_neighbor_mass_normalization,
+                    similarity_power=args.similarity_power,
+                )
 
-            query_vectors = _query_vectors_for_expander(
-                processed_queries,
-                expander,
-                show_progress=show_progress,
-                logger=log,
-            )
+                query_vectors = _query_vectors_for_expander(
+                    processed_queries,
+                    expander,
+                    show_progress=show_progress,
+                    logger=log,
+                    log_every=log_every,
+                )
+                custom_query_vectors = _query_vectors_for_expander(
+                    custom_processed_queries,
+                    expander,
+                    show_progress=show_progress,
+                    logger=log,
+                    log_every=log_every,
+                )
+
             log(f"[{method}] Ranking documents")
             rankings = retriever.query_vectors_to_rankings(query_vectors)
             rankings_by_query = {
                 str(qid): [str(doc_id) for doc_id in ranked]
                 for qid, ranked in zip(query_ids, rankings)
+            }
+
+            custom_rankings = retriever.query_vectors_to_rankings(custom_query_vectors)
+            custom_rankings_by_id = {
+                custom_query_ids[idx]: [str(doc_id) for doc_id in ranked]
+                for idx, ranked in enumerate(custom_rankings)
             }
 
             log(f"[{method}] Computing evaluation metrics")
@@ -374,19 +813,31 @@ def run() -> None:
                     )
                 )
 
-            (method_dir / "metrics.json").write_text(
-                json.dumps(metrics, indent=2),
-                encoding="utf-8",
-            )
+            dataset_rankings_by_method[method] = rankings_by_query
+            custom_rankings_by_method[method] = custom_rankings_by_id
+
+            (method_dir / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
             (method_dir / "rankings_top20.json").write_text(
                 json.dumps({qid: docs[:20] for qid, docs in rankings_by_query.items()}, indent=2),
+                encoding="utf-8",
+            )
+            (method_dir / "custom_query_top20.json").write_text(
+                json.dumps({qid: docs[:20] for qid, docs in custom_rankings_by_id.items()}, indent=2),
                 encoding="utf-8",
             )
             (method_dir / "query_expansion_preview.json").write_text(
                 json.dumps(previews, indent=2),
                 encoding="utf-8",
             )
-            _plot_method_metrics(method, metrics, method_dir / "eval_plot.png")
+
+            baseline_metrics = all_results.get(BASELINE_METHOD)
+            _plot_method_metrics(
+                method,
+                metrics,
+                method_dir / "eval_plot.png",
+                baseline_metrics=baseline_metrics,
+                baseline_name=BASELINE_METHOD,
+            )
 
             all_results[method] = metrics
             print(
@@ -404,8 +855,8 @@ def run() -> None:
     summary_file.write_text(json.dumps(all_results, indent=2), encoding="utf-8")
 
     csv_file = output_dir / "summary_k10.csv"
-    with csv_file.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
+    with csv_file.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
         writer.writerow(["method", "precision@10", "recall@10", "fscore@10", "map@10", "ndcg@10", "mrr@10"])
         for method, metrics in all_results.items():
             m10 = metrics["10"]
@@ -422,13 +873,43 @@ def run() -> None:
             )
 
     if failures:
-        (output_dir / "failed_methods.json").write_text(
-            json.dumps(failures, indent=2),
-            encoding="utf-8",
-        )
+        (output_dir / "failed_methods.json").write_text(json.dumps(failures, indent=2), encoding="utf-8")
 
     if all_results:
-        _plot_overlay_metrics(all_results, output_dir / "eval_overlay.png")
+        _plot_overlay_metrics(all_results, output_dir / "eval_overlay.png", baseline_name=BASELINE_METHOD)
+
+        baseline_metrics = all_results.get(BASELINE_METHOD)
+        if baseline_metrics is not None:
+            for method, metrics in all_results.items():
+                if method == BASELINE_METHOD:
+                    continue
+                _plot_method_metrics(
+                    method,
+                    metrics,
+                    output_dir / method / "eval_plot_vs_baseline.png",
+                    baseline_metrics=baseline_metrics,
+                    baseline_name=BASELINE_METHOD,
+                )
+
+        example_summary = _write_example_comparison(
+            output_dir=output_dir,
+            methods=list(all_results.keys()),
+            qrels=qrels,
+            query_text_lookup=query_text_lookup,
+            dataset_rankings_by_method=dataset_rankings_by_method,
+            custom_rankings_by_method=custom_rankings_by_method,
+            baseline_name=BASELINE_METHOD,
+        )
+
+        report_path = Path(__file__).resolve().parent / "experiment_report.md"
+        _write_experiment_report(
+            report_path=report_path,
+            output_dir=output_dir,
+            all_results=all_results,
+            args=args,
+            example_summary=example_summary,
+            baseline_name=BASELINE_METHOD,
+        )
 
     elapsed = time.time() - start
     print(f"\nCompleted in {elapsed:.2f} seconds", flush=True)

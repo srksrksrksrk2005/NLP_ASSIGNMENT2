@@ -1,138 +1,99 @@
 # Query Expansion Experiment Report
 
-## Scope
-This experiment evaluates the two target query expansion families on the Cranfield collection:
+## What Was Fixed
 
-- WordNet-based query replacement and expansion
-- Embedding-based query replacement and expansion using similarity matrices built from TF-IDF, LSA, ESA, and Word2Vec
+1. Added a true non-expanded TF-IDF baseline (`baseline_tfidf`) for correct comparison.
+2. Kept retrieval model fixed to base TF-IDF document index; expansion is applied only to queries.
+3. Added adaptive similarity thresholding using mean similarity filtering.
+4. Added normalized neighbor mass allocation so expansion does not overpower original query terms.
+5. Added method-vs-baseline plots and full overlay plots.
+6. Added explicit example-case comparisons for the report query set.
+7. Added persistent WordNet graph caching on disk for faster reruns.
 
-The implementation lives entirely inside the `query_expansion` folder. The run logs are saved in `output/live_run.log`.
+## Run Configuration
 
-## Run Setup
+- Dataset: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/cranfield
+- Methods: baseline_tfidf, wordnet, embedding_tfidf, embedding_lsa, embedding_esa, embedding_word2vec
+- top_k_neighbors: 10
+- min_similarity: 0.08
+- self_weight: 1.0
+- expansion_weight: 0.2
+- replacement_weight: 0.85
+- replacement_expansion_weight: 0.15
+- adaptive_mean_similarity_threshold: True
+- mean_similarity_factor: 1.0
+- normalize_neighbor_mass: True
+- similarity_power: 1.0
 
-- Dataset: Cranfield
-- Preprocessing: sentence split, tokenization, lemmatization, stopword removal
-- Retrieval model: TF-IDF cosine ranking over the processed corpus
-- Expansion mechanism: query term-frequency spreading over a word-word similarity graph
-- OOV handling: WordNet-based replacement into in-vocabulary terms
-- Main hyperparameters used in this run:
-  - `top_k_neighbors = 10`
-  - `min_similarity = 0.05`
-  - `expansion_weight = 0.35`
-  - `replacement_weight = 1.0`
-  - `replacement_expansion_weight = 0.35`
-
-## Output Artifacts
-
-- Per-method plots: `output/<method>/eval_plot.png`
-- Overlay comparison plot: `output/eval_overlay.png`
-- Per-method metrics: `output/<method>/metrics.json`
-- Full summary: `output/summary.json`
-- Fixed k=10 score table: `output/summary_k10.csv`
-- Live log: `output/live_run.log`
-
-The earlier empty `output/wordnet/` folder was due to the run not having finished yet. After the full run completed, it now contains the WordNet method outputs.
-
-## Overall Results at k=10
+## k=10 Scores
 
 | Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| wordnet | 0.2684 | 0.3897 | 0.2949 | 0.2887 | 0.4395 | 0.7171 |
-| embedding_tfidf | 0.2644 | 0.3843 | 0.2906 | 0.2711 | 0.4154 | 0.6771 |
-| embedding_lsa | 0.2636 | 0.3828 | 0.2898 | 0.2471 | 0.3842 | 0.5882 |
-| embedding_esa | 0.2662 | 0.3858 | 0.2921 | 0.2696 | 0.4139 | 0.6676 |
-| embedding_word2vec | 0.2716 | 0.3993 | 0.2995 | 0.2865 | 0.4318 | 0.6915 |
+| baseline_tfidf | 0.2813 | 0.4005 | 0.3059 | 0.3024 | 0.4546 | 0.7379 |
+| wordnet | 0.2818 | 0.4028 | 0.3069 | 0.3058 | 0.4588 | 0.7476 |
+| embedding_tfidf | 0.2773 | 0.3946 | 0.3014 | 0.3029 | 0.4506 | 0.7438 |
+| embedding_lsa | 0.2800 | 0.4002 | 0.3052 | 0.3031 | 0.4540 | 0.7358 |
+| embedding_esa | 0.2764 | 0.3934 | 0.3005 | 0.3030 | 0.4501 | 0.7434 |
+| embedding_word2vec | 0.2822 | 0.4025 | 0.3072 | 0.3061 | 0.4560 | 0.7368 |
 
-## What Improved And What Decreased
+## Delta vs Baseline (k=10)
 
-### WordNet-based expansion
-WordNet is the strongest method for ranked retrieval quality in this run. Compared with embedding_tfidf, it improves every metric at k=10:
-
-- Precision@10: +0.0040
-- Recall@10: +0.0055
-- F@10: +0.0043
-- MAP@10: +0.0176
-- nDCG@10: +0.0241
-- MRR@10: +0.0400
-
-This means WordNet helped get relevant documents earlier in the ranking and improved overall ranking quality. The likely cause is that lexical synonym replacement and term spreading recover useful variants for technical words that appear in the Cranfield collection with slightly different surface forms.
-
-Compared with Word2Vec, WordNet is a little weaker on Precision@10, Recall@10, and F@10, but still better on MAP, nDCG, and MRR. That suggests WordNet is slightly more conservative and better at ordering the top relevant documents, while Word2Vec retrieves a slightly broader set of relevant documents in the top 10.
-
-### TF-IDF similarity expansion
-TF-IDF expansion is the baseline embedding-style method in this run. It is simple and stable, but it mostly preserves lexical overlap rather than adding much semantic generalization. It performs below WordNet and Word2Vec on almost every metric.
-
-### LSA expansion
-LSA is the weakest method in this run. It loses to embedding_tfidf on all reported metrics at k=10, especially MAP, nDCG, and MRR. The main reason is that low-rank compression smooths away fine-grained technical distinctions in Cranfield. That helps broad topic similarity, but it hurts early ranking of exact relevant papers.
-
-### ESA expansion
-ESA gives a small improvement over TF-IDF on Precision@10, Recall@10, and F@10, but it is slightly worse on MAP, nDCG, and MRR. This looks like a mixed effect: concept mapping helps retrieve more relevant material, but it also introduces broader concept overlap that can disturb the very top of the ranking.
-
-### Word2Vec expansion
-Word2Vec is the best method on Precision@10, Recall@10, and F@10. It also performs very well on MAP and nDCG, though WordNet still wins those ranking-sensitive metrics. The likely cause is that Word2Vec captures corpus-specific similarity better than a general lexicon and is better at finding technical near-synonyms inside the Cranfield vocabulary.
-
-## Best Hyperparameter Setting
-
-No formal hyperparameter sweep was run, so there is no statistically validated best setting. The best observed configuration in this experiment is the default one used for all methods:
-
-- `top_k_neighbors = 10`
-- `min_similarity = 0.05`
-- `expansion_weight = 0.35`
-- `replacement_weight = 1.0`
-- `replacement_expansion_weight = 0.35`
-
-If a later tuning pass is done, the most likely useful knobs are:
-
-- lower `expansion_weight` for WordNet if precision needs to be protected
-- higher `top_k_neighbors` for broader recall-oriented queries
-- smaller `min_similarity` only if the vocabulary is very sparse and synonym coverage is weak
-
-## Fixed Limitation Score Table
-
-These scores are relative, empirical ratings on a 10-point scale based on this Cranfield run. Higher is better.
-
-| Method | Semantic understanding | Ambiguity handling | OOV handling | Context handling | Sparse representation | Cost / scalability |
+| Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| wordnet | 9 | 8 | 9 | 6 | 2 | 3 |
-| embedding_tfidf | 4 | 3 | 2 | 3 | 2 | 8 |
-| embedding_lsa | 6 | 5 | 2 | 4 | 8 | 5 |
-| embedding_esa | 7 | 5 | 3 | 5 | 8 | 4 |
-| embedding_word2vec | 8 | 6 | 4 | 6 | 4 | 5 |
+| wordnet | +0.0004 | +0.0024 | +0.0010 | +0.0035 | +0.0041 | +0.0098 |
+| embedding_tfidf | -0.0040 | -0.0059 | -0.0045 | +0.0005 | -0.0040 | +0.0059 |
+| embedding_lsa | -0.0013 | -0.0003 | -0.0007 | +0.0007 | -0.0006 | -0.0020 |
+| embedding_esa | -0.0049 | -0.0070 | -0.0054 | +0.0006 | -0.0045 | +0.0056 |
+| embedding_word2vec | +0.0009 | +0.0021 | +0.0013 | +0.0037 | +0.0014 | -0.0011 |
 
-### Interpretation of the scores
+## Best Method Per Metric at k=10
 
-- WordNet is strongest for semantic matching, ambiguity, and OOV replacement, but it is expensive to build and not good at dense representation.
-- TF-IDF expansion is cheap and scalable, but it adds very little true semantic coverage.
-- LSA and ESA both address sparsity well, with ESA slightly more interpretable and LSA slightly simpler, but LSA underperforms in ranking quality on this dataset.
-- Word2Vec gives the best overall balance for ranking quality and semantic recall, but it is still weaker than WordNet on exact lexical ambiguity control and early ranking of the very best documents.
+- precision: embedding_word2vec (0.2822)
+- recall: wordnet (0.4028)
+- fscore: embedding_word2vec (0.3072)
+- map: embedding_word2vec (0.3061)
+- ndcg: wordnet (0.4588)
+- mrr: wordnet (0.7476)
 
-## Comparison Summary
+## Example Cases Summary
 
-- Best MAP@10, nDCG@10, and MRR@10: WordNet
-- Best Precision@10, Recall@10, and F@10: Word2Vec
-- Weakest overall method in this run: LSA
-- Best tradeoff between semantic recall and ranking quality: WordNet
+### Dataset Query Cases
 
-## Notes On Caching And Speed
+| Query ID | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |
+| --- | ---: | --- | ---: | ---: |
+| 9 | 1 | embedding_lsa | 2 | +1 |
+| 39 | 2 | baseline_tfidf | 2 | +0 |
+| 40 | 2 | baseline_tfidf | 2 | +0 |
+| 51 | 4 | baseline_tfidf | 4 | +0 |
+| 64 | 2 | baseline_tfidf | 2 | +0 |
+| 81 | 1 | baseline_tfidf | 1 | +0 |
+| 90 | 2 | embedding_lsa | 3 | +1 |
 
-WordNet vocab similarity caching is now implemented in code and will be saved under `cache/wordnet/` inside the experiment folder on the next run that hits the cache path. This is intended to avoid rebuilding the WordNet similarity graph every time.
+### Custom Query Cases
 
-The current run that generated these results completed before the persistent cache was first populated, so the cache will help the next execution rather than this one.
+| Case | Mapped Query | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |
+| --- | --- | ---: | --- | ---: | ---: |
+| slip-flow heat transfer in internal channels | 9 | 1 | baseline_tfidf | 1 | +0 |
+| transition detection in hypersonic wakes behind slender bodies | 40 | 2 | baseline_tfidf | 2 | +0 |
+| replace vibrational shapes with static deflection shapes for flutter prediction | 64 | 1 | baseline_tfidf | 1 | +0 |
+| shock-induced boundary-layer separation | 90 | 2 | embedding_lsa | 3 | +1 |
+| what corrections are needed for a liftbody in a propwash flowfield inside a test duct | 81 | 0 | baseline_tfidf | 0 | +0 |
 
-## Recommended Figure To Use In The Writeup
+## Limitation-Solving Score Table (updated)
 
-Use the overlay plot for comparison across methods:
+| Method | Semantic | Dim/Cost | Scale | Ambiguity | OOV | Context | Sparse |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_tfidf | 2/10 | 6/10 | 6/10 | 2/10 | 1/10 | 2/10 | 2/10 |
+| wordnet | 8/10 | 3/10 | 3/10 | 7/10 | 8/10 | 5/10 | 3/10 |
+| embedding_tfidf | 4/10 | 6/10 | 6/10 | 3/10 | 2/10 | 3/10 | 3/10 |
+| embedding_lsa | 5/10 | 5/10 | 5/10 | 4/10 | 2/10 | 4/10 | 7/10 |
+| embedding_esa | 6/10 | 4/10 | 5/10 | 4/10 | 3/10 | 4/10 | 7/10 |
+| embedding_word2vec | 7/10 | 5/10 | 5/10 | 5/10 | 4/10 | 5/10 | 5/10 |
 
-- [overlay comparison](output/eval_overlay.png)
+## Output Files
 
-For method-specific curves, use the per-method plots inside each output folder, for example:
-
-- [WordNet plot](output/wordnet/eval_plot.png)
-- [TF-IDF plot](output/embedding_tfidf/eval_plot.png)
-- [LSA plot](output/embedding_lsa/eval_plot.png)
-- [ESA plot](output/embedding_esa/eval_plot.png)
-- [Word2Vec plot](output/embedding_word2vec/eval_plot.png)
-
-## Final Takeaway
-
-For this dataset and this setup, WordNet is the best choice if the goal is stronger ranking quality and better handling of synonymy and ambiguity. Word2Vec is the best choice if the goal is raw top-10 precision and recall. LSA is not competitive here, and ESA is a moderate compromise between sparse concept matching and retrieval quality.
+- Summary JSON: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary.json
+- Summary CSV: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary_k10.csv
+- Overlay plot: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/eval_overlay.png
+- Example comparison markdown: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.md
+- Example comparison json: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.json

@@ -54,14 +54,6 @@
       {
         "term": "speed",
         "weight": 1.0
-      },
-      {
-        "term": "obey",
-        "weight": 0.3683333333333333
-      },
-      {
-        "term": "obeying",
-        "weight": 0.2833333333333333
       }
     ]
   },
@@ -109,22 +101,6 @@
       {
         "term": "structural",
         "weight": 1.0
-      },
-      {
-        "term": "craft",
-        "weight": 0.2
-      },
-      {
-        "term": "functional",
-        "weight": 0.2
-      },
-      {
-        "term": "trouble",
-        "weight": 0.2
-      },
-      {
-        "term": "upper",
-        "weight": 0.1
       }
     ]
   },
@@ -167,26 +143,6 @@
       {
         "term": "solved",
         "weight": 1.0
-      },
-      {
-        "term": "block",
-        "weight": 0.2
-      },
-      {
-        "term": "complex",
-        "weight": 0.2
-      },
-      {
-        "term": "conductivity",
-        "weight": 0.2
-      },
-      {
-        "term": "farther",
-        "weight": 0.2
-      },
-      {
-        "term": "trouble",
-        "weight": 0.2
       }
     ]
   },
@@ -302,26 +258,6 @@
       {
         "term": "system",
         "weight": 1.0
-      },
-      {
-        "term": "flowing",
-        "weight": 0.2
-      },
-      {
-        "term": "relevant",
-        "weight": 0.2
-      },
-      {
-        "term": "trouble",
-        "weight": 0.2
-      },
-      {
-        "term": "arrangement",
-        "weight": 0.06666666666666667
-      },
-      {
-        "term": "dynamic",
-        "weight": 0.06666666666666667
       }
     ]
   },
@@ -364,26 +300,6 @@
       {
         "term": "turbulent",
         "weight": 1.0
-      },
-      {
-        "term": "observational",
-        "weight": 0.2
-      },
-      {
-        "term": "theoretic",
-        "weight": 0.2
-      },
-      {
-        "term": "conduct",
-        "weight": 0.12000000000000001
-      },
-      {
-        "term": "behavior",
-        "weight": 0.1
-      },
-      {
-        "term": "run",
-        "weight": 0.045000000000000005
       }
     ]
   },
@@ -514,10 +430,6 @@
       {
         "term": "pressure",
         "weight": 1.0
-      },
-      {
-        "term": "fuselage",
-        "weight": 0.2
       }
     ]
   }

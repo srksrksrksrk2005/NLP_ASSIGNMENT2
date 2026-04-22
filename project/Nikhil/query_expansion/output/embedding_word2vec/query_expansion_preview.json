@@ -48,20 +48,20 @@
         "weight": 1.0
       },
       {
-        "term": "obey",
+        "term": "similarity",
         "weight": 1.0
+      },
+      {
+        "term": "speed",
+        "weight": 1.0
+      },
+      {
+        "term": "obey",
+        "weight": 0.2833333333333333
       },
       {
         "term": "obeying",
-        "weight": 1.0
-      },
-      {
-        "term": "obeys",
-        "weight": 1.0
-      },
-      {
-        "term": "similarity",
-        "weight": 1.0
+        "weight": 0.2833333333333333
       }
     ]
   },
@@ -112,19 +112,19 @@
       },
       {
         "term": "flying",
-        "weight": 0.6050458282232284
+        "weight": 0.15990419742775155
+      },
+      {
+        "term": "low",
+        "weight": 0.10428141507830445
       },
       {
         "term": "vibratory",
-        "weight": 0.4737592786550522
+        "weight": 0.09841406327468952
       },
       {
-        "term": "travelling",
-        "weight": 0.4173723071813583
-      },
-      {
-        "term": "aerfoils",
-        "weight": 0.4076550871133804
+        "term": "boundary-value",
+        "weight": 0.06985361373843882
       }
     ]
   },
@@ -141,16 +141,16 @@
     },
     "expanded_top_terms": [
       {
+        "term": "conduction",
+        "weight": 1.062836364094698
+      },
+      {
         "term": "slab",
-        "weight": 1.5772215723991394
+        "weight": 1.0532196455268399
       },
       {
         "term": "composite",
-        "weight": 1.3243047565221786
-      },
-      {
-        "term": "conduction",
-        "weight": 1.2350457459688187
+        "weight": 1.0437740465903123
       },
       {
         "term": "far",
@@ -170,23 +170,23 @@
       },
       {
         "term": "double-layer",
-        "weight": 0.8452151060104369
+        "weight": 0.13665269361750848
       },
       {
         "term": "multilayer",
-        "weight": 0.8411544740200042
-      },
-      {
-        "term": "ture",
-        "weight": 0.79815956056118
+        "weight": 0.136066296052399
       },
       {
         "term": "two-layer",
-        "weight": 0.6175657033920288
+        "weight": 0.09247358114074412
       },
       {
-        "term": "refractory",
-        "weight": 0.5459241062402724
+        "term": "transfer",
+        "weight": 0.07402114594139506
+      },
+      {
+        "term": "boundary-value",
+        "weight": 0.06985361373843882
       }
     ]
   },
@@ -214,28 +214,16 @@
     },
     "expanded_top_terms": [
       {
-        "term": "chemically",
-        "weight": 1.7626238465309143
-      },
-      {
-        "term": "reacting",
-        "weight": 1.4751795172691344
-      },
-      {
         "term": "simplifying",
-        "weight": 1.2491915553808213
+        "weight": 1.1067143250614133
       },
       {
         "term": "mixture",
-        "weight": 1.2334116965532302
+        "weight": 1.0416456570792774
       },
       {
         "term": "chemical",
-        "weight": 1.2216856479644775
-      },
-      {
-        "term": "calorically",
-        "weight": 1.074535608291626
+        "weight": 1.0330259565580042
       },
       {
         "term": "assumption",
@@ -243,6 +231,10 @@
       },
       {
         "term": "based",
+        "weight": 1.0
+      },
+      {
+        "term": "chemically",
         "weight": 1.0
       },
       {
@@ -259,6 +251,14 @@
       },
       {
         "term": "equilibrium",
+        "weight": 1.0
+      },
+      {
+        "term": "flow",
+        "weight": 1.0
+      },
+      {
+        "term": "gas",
         "weight": 1.0
       }
     ]
@@ -304,24 +304,24 @@
         "weight": 1.0
       },
       {
-        "term": "extinction",
-        "weight": 0.5329216182231903
-      },
-      {
-        "term": "inadequacy",
-        "weight": 0.3999379754066467
+        "term": "boundary-value",
+        "weight": 0.06985361373843882
       },
       {
         "term": "kinetics",
-        "weight": 0.28469960689544677
+        "weight": 0.06874970435010751
+      },
+      {
+        "term": "two-point",
+        "weight": 0.06757885231764038
       },
       {
         "term": "recombination",
-        "weight": 0.2746396094560623
+        "weight": 0.06632040050503929
       },
       {
         "term": "dissociation",
-        "weight": 0.26888138353824614
+        "weight": 0.06492989514485321
       }
     ]
   },
@@ -366,24 +366,24 @@
         "weight": 1.0
       },
       {
-        "term": "checked",
-        "weight": 0.43279791474342344
-      },
-      {
         "term": "kernel-function",
-        "weight": 0.42913254797458644
+        "weight": 0.08973478488671584
       },
       {
-        "term": "corroborate",
-        "weight": 0.4205713748931884
+        "term": "postulated",
+        "weight": 0.068807527181095
       },
       {
-        "term": "exceptionally",
-        "weight": 0.41716120839118953
+        "term": "quasi-one",
+        "weight": 0.06567195661515927
       },
       {
-        "term": "unification",
-        "weight": 0.2962207943201065
+        "term": "quasi-incompressible",
+        "weight": 0.06552051620374574
+      },
+      {
+        "term": "dvl",
+        "weight": 0.05172112853249544
       }
     ]
   },
@@ -406,12 +406,12 @@
     },
     "expanded_top_terms": [
       {
-        "term": "angle",
-        "weight": 2.600071144104004
+        "term": "attack",
+        "weight": 2.226198194266279
       },
       {
-        "term": "attack",
-        "weight": 2.600071144104004
+        "term": "angle",
+        "weight": 2.210115409392418
       },
       {
         "term": "forebody",
@@ -427,11 +427,7 @@
       },
       {
         "term": "relate",
-        "weight": 1.2148725539445877
-      },
-      {
-        "term": "angle-of",
-        "weight": 1.0033647954463958
+        "weight": 1.0649215042163322
       },
       {
         "term": "available",
@@ -451,6 +447,10 @@
       },
       {
         "term": "possible",
+        "weight": 1.0
+      },
+      {
+        "term": "surface",
         "weight": 1.0
       }
     ]
@@ -476,12 +476,12 @@
         "weight": 2.0
       },
       {
-        "term": "angle",
-        "weight": 1.300035572052002
+        "term": "attack",
+        "weight": 1.1130990971331396
       },
       {
-        "term": "attack",
-        "weight": 1.300035572052002
+        "term": "angle",
+        "weight": 1.105057704696209
       },
       {
         "term": "approximate",
@@ -516,8 +516,8 @@
         "weight": 1.0
       },
       {
-        "term": "99degrees",
-        "weight": 0.9295476853847503
+        "term": "angle-of",
+        "weight": 0.1818431981706514
       }
     ]
   }
