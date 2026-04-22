@@ -1,9 +1,11 @@
 from collections import defaultdict
 from functools import lru_cache
-from typing import Any, Dict, List, Sequence, Set, Tuple
+import time
+from typing import Any, Callable, Dict, List, Sequence, Set, Tuple
 
 import nltk
 from nltk.corpus import wordnet as wn
+from tqdm.auto import tqdm
 
 
 def ensure_wordnet_resources() -> None:
@@ -77,6 +79,9 @@ def build_wordnet_neighbor_map(
     vocab: Sequence[str],
     top_k: int = 10,
     min_similarity: float = 0.05,
+    progress: bool = False,
+    logger: Callable[[str], None] | None = None,
+    log_every: int = 1000,
 ) -> Dict[str, List[Tuple[str, float]]]:
     """
     Build a sparse word-word similarity map over in-vocabulary terms using WordNet.
@@ -85,8 +90,16 @@ def build_wordnet_neighbor_map(
 
     vocab_set = set(vocab)
     neighbors: Dict[str, List[Tuple[str, float]]] = {}
+    total_terms = len(vocab)
+    started = time.time()
 
-    for term in vocab:
+    if logger is not None:
+        logger(
+            f"WordNet matrix build started: {total_terms} terms, top_k={top_k}, min_similarity={min_similarity}"
+        )
+
+    vocab_iter = tqdm(vocab, desc="WordNet vocab graph", unit="term", disable=not progress)
+    for idx, term in enumerate(vocab_iter, start=1):
         candidates = _lemma_candidates(term)
         candidates = {cand for cand in candidates if cand in vocab_set and cand != term}
 
@@ -99,24 +112,49 @@ def build_wordnet_neighbor_map(
         scored.sort(key=lambda x: x[1], reverse=True)
         neighbors[term] = scored[:top_k]
 
+        if logger is not None and (idx == 1 or idx % max(1, log_every) == 0 or idx == total_terms):
+            elapsed = time.time() - started
+            logger(f"WordNet matrix progress: {idx}/{total_terms} terms (elapsed {elapsed:.1f}s)")
+
+    if logger is not None:
+        logger(f"WordNet matrix build finished in {time.time() - started:.2f}s")
+
     return neighbors
 
 
 class WordNetOOVResolver:
     """Resolve OOV terms into in-vocabulary replacements using WordNet similarity."""
 
-    def __init__(self, vocab: Sequence[str]) -> None:
+    def __init__(
+        self,
+        vocab: Sequence[str],
+        progress: bool = False,
+        logger: Callable[[str], None] | None = None,
+        log_every: int = 1000,
+    ) -> None:
         ensure_wordnet_resources()
         self.vocab = list(vocab)
         self.vocab_set = set(self.vocab)
 
         self.lemma_to_vocab: Dict[str, Set[str]] = defaultdict(set)
-        for term in self.vocab:
+        total_terms = len(self.vocab)
+        started = time.time()
+        if logger is not None:
+            logger(f"WordNet OOV index build started for {total_terms} terms")
+
+        vocab_iter = tqdm(self.vocab, desc="WordNet OOV index", unit="term", disable=not progress)
+        for idx, term in enumerate(vocab_iter, start=1):
             self.lemma_to_vocab[term].add(term)
             for cand in _lemma_candidates(term):
                 self.lemma_to_vocab[cand].add(term)
 
+            if logger is not None and (idx == 1 or idx % max(1, log_every) == 0 or idx == total_terms):
+                elapsed = time.time() - started
+                logger(f"WordNet OOV index progress: {idx}/{total_terms} terms (elapsed {elapsed:.1f}s)")
+
         self._cache: Dict[Tuple[str, int, float], List[Tuple[str, float]]] = {}
+        if logger is not None:
+            logger(f"WordNet OOV index build finished in {time.time() - started:.2f}s")
 
     def resolve(self, term: str, max_candidates: int, min_similarity: float) -> List[Tuple[str, float]]:
         key = (term, max_candidates, min_similarity)

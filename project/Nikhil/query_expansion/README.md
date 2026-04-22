@@ -33,6 +33,15 @@ From `NLP_ASSIGNMENT2/project/Nikhil/query_expansion`:
 python run_experiments.py
 ```
 
+For live progress and stage logs (recommended):
+
+```bash
+python run_experiments.py --log-every 500
+```
+
+- Progress bars are shown for method loop, WordNet graph construction, matrix neighbor generation, ESA pruning, and query expansion.
+- Timestamped logs are printed for stage transitions and periodic progress so you can see exactly what step is running even if bar rendering is limited.
+
 Default methods run:
 
 - `wordnet`
@@ -49,7 +58,14 @@ python run_experiments.py \
   --top-k-neighbors 10 \
   --min-similarity 0.05 \
   --expansion-weight 0.35 \
-  --replacement-weight 1.0
+  --replacement-weight 1.0 \
+  --log-every 500
+```
+
+Disable bars only:
+
+```bash
+python run_experiments.py --no-progress
 ```
 
 ## Output
