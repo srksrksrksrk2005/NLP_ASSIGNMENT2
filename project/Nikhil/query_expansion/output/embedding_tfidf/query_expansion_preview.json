@@ -1,0 +1,524 @@
+[
+  {
+    "query_id": "1",
+    "original_terms": {
+      "similarity": 1,
+      "law": 1,
+      "must": 1,
+      "obeyed": 1,
+      "constructing": 1,
+      "aeroelastic": 1,
+      "model": 1,
+      "heated": 1,
+      "high": 1,
+      "speed": 1,
+      "aircraft": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "speed",
+        "weight": 1.2052409831954038
+      },
+      {
+        "term": "high",
+        "weight": 1.1087346131562483
+      },
+      {
+        "term": "law",
+        "weight": 1.1029953097312615
+      },
+      {
+        "term": "aeroelastic",
+        "weight": 1.0
+      },
+      {
+        "term": "aircraft",
+        "weight": 1.0
+      },
+      {
+        "term": "constructing",
+        "weight": 1.0
+      },
+      {
+        "term": "heated",
+        "weight": 1.0
+      },
+      {
+        "term": "model",
+        "weight": 1.0
+      },
+      {
+        "term": "must",
+        "weight": 1.0
+      },
+      {
+        "term": "obey",
+        "weight": 1.0
+      },
+      {
+        "term": "obeying",
+        "weight": 1.0
+      },
+      {
+        "term": "obeys",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "query_id": "2",
+    "original_terms": {
+      "structural": 1,
+      "aeroelastic": 1,
+      "problem": 1,
+      "associated": 1,
+      "flight": 1,
+      "high": 1,
+      "speed": 1,
+      "aircraft": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "aircraft",
+        "weight": 1.1279585579372617
+      },
+      {
+        "term": "structural",
+        "weight": 1.1279585579372617
+      },
+      {
+        "term": "high",
+        "weight": 1.1087346131562483
+      },
+      {
+        "term": "speed",
+        "weight": 1.1087346131562483
+      },
+      {
+        "term": "aeroelastic",
+        "weight": 1.0
+      },
+      {
+        "term": "associated",
+        "weight": 1.0
+      },
+      {
+        "term": "flight",
+        "weight": 1.0
+      },
+      {
+        "term": "problem",
+        "weight": 1.0
+      },
+      {
+        "term": "angular",
+        "weight": 0.2768872977943425
+      },
+      {
+        "term": "low",
+        "weight": 0.19803612515842792
+      },
+      {
+        "term": "effect",
+        "weight": 0.19641183529046796
+      },
+      {
+        "term": "ackeret's",
+        "weight": 0.18561553006146875
+      }
+    ]
+  },
+  {
+    "query_id": "3",
+    "original_terms": {
+      "problem": 1,
+      "heat": 1,
+      "conduction": 1,
+      "composite": 1,
+      "slab": 1,
+      "solved": 1,
+      "far": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "composite",
+        "weight": 1.245841140115515
+      },
+      {
+        "term": "slab",
+        "weight": 1.245841140115515
+      },
+      {
+        "term": "conduction",
+        "weight": 1.1240922582237203
+      },
+      {
+        "term": "heat",
+        "weight": 1.1240922582237203
+      },
+      {
+        "term": "problem",
+        "weight": 1.0948985956631527
+      },
+      {
+        "term": "solved",
+        "weight": 1.0948985956631527
+      },
+      {
+        "term": "far",
+        "weight": 1.0
+      },
+      {
+        "term": "two-layer",
+        "weight": 0.38026469019084025
+      },
+      {
+        "term": "periodic",
+        "weight": 0.3052010819680521
+      },
+      {
+        "term": "transfer",
+        "weight": 0.25892832349000017
+      },
+      {
+        "term": "shielded",
+        "weight": 0.25526373512131545
+      },
+      {
+        "term": "refractory",
+        "weight": 0.23089473599510973
+      }
+    ]
+  },
+  {
+    "query_id": "4",
+    "original_terms": {
+      "criterion": 1,
+      "developed": 1,
+      "show": 1,
+      "empirically": 1,
+      "validity": 1,
+      "flow": 1,
+      "solution": 1,
+      "chemically": 1,
+      "reacting": 1,
+      "gas": 1,
+      "mixture": 1,
+      "based": 1,
+      "simplifying": 1,
+      "assumption": 1,
+      "instantaneous": 1,
+      "local": 1,
+      "chemical": 1,
+      "equilibrium": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "flow",
+        "weight": 1.3054892084164804
+      },
+      {
+        "term": "solution",
+        "weight": 1.2130015918258357
+      },
+      {
+        "term": "chemically",
+        "weight": 1.1891624019381348
+      },
+      {
+        "term": "mixture",
+        "weight": 1.1513467699951854
+      },
+      {
+        "term": "chemical",
+        "weight": 1.1459008956873555
+      },
+      {
+        "term": "equilibrium",
+        "weight": 1.1459008956873555
+      },
+      {
+        "term": "assumption",
+        "weight": 1.094232008318578
+      },
+      {
+        "term": "based",
+        "weight": 1.0
+      },
+      {
+        "term": "criterion",
+        "weight": 1.0
+      },
+      {
+        "term": "developed",
+        "weight": 1.0
+      },
+      {
+        "term": "empirically",
+        "weight": 1.0
+      },
+      {
+        "term": "gas",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "query_id": "5",
+    "original_terms": {
+      "chemical": 1,
+      "kinetic": 1,
+      "system": 1,
+      "applicable": 1,
+      "hypersonic": 1,
+      "aerodynamic": 1,
+      "problem": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "aerodynamic",
+        "weight": 1.0
+      },
+      {
+        "term": "applicable",
+        "weight": 1.0
+      },
+      {
+        "term": "chemical",
+        "weight": 1.0
+      },
+      {
+        "term": "hypersonic",
+        "weight": 1.0
+      },
+      {
+        "term": "kinetic",
+        "weight": 1.0
+      },
+      {
+        "term": "problem",
+        "weight": 1.0
+      },
+      {
+        "term": "system",
+        "weight": 1.0
+      },
+      {
+        "term": "butler",
+        "weight": 0.2499675358000875
+      },
+      {
+        "term": "flow",
+        "weight": 0.2103839233060803
+      },
+      {
+        "term": "reaction",
+        "weight": 0.20772071054127922
+      },
+      {
+        "term": "equilibrium",
+        "weight": 0.14590089568735545
+      },
+      {
+        "term": "specie",
+        "weight": 0.1448814314651821
+      }
+    ]
+  },
+  {
+    "query_id": "6",
+    "original_terms": {
+      "theoretical": 1,
+      "experimental": 1,
+      "guide": 1,
+      "turbulent": 1,
+      "couette": 1,
+      "flow": 1,
+      "behaviour": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "experimental",
+        "weight": 1.1526106308300956
+      },
+      {
+        "term": "theoretical",
+        "weight": 1.1526106308300956
+      },
+      {
+        "term": "behaviour",
+        "weight": 1.0
+      },
+      {
+        "term": "couette",
+        "weight": 1.0
+      },
+      {
+        "term": "flow",
+        "weight": 1.0
+      },
+      {
+        "term": "guide",
+        "weight": 1.0
+      },
+      {
+        "term": "turbulent",
+        "weight": 1.0
+      },
+      {
+        "term": "result",
+        "weight": 0.3994710376004298
+      },
+      {
+        "term": "experiment",
+        "weight": 0.2918414430165526
+      },
+      {
+        "term": "layer",
+        "weight": 0.2875378832964314
+      },
+      {
+        "term": "boundary",
+        "weight": 0.2594201111685765
+      },
+      {
+        "term": "agreement",
+        "weight": 0.24654903996278246
+      }
+    ]
+  },
+  {
+    "query_id": "7",
+    "original_terms": {
+      "possible": 1,
+      "relate": 1,
+      "available": 1,
+      "pressure": 2,
+      "distribution": 1,
+      "ogive": 2,
+      "forebody": 2,
+      "zero": 1,
+      "angle": 2,
+      "attack": 2,
+      "lower": 1,
+      "surface": 1,
+      "equivalent": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "angle",
+        "weight": 2.6553513532161372
+      },
+      {
+        "term": "attack",
+        "weight": 2.64248894942964
+      },
+      {
+        "term": "pressure",
+        "weight": 2.5862712882563272
+      },
+      {
+        "term": "forebody",
+        "weight": 2.0
+      },
+      {
+        "term": "ogive",
+        "weight": 2.0
+      },
+      {
+        "term": "distribution",
+        "weight": 1.298934229996774
+      },
+      {
+        "term": "zero",
+        "weight": 1.2082894290459785
+      },
+      {
+        "term": "available",
+        "weight": 1.0
+      },
+      {
+        "term": "equivalent",
+        "weight": 1.0
+      },
+      {
+        "term": "lower",
+        "weight": 1.0
+      },
+      {
+        "term": "possible",
+        "weight": 1.0
+      },
+      {
+        "term": "relate",
+        "weight": 1.0
+      }
+    ]
+  },
+  {
+    "query_id": "8",
+    "original_terms": {
+      "method": 1,
+      "dash": 2,
+      "exact": 1,
+      "approximate": 1,
+      "presently": 1,
+      "available": 1,
+      "predicting": 1,
+      "body": 1,
+      "pressure": 1,
+      "angle": 1,
+      "attack": 1
+    },
+    "expanded_top_terms": [
+      {
+        "term": "dash",
+        "weight": 2.0
+      },
+      {
+        "term": "angle",
+        "weight": 1.275603319346574
+      },
+      {
+        "term": "attack",
+        "weight": 1.275603319346574
+      },
+      {
+        "term": "approximate",
+        "weight": 1.2152647253968518
+      },
+      {
+        "term": "method",
+        "weight": 1.1294221954988926
+      },
+      {
+        "term": "pressure",
+        "weight": 1.1137997028434603
+      },
+      {
+        "term": "available",
+        "weight": 1.0
+      },
+      {
+        "term": "body",
+        "weight": 1.0
+      },
+      {
+        "term": "exact",
+        "weight": 1.0
+      },
+      {
+        "term": "predicting",
+        "weight": 1.0
+      },
+      {
+        "term": "presently",
+        "weight": 1.0
+      },
+      {
+        "term": "flow",
+        "weight": 0.4524160455466578
+      }
+    ]
+  }
+]
