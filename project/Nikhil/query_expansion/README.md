@@ -83,3 +83,4 @@ Outputs are saved under `output/`:
 
 - OOV terms are always handled through WordNet replacement into vocabulary terms.
 - Embedding methods differ only in how the in-vocabulary word-word similarity matrix is built.
+- WordNet vocab similarities are cached on disk under `cache/wordnet/` after the first build so later runs can skip the expensive graph construction step.

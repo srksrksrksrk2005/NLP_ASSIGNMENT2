@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Callable, Dict, List
 
 import numpy as np
+import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
 from core.data import get_docs_ids_and_texts, get_query_ids_and_texts, load_cranfield_dataset
@@ -120,6 +121,71 @@ def _preview_query_expansion(
         "original_terms": dict(token_counts),
         "expanded_top_terms": top_terms,
     }
+
+
+
+def _plot_method_metrics(method_name: str, metrics: Dict[str, Dict[str, float]], output_path: Path) -> None:
+    ks = sorted(int(k) for k in metrics.keys())
+    series = {
+        "Precision": [metrics[str(k)]["precision"] for k in ks],
+        "Recall": [metrics[str(k)]["recall"] for k in ks],
+        "F-Score": [metrics[str(k)]["fscore"] for k in ks],
+        "MAP": [metrics[str(k)]["map"] for k in ks],
+        "nDCG": [metrics[str(k)]["ndcg"] for k in ks],
+        "MRR": [metrics[str(k)]["mrr"] for k in ks],
+    }
+
+    plt.figure(figsize=(10, 6))
+    for label, values in series.items():
+        plt.plot(ks, values, marker="o", linewidth=2, label=label)
+    plt.title(f"Evaluation Metrics - {method_name}")
+    plt.xlabel("k")
+    plt.ylabel("Score")
+    plt.grid(True, alpha=0.25)
+    plt.legend(ncol=2)
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=180)
+    plt.close()
+
+
+
+def _plot_overlay_metrics(all_results: Dict[str, Dict[str, Dict[str, float]]], output_path: Path) -> None:
+    if not all_results:
+        return
+
+    metric_names = ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
+    pretty_names = {
+        "precision": "Precision",
+        "recall": "Recall",
+        "fscore": "F-Score",
+        "map": "MAP",
+        "ndcg": "nDCG",
+        "mrr": "MRR",
+    }
+    ks = sorted(int(k) for k in next(iter(all_results.values())).keys())
+    methods = list(all_results.keys())
+
+    fig, axes = plt.subplots(2, 3, figsize=(16, 9), sharex=True)
+    axes = axes.flatten()
+
+    for axis, metric_name in zip(axes, metric_names):
+        for method in methods:
+            values = [all_results[method][str(k)][metric_name] for k in ks]
+            if method == "embedding_tfidf":
+                axis.plot(ks, values, marker="o", linewidth=3, linestyle="--", label=f"{method} baseline")
+            else:
+                axis.plot(ks, values, marker="o", linewidth=1.8, label=method)
+        axis.set_title(pretty_names[metric_name])
+        axis.grid(True, alpha=0.25)
+        axis.set_xlabel("k")
+        axis.set_ylabel("Score")
+
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", ncol=min(3, len(labels)), frameon=False)
+    fig.suptitle("Cranfield Query Expansion Comparison Across Methods", y=0.98)
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    fig.savefig(output_path, dpi=180)
+    plt.close(fig)
 
 
 
@@ -320,6 +386,7 @@ def run() -> None:
                 json.dumps(previews, indent=2),
                 encoding="utf-8",
             )
+            _plot_method_metrics(method, metrics, method_dir / "eval_plot.png")
 
             all_results[method] = metrics
             print(
@@ -359,6 +426,9 @@ def run() -> None:
             json.dumps(failures, indent=2),
             encoding="utf-8",
         )
+
+    if all_results:
+        _plot_overlay_metrics(all_results, output_dir / "eval_overlay.png")
 
     elapsed = time.time() - start
     print(f"\nCompleted in {elapsed:.2f} seconds", flush=True)

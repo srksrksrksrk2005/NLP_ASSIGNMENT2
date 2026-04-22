@@ -1,11 +1,19 @@
 from collections import defaultdict
 from functools import lru_cache
+import gzip
+import hashlib
 import time
+import pickle
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Sequence, Set, Tuple
 
 import nltk
 from nltk.corpus import wordnet as wn
 from tqdm.auto import tqdm
+
+
+CACHE_VERSION = "wordnet_neighbors_v1"
+DEFAULT_CACHE_DIR = Path(__file__).resolve().parents[1] / "cache" / "wordnet"
 
 
 def ensure_wordnet_resources() -> None:
@@ -82,11 +90,26 @@ def build_wordnet_neighbor_map(
     progress: bool = False,
     logger: Callable[[str], None] | None = None,
     log_every: int = 1000,
+    cache_dir: str | Path | None = None,
 ) -> Dict[str, List[Tuple[str, float]]]:
     """
     Build a sparse word-word similarity map over in-vocabulary terms using WordNet.
     """
     ensure_wordnet_resources()
+
+    cache_path = _cache_path(vocab, top_k, min_similarity, cache_dir)
+    if cache_path.exists():
+        try:
+            if logger is not None:
+                logger(f"WordNet matrix cache hit: {cache_path}")
+            with gzip.open(cache_path, "rb") as handle:
+                cached_neighbors = pickle.load(handle)
+            if logger is not None:
+                logger("WordNet matrix loaded from disk cache")
+            return cached_neighbors
+        except Exception as exc:
+            if logger is not None:
+                logger(f"WordNet matrix cache load failed, rebuilding: {exc}")
 
     vocab_set = set(vocab)
     neighbors: Dict[str, List[Tuple[str, float]]] = {}
@@ -118,6 +141,16 @@ def build_wordnet_neighbor_map(
 
     if logger is not None:
         logger(f"WordNet matrix build finished in {time.time() - started:.2f}s")
+
+    try:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        with gzip.open(cache_path, "wb") as handle:
+            pickle.dump(neighbors, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        if logger is not None:
+            logger(f"WordNet matrix cached at {cache_path}")
+    except Exception as exc:
+        if logger is not None:
+            logger(f"WordNet matrix cache save failed: {exc}")
 
     return neighbors
 
@@ -178,3 +211,20 @@ class WordNetOOVResolver:
         scored.sort(key=lambda x: x[1], reverse=True)
         self._cache[key] = scored[:max_candidates]
         return self._cache[key]
+
+
+
+def _cache_path(
+    vocab: Sequence[str],
+    top_k: int,
+    min_similarity: float,
+    cache_dir: str | Path | None,
+) -> Path:
+    hasher = hashlib.sha256()
+    hasher.update(CACHE_VERSION.encode("utf-8"))
+    hasher.update(f"|top_k={top_k}|min_similarity={min_similarity:.6f}".encode("utf-8"))
+    for term in vocab:
+        hasher.update(term.encode("utf-8"))
+        hasher.update(b"\0")
+    cache_root = Path(cache_dir) if cache_dir is not None else DEFAULT_CACHE_DIR
+    return cache_root / f"{hasher.hexdigest()}.pkl.gz"
