@@ -1,0 +1,73 @@
+[
+  {
+    "timestamp": "2026-04-22T19:19:06.063283+00:00",
+    "trial_label": "lsa_sweep_32",
+    "methods": [
+      "baseline_tfidf",
+      "embedding_lsa"
+    ],
+    "config": {
+      "top_k_neighbors": 15,
+      "min_similarity": 0.03,
+      "min_similarity_floor": 0.03,
+      "method_threshold_quantile": 0.45,
+      "self_weight": 1.0,
+      "expansion_weight": 0.25,
+      "replacement_weight": 0.9,
+      "replacement_expansion_weight": 0.2,
+      "max_oov_candidates": 5,
+      "adaptive_mean_similarity_threshold": true,
+      "mean_similarity_factor": 0.85,
+      "adaptive_quantile_similarity_threshold": true,
+      "similarity_quantile": 0.45,
+      "normalize_neighbor_mass": true,
+      "scale_similarity_scores": true,
+      "similarity_scale_mode": "minmax",
+      "similarity_scale_epsilon": 1e-09,
+      "similarity_power": 1.15,
+      "lsa_components": 32,
+      "esa_top_concepts": 100,
+      "w2v_vector_size": 100,
+      "w2v_window": 5,
+      "w2v_min_count": 1,
+      "w2v_workers": 1,
+      "w2v_sg": 1,
+      "w2v_epochs": 20
+    },
+    "k10": {
+      "baseline_tfidf": {
+        "precision": 0.2813333333333333,
+        "recall": 0.4004766597938976,
+        "fscore": 0.30591327188433276,
+        "map": 0.3023784410028705,
+        "ndcg": 0.454638732617823,
+        "mrr": 0.7378730158730159
+      },
+      "embedding_lsa": {
+        "precision": 0.2791111111111111,
+        "recall": 0.395674742997244,
+        "fscore": 0.30328094381311105,
+        "map": 0.30260368614739136,
+        "ndcg": 0.4521787963319613,
+        "mrr": 0.7441340388007054
+      }
+    },
+    "method_details": {
+      "embedding_lsa": {
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 119760,
+        "derived_min_similarity": 0.8570018213234497,
+        "score_min": 0.5603607944956389,
+        "score_mean": 0.8671774904026409,
+        "score_std": 0.10060381717682039,
+        "score_q25": 0.7878760000793785,
+        "score_median": 0.8730954669345465,
+        "score_q75": 0.9616215062321968,
+        "score_q90": 0.9999999999999999,
+        "score_max": 1.0,
+        "score_quantile": 0.8570018213234497
+      }
+    }
+  }
+]
