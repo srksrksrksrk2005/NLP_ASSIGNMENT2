@@ -86,12 +86,24 @@ def build_esa_neighbor_map(
     progress: bool = False,
     logger: Callable[[str], None] | None = None,
     log_every: int = 1000,
+    stats_out: Dict | None = None,
 ) -> NeighborMap:
     """
     ESA-style concept vectors where each term keeps only top concept activations.
     Here, Cranfield documents are treated as explicit concepts.
     """
     term_document = doc_tfidf.T.tocsr()
+    if stats_out is not None:
+        row_nnz = np.diff(term_document.indptr)
+        represented = int(np.count_nonzero(row_nnz))
+        vocab_count = len(vocab)
+        stats_out.update(
+            {
+                "vocab_terms": vocab_count,
+                "represented_terms": represented,
+                "representation_coverage": float(represented / vocab_count) if vocab_count else 0.0,
+            }
+        )
     concept_vectors = _keep_top_k_per_row(
         term_document,
         top_concepts,
@@ -127,6 +139,7 @@ def build_word2vec_neighbor_map(
     progress: bool = False,
     logger: Callable[[str], None] | None = None,
     log_every: int = 1000,
+    stats_out: Dict | None = None,
 ) -> NeighborMap:
     try:
         word2vec_cls = importlib.import_module("gensim.models").Word2Vec
@@ -163,6 +176,17 @@ def build_word2vec_neighbor_map(
         if term in model.wv:
             available_terms.append(term)
             vectors.append(model.wv[term])
+
+    if stats_out is not None:
+        vocab_count = len(vocab)
+        in_model = len(available_terms)
+        stats_out.update(
+            {
+                "vocab_terms": vocab_count,
+                "present_in_model": in_model,
+                "model_coverage": float(in_model / vocab_count) if vocab_count else 0.0,
+            }
+        )
 
     if not available_terms:
         return {term: [] for term in vocab}

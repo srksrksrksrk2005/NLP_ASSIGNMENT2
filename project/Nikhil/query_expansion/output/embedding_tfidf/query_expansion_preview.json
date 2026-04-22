@@ -17,7 +17,7 @@
     "expanded_top_terms": [
       {
         "term": "speed",
-        "weight": 1.0361353274253209
+        "weight": 1.2
       },
       {
         "term": "aeroelastic",
@@ -79,16 +79,16 @@
     },
     "expanded_top_terms": [
       {
-        "term": "structural",
-        "weight": 1.0453375269262903
+        "term": "speed",
+        "weight": 1.2
       },
       {
         "term": "aircraft",
-        "weight": 1.04079788520213
+        "weight": 1.057863506654604
       },
       {
-        "term": "speed",
-        "weight": 1.0361353274253209
+        "term": "structural",
+        "weight": 1.020593833234949
       },
       {
         "term": "aeroelastic",
@@ -111,20 +111,20 @@
         "weight": 1.0
       },
       {
-        "term": "radiant",
-        "weight": 0.10689283633194091
-      },
-      {
-        "term": "angular",
-        "weight": 0.09342879343576371
-      },
-      {
-        "term": "altitude",
-        "weight": 0.0931071636680591
+        "term": "low-aspect",
+        "weight": 0.2
       },
       {
         "term": "solution",
-        "weight": 0.07867537963075279
+        "weight": 0.15664526412191704
+      },
+      {
+        "term": "angular",
+        "weight": 0.1491311474225377
+      },
+      {
+        "term": "radiant",
+        "weight": 0.13557340683571859
       }
     ]
   },
@@ -142,19 +142,19 @@
     "expanded_top_terms": [
       {
         "term": "composite",
-        "weight": 1.0774356595063153
+        "weight": 1.1195357217683266
       },
       {
         "term": "slab",
-        "weight": 1.0671697460881897
+        "weight": 1.0680734620044032
       },
       {
         "term": "problem",
-        "weight": 1.0622629824551846
+        "weight": 1.0331937914780853
       },
       {
         "term": "conduction",
-        "weight": 1.0
+        "weight": 1.0106312386179195
       },
       {
         "term": "far",
@@ -173,20 +173,20 @@
         "weight": 0.2
       },
       {
-        "term": "transfer",
-        "weight": 0.12635608827494396
-      },
-      {
-        "term": "equation",
-        "weight": 0.12130660278414115
-      },
-      {
         "term": "solution",
-        "weight": 0.07867537963075279
+        "weight": 0.15664526412191704
+      },
+      {
+        "term": "transfer",
+        "weight": 0.14951444196532498
       },
       {
         "term": "thermal-boundary",
-        "weight": 0.07702193762336884
+        "weight": 0.14137704193098544
+      },
+      {
+        "term": "shielded",
+        "weight": 0.07804619162420544
       }
     ]
   },
@@ -219,23 +219,23 @@
       },
       {
         "term": "mixture",
-        "weight": 1.1044332979336962
-      },
-      {
-        "term": "equilibrium",
-        "weight": 1.0585356094768548
+        "weight": 1.1524809996640895
       },
       {
         "term": "solution",
-        "weight": 1.0509912069094722
+        "weight": 1.093652138361069
+      },
+      {
+        "term": "equilibrium",
+        "weight": 1.0388723565510571
       },
       {
         "term": "chemical",
-        "weight": 1.0482302240655046
+        "weight": 1.0370716485279514
       },
       {
         "term": "flow",
-        "weight": 1.03620798940252
+        "weight": 1.0062005022936984
       },
       {
         "term": "assumption",
@@ -308,20 +308,20 @@
         "weight": 0.2
       },
       {
-        "term": "reaction",
-        "weight": 0.08333779128096803
-      },
-      {
         "term": "solution",
-        "weight": 0.07867537963075279
+        "weight": 0.15664526412191704
       },
       {
-        "term": "method",
-        "weight": 0.060733097506552675
+        "term": "reaction",
+        "weight": 0.12365340242428167
       },
       {
-        "term": "equation",
-        "weight": 0.06059152286269455
+        "term": "inviscid",
+        "weight": 0.10765667854951755
+      },
+      {
+        "term": "blunt",
+        "weight": 0.04295810151942006
       }
     ]
   },
@@ -339,11 +339,11 @@
     "expanded_top_terms": [
       {
         "term": "experimental",
-        "weight": 1.0811453520018062
+        "weight": 1.1254535412836613
       },
       {
         "term": "theoretical",
-        "weight": 1.068654473437884
+        "weight": 1.0741510121554905
       },
       {
         "term": "behaviour",
@@ -366,24 +366,24 @@
         "weight": 1.0
       },
       {
+        "term": "couette-type",
+        "weight": 0.2
+      },
+      {
         "term": "diffuser",
         "weight": 0.2
       },
       {
         "term": "result",
-        "weight": 0.1793094332581956
+        "weight": 0.1271268396431259
       },
       {
-        "term": "agreement",
-        "weight": 0.11994034157749056
+        "term": "two-dimensional",
+        "weight": 0.09573908452479295
       },
       {
-        "term": "layer",
-        "weight": 0.07318859110234198
-      },
-      {
-        "term": "laminar",
-        "weight": 0.06560590558012201
+        "term": "solution",
+        "weight": 0.09365213836106884
       }
     ]
   },
@@ -407,15 +407,15 @@
     "expanded_top_terms": [
       {
         "term": "angle",
-        "weight": 2.3215440946227015
+        "weight": 2.384586309448497
       },
       {
         "term": "attack",
-        "weight": 2.2679486880060886
+        "weight": 2.3525073427262426
       },
       {
         "term": "pressure",
-        "weight": 2.175156881049691
+        "weight": 2.21449970242214
       },
       {
         "term": "forebody",
@@ -427,7 +427,7 @@
       },
       {
         "term": "distribution",
-        "weight": 1.1247014874591197
+        "weight": 1.0638812138979876
       },
       {
         "term": "available",
@@ -477,19 +477,19 @@
       },
       {
         "term": "attack",
-        "weight": 1.1339743440030443
+        "weight": 1.1762536713631213
       },
       {
         "term": "angle",
-        "weight": 1.1272085538804504
-      },
-      {
-        "term": "method",
-        "weight": 1.0495822227047684
+        "weight": 1.1572337778542958
       },
       {
         "term": "approximate",
-        "weight": 1.040821826313215
+        "weight": 1.0774496205180495
+      },
+      {
+        "term": "method",
+        "weight": 1.0461805163478406
       },
       {
         "term": "available",
@@ -517,7 +517,7 @@
       },
       {
         "term": "solution",
-        "weight": 0.2912576866915818
+        "weight": 0.2672419264710435
       }
     ]
   }

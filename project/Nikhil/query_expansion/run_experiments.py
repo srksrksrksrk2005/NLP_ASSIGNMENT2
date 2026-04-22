@@ -3,8 +3,9 @@ import csv
 import json
 import time
 from collections import Counter, defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Callable, Dict, List, Sequence
+from typing import Any, Callable, Dict, List, Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,6 +26,7 @@ from expansion.wordnet_matrix import WordNetOOVResolver, build_wordnet_neighbor_
 
 
 BASELINE_METHOD = "baseline_tfidf"
+RUN_TIMELINE_FILE = "run_timeline.json"
 
 CUSTOM_QUERY_CASES = [
     {
@@ -96,11 +98,40 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--mean-sim-factor", type=float, default=1.0)
     parser.add_argument(
+        "--disable-quantile-sim-threshold",
+        action="store_true",
+        help="Disable adaptive quantile-based similarity thresholding in expansion.",
+    )
+    parser.add_argument(
+        "--similarity-quantile",
+        type=float,
+        default=0.60,
+        help="Quantile used for distribution-aware similarity thresholding (0..1).",
+    )
+    parser.add_argument(
         "--disable-neighbor-mass-normalization",
         action="store_true",
         help="Disable normalized mass allocation across neighbors.",
     )
+    parser.add_argument(
+        "--disable-similarity-scaling",
+        action="store_true",
+        help="Disable similarity scaling prior to mass allocation.",
+    )
+    parser.add_argument(
+        "--similarity-scale-mode",
+        choices=["minmax", "raw"],
+        default="minmax",
+        help="How to scale similarities before weighting.",
+    )
+    parser.add_argument(
+        "--similarity-scale-epsilon",
+        type=float,
+        default=1e-9,
+        help="Numerical epsilon for similarity scaling denominator.",
+    )
     parser.add_argument("--similarity-power", type=float, default=1.0)
+    parser.add_argument("--trial-label", default="", help="Optional label for run timeline/reporting")
 
     parser.add_argument("--lsa-components", type=int, default=128)
     parser.add_argument("--esa-top-concepts", type=int, default=100)
@@ -288,9 +319,16 @@ def _plot_overlay_metrics(
         axis.set_ylabel("Score")
 
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center", ncol=min(4, len(labels)), frameon=False)
-    fig.suptitle("Cranfield Method Comparison (Baseline vs Expanded Queries)", y=0.98)
-    fig.tight_layout(rect=(0, 0, 1, 0.93))
+    fig.suptitle("Cranfield Method Comparison (Baseline vs Expanded Queries)", y=0.995)
+    fig.legend(
+        handles,
+        labels,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 0.965),
+        ncol=min(3, len(labels)),
+        frameon=False,
+    )
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
     fig.savefig(output_path, dpi=180)
     plt.close(fig)
 
@@ -439,16 +477,102 @@ def _write_example_comparison(
     }
 
 
+def _run_config_snapshot(args: argparse.Namespace) -> Dict[str, Any]:
+    return {
+        "top_k_neighbors": args.top_k_neighbors,
+        "min_similarity": args.min_similarity,
+        "self_weight": args.self_weight,
+        "expansion_weight": args.expansion_weight,
+        "replacement_weight": args.replacement_weight,
+        "replacement_expansion_weight": args.replacement_expansion_weight,
+        "max_oov_candidates": args.max_oov_candidates,
+        "adaptive_mean_similarity_threshold": not args.disable_mean_sim_threshold,
+        "mean_similarity_factor": args.mean_sim_factor,
+        "adaptive_quantile_similarity_threshold": not args.disable_quantile_sim_threshold,
+        "similarity_quantile": args.similarity_quantile,
+        "normalize_neighbor_mass": not args.disable_neighbor_mass_normalization,
+        "scale_similarity_scores": not args.disable_similarity_scaling,
+        "similarity_scale_mode": args.similarity_scale_mode,
+        "similarity_scale_epsilon": args.similarity_scale_epsilon,
+        "similarity_power": args.similarity_power,
+        "lsa_components": args.lsa_components,
+        "esa_top_concepts": args.esa_top_concepts,
+        "w2v_vector_size": args.w2v_vector_size,
+        "w2v_window": args.w2v_window,
+        "w2v_min_count": args.w2v_min_count,
+        "w2v_workers": args.w2v_workers,
+        "w2v_sg": args.w2v_sg,
+        "w2v_epochs": args.w2v_epochs,
+    }
+
+
+def _k10_scores(results: Dict[str, Dict[str, Dict[str, float]]]) -> Dict[str, Dict[str, float]]:
+    snapshot: Dict[str, Dict[str, float]] = {}
+    for method, metrics in results.items():
+        if "10" not in metrics:
+            continue
+        snapshot[method] = {k: float(v) for k, v in metrics["10"].items()}
+    return snapshot
+
+
+def _bootstrap_timeline_entry(previous_results: Dict[str, Dict[str, Dict[str, float]]]) -> Dict[str, Any] | None:
+    k10 = _k10_scores(previous_results)
+    if not k10:
+        return None
+    return {
+        "timestamp": "pre-existing",
+        "trial_label": "previous_snapshot",
+        "methods": list(previous_results.keys()),
+        "config": None,
+        "k10": k10,
+        "method_details": {},
+    }
+
+
+def _build_timeline_entry(
+    args: argparse.Namespace,
+    methods: List[str],
+    all_results: Dict[str, Dict[str, Dict[str, float]]],
+    method_details: Dict[str, Dict[str, Any]],
+) -> Dict[str, Any]:
+    return {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "trial_label": args.trial_label.strip(),
+        "methods": methods,
+        "config": _run_config_snapshot(args),
+        "k10": _k10_scores(all_results),
+        "method_details": method_details,
+    }
+
+
+def _format_config_changes(previous: Dict[str, Any] | None, current: Dict[str, Any] | None) -> List[str]:
+    if not previous or not current:
+        return []
+
+    lines: List[str] = []
+    for key in sorted(current.keys()):
+        if previous.get(key) != current.get(key):
+            lines.append(f"{key}: {previous.get(key)} -> {current.get(key)}")
+    return lines
+
+
 def _write_experiment_report(
     report_path: Path,
     output_dir: Path,
     all_results: Dict[str, Dict[str, Dict[str, float]]],
     args: argparse.Namespace,
     example_summary: Dict[str, List[Dict]],
+    previous_results: Dict[str, Dict[str, Dict[str, float]]] | None = None,
+    timeline_entries: List[Dict[str, Any]] | None = None,
+    method_details: Dict[str, Dict[str, Any]] | None = None,
     baseline_name: str = BASELINE_METHOD,
 ) -> None:
     if not all_results:
         return
+
+    previous_results = previous_results or {}
+    timeline_entries = timeline_entries or []
+    method_details = method_details or {}
 
     k10 = {method: metrics["10"] for method, metrics in all_results.items()}
     ordered_methods = list(all_results.keys())
@@ -456,6 +580,13 @@ def _write_experiment_report(
         ordered_methods = [baseline_name] + [m for m in ordered_methods if m != baseline_name]
 
     baseline_k10 = k10.get(baseline_name)
+    previous_k10 = _k10_scores(previous_results)
+    latest_entry = timeline_entries[-1] if timeline_entries else None
+    previous_entry = timeline_entries[-2] if len(timeline_entries) >= 2 else None
+    config_changes = _format_config_changes(
+        previous_entry.get("config") if previous_entry else None,
+        latest_entry.get("config") if latest_entry else _run_config_snapshot(args),
+    )
 
     best_by_metric = {}
     metric_names = ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
@@ -589,6 +720,25 @@ def run() -> None:
     show_progress = not args.no_progress
     log_every = max(1, args.log_every)
     requested_methods = [m.strip() for m in args.methods.split(",") if m.strip()]
+
+    timeline_file = output_dir / RUN_TIMELINE_FILE
+    timeline_entries: List[Dict[str, Any]] = []
+    if timeline_file.exists():
+        try:
+            loaded = json.loads(timeline_file.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                timeline_entries = [entry for entry in loaded if isinstance(entry, dict)]
+        except Exception:
+            timeline_entries = []
+
+    previous_results: Dict[str, Dict[str, Dict[str, float]]] = {}
+    if timeline_entries:
+        previous_entry = timeline_entries[-1]
+        previous_k10 = previous_entry.get("k10", {})
+        if isinstance(previous_k10, dict):
+            previous_results = {method: {"10": metrics} for method, metrics in previous_k10.items() if isinstance(metrics, dict)}
+
+    method_details: Dict[str, Dict[str, Any]] = {}
 
     log(f"Loading Cranfield dataset from: {args.dataset}")
     docs_json, queries_json, qrels = load_cranfield_dataset(args.dataset)
@@ -724,6 +874,7 @@ def run() -> None:
                         log_every=log_every,
                     )
                 elif method == "embedding_esa":
+                    esa_stats: Dict[str, Any] = {}
                     neighbors = build_esa_neighbor_map(
                         doc_tfidf,
                         retriever.vocab,
@@ -733,8 +884,16 @@ def run() -> None:
                         progress=show_progress,
                         logger=log,
                         log_every=log_every,
+                        stats_out=esa_stats,
                     )
+                    if esa_stats:
+                        method_details[method] = esa_stats
+                        log(
+                            f"[{method}] Coverage: {esa_stats.get('represented_terms', 0)}/{esa_stats.get('vocab_terms', 0)} terms "
+                            f"({float(esa_stats.get('representation_coverage', 0.0)):.2%})"
+                        )
                 elif method == "embedding_word2vec":
+                    w2v_stats: Dict[str, Any] = {}
                     neighbors = build_word2vec_neighbor_map(
                         processed_docs,
                         retriever.vocab,
@@ -749,7 +908,14 @@ def run() -> None:
                         progress=show_progress,
                         logger=log,
                         log_every=log_every,
+                        stats_out=w2v_stats,
                     )
+                    if w2v_stats:
+                        method_details[method] = w2v_stats
+                        log(
+                            f"[{method}] Coverage: {w2v_stats.get('present_in_model', 0)}/{w2v_stats.get('vocab_terms', 0)} terms "
+                            f"({float(w2v_stats.get('model_coverage', 0.0)):.2%})"
+                        )
                 else:
                     raise ValueError(f"Unknown method: {method}")
 
@@ -876,6 +1042,10 @@ def run() -> None:
         (output_dir / "failed_methods.json").write_text(json.dumps(failures, indent=2), encoding="utf-8")
 
     if all_results:
+        timeline_entry = _build_timeline_entry(args, list(all_results.keys()), all_results, method_details)
+        timeline_entries.append(timeline_entry)
+        timeline_file.write_text(json.dumps(timeline_entries, indent=2), encoding="utf-8")
+
         _plot_overlay_metrics(all_results, output_dir / "eval_overlay.png", baseline_name=BASELINE_METHOD)
 
         baseline_metrics = all_results.get(BASELINE_METHOD)
@@ -908,6 +1078,9 @@ def run() -> None:
             all_results=all_results,
             args=args,
             example_summary=example_summary,
+            previous_results=previous_results,
+            timeline_entries=timeline_entries,
+            method_details=method_details,
             baseline_name=BASELINE_METHOD,
         )
 

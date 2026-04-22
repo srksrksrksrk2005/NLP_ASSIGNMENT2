@@ -15,13 +15,13 @@
 - Dataset: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/cranfield
 - Methods: baseline_tfidf, wordnet, embedding_tfidf, embedding_lsa, embedding_esa, embedding_word2vec
 - top_k_neighbors: 10
-- min_similarity: 0.08
+- min_similarity: 0.05
 - self_weight: 1.0
 - expansion_weight: 0.2
 - replacement_weight: 0.85
 - replacement_expansion_weight: 0.15
 - adaptive_mean_similarity_threshold: True
-- mean_similarity_factor: 1.0
+- mean_similarity_factor: 0.9
 - normalize_neighbor_mass: True
 - similarity_power: 1.0
 
@@ -30,30 +30,30 @@
 | Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | baseline_tfidf | 0.2813 | 0.4005 | 0.3059 | 0.3024 | 0.4546 | 0.7379 |
-| wordnet | 0.2818 | 0.4028 | 0.3069 | 0.3058 | 0.4588 | 0.7476 |
-| embedding_tfidf | 0.2773 | 0.3946 | 0.3014 | 0.3029 | 0.4506 | 0.7438 |
-| embedding_lsa | 0.2800 | 0.4002 | 0.3052 | 0.3031 | 0.4540 | 0.7358 |
-| embedding_esa | 0.2764 | 0.3934 | 0.3005 | 0.3030 | 0.4501 | 0.7434 |
-| embedding_word2vec | 0.2822 | 0.4025 | 0.3072 | 0.3061 | 0.4560 | 0.7368 |
+| wordnet | 0.2818 | 0.4033 | 0.3071 | 0.3059 | 0.4596 | 0.7506 |
+| embedding_tfidf | 0.2804 | 0.3999 | 0.3054 | 0.3026 | 0.4512 | 0.7403 |
+| embedding_lsa | 0.2782 | 0.3971 | 0.3031 | 0.3023 | 0.4520 | 0.7441 |
+| embedding_esa | 0.2800 | 0.3993 | 0.3049 | 0.3032 | 0.4523 | 0.7419 |
+| embedding_word2vec | 0.2796 | 0.4004 | 0.3051 | 0.3043 | 0.4550 | 0.7405 |
 
 ## Delta vs Baseline (k=10)
 
 | Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| wordnet | +0.0004 | +0.0024 | +0.0010 | +0.0035 | +0.0041 | +0.0098 |
-| embedding_tfidf | -0.0040 | -0.0059 | -0.0045 | +0.0005 | -0.0040 | +0.0059 |
-| embedding_lsa | -0.0013 | -0.0003 | -0.0007 | +0.0007 | -0.0006 | -0.0020 |
-| embedding_esa | -0.0049 | -0.0070 | -0.0054 | +0.0006 | -0.0045 | +0.0056 |
-| embedding_word2vec | +0.0009 | +0.0021 | +0.0013 | +0.0037 | +0.0014 | -0.0011 |
+| wordnet | +0.0004 | +0.0028 | +0.0012 | +0.0036 | +0.0050 | +0.0127 |
+| embedding_tfidf | -0.0009 | -0.0006 | -0.0005 | +0.0002 | -0.0034 | +0.0024 |
+| embedding_lsa | -0.0031 | -0.0034 | -0.0028 | -0.0001 | -0.0026 | +0.0062 |
+| embedding_esa | -0.0013 | -0.0011 | -0.0010 | +0.0008 | -0.0023 | +0.0041 |
+| embedding_word2vec | -0.0018 | -0.0001 | -0.0008 | +0.0019 | +0.0004 | +0.0027 |
 
 ## Best Method Per Metric at k=10
 
-- precision: embedding_word2vec (0.2822)
-- recall: wordnet (0.4028)
-- fscore: embedding_word2vec (0.3072)
-- map: embedding_word2vec (0.3061)
-- ndcg: wordnet (0.4588)
-- mrr: wordnet (0.7476)
+- precision: wordnet (0.2818)
+- recall: wordnet (0.4033)
+- fscore: wordnet (0.3071)
+- map: wordnet (0.3059)
+- ndcg: wordnet (0.4596)
+- mrr: wordnet (0.7506)
 
 ## Example Cases Summary
 

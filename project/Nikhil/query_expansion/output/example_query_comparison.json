@@ -37,9 +37,9 @@
       "method": "embedding_tfidf",
       "top5_docs": [
         "21",
-        "1215",
         "306",
         "326",
+        "1215",
         "102"
       ],
       "hits_at_5": 1,
@@ -70,7 +70,7 @@
         "306",
         "326",
         "1215",
-        "528"
+        "102"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 4
@@ -127,8 +127,8 @@
       "method": "embedding_tfidf",
       "top5_docs": [
         "1257",
-        "272",
         "1264",
+        "272",
         "37",
         "43"
       ],
@@ -218,8 +218,8 @@
       "top5_docs": [
         "1257",
         "536",
-        "1141",
         "37",
+        "1141",
         "976"
       ],
       "hits_at_5": 2,
@@ -231,9 +231,9 @@
       "query_text": "how can one detect transition phenomena in hypersonic wakes .",
       "method": "embedding_lsa",
       "top5_docs": [
-        "536",
-        "1257",
         "1141",
+        "1257",
+        "536",
         "37",
         "272"
       ],
@@ -248,8 +248,8 @@
       "top5_docs": [
         "1257",
         "536",
-        "1141",
         "37",
+        "1141",
         "976"
       ],
       "hits_at_5": 2,
@@ -309,8 +309,8 @@
         "326",
         "494",
         "1301",
-        "1214",
-        "23"
+        "23",
+        "1214"
       ],
       "hits_at_5": 3,
       "num_relevant_total": 11
@@ -324,8 +324,8 @@
         "326",
         "494",
         "1301",
-        "94",
-        "23"
+        "23",
+        "94"
       ],
       "hits_at_5": 4,
       "num_relevant_total": 11
@@ -339,8 +339,8 @@
         "326",
         "494",
         "1301",
-        "1214",
-        "23"
+        "23",
+        "1214"
       ],
       "hits_at_5": 3,
       "num_relevant_total": 11
@@ -353,8 +353,8 @@
       "top5_docs": [
         "494",
         "326",
-        "23",
         "1301",
+        "23",
         "94"
       ],
       "hits_at_5": 4,
@@ -413,23 +413,23 @@
       "top5_docs": [
         "878",
         "391",
-        "52",
-        "593",
-        "390"
-      ],
-      "hits_at_5": 2,
-      "num_relevant_total": 3
-    },
-    {
-      "case_type": "dataset",
-      "query_id": "64",
-      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
-      "method": "embedding_esa",
-      "top5_docs": [
-        "391",
-        "878",
         "1252",
+        "52",
+        "593"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "391",
+        "878",
         "390",
+        "1252",
         "52"
       ],
       "hits_at_5": 2,
@@ -444,8 +444,8 @@
         "391",
         "878",
         "390",
-        "593",
-        "52"
+        "52",
+        "593"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 3
@@ -488,8 +488,8 @@
       "top5_docs": [
         "206",
         "652",
-        "714",
         "249",
+        "714",
         "799"
       ],
       "hits_at_5": 1,
@@ -503,9 +503,9 @@
       "top5_docs": [
         "206",
         "652",
+        "799",
         "249",
-        "714",
-        "799"
+        "714"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -531,8 +531,8 @@
       "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
       "method": "embedding_word2vec",
       "top5_docs": [
-        "652",
         "206",
+        "652",
         "249",
         "714",
         "799"
@@ -593,8 +593,8 @@
       "top5_docs": [
         "265",
         "311",
-        "1187",
         "1367",
+        "1187",
         "996"
       ],
       "hits_at_5": 3,
@@ -695,7 +695,7 @@
         "941",
         "270",
         "102",
-        "1221"
+        "571"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 4
@@ -778,8 +778,8 @@
       "top5_docs": [
         "1141",
         "976",
-        "289",
         "154",
+        "289",
         "536"
       ],
       "hits_at_5": 2,
@@ -794,9 +794,9 @@
       "method": "embedding_lsa",
       "top5_docs": [
         "1141",
-        "289",
         "976",
         "154",
+        "289",
         "536"
       ],
       "hits_at_5": 2,
@@ -828,12 +828,12 @@
       "method": "embedding_word2vec",
       "top5_docs": [
         "1141",
-        "976",
         "1196",
-        "289",
-        "154"
+        "976",
+        "154",
+        "536"
       ],
-      "hits_at_5": 1,
+      "hits_at_5": 2,
       "num_relevant_total": 13
     },
     {
@@ -897,9 +897,9 @@
       "top5_docs": [
         "391",
         "878",
+        "1252",
         "593",
-        "1111",
-        "1252"
+        "1111"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -932,8 +932,8 @@
         "391",
         "878",
         "593",
-        "1111",
-        "1252"
+        "1008",
+        "1111"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -1000,8 +1000,8 @@
         "265",
         "311",
         "1367",
-        "1187",
-        "996"
+        "996",
+        "1187"
       ],
       "hits_at_5": 3,
       "num_relevant_total": 14
@@ -1101,8 +1101,8 @@
       "top5_docs": [
         "669",
         "450",
-        "1270",
         "607",
+        "1270",
         "653"
       ],
       "hits_at_5": 0,

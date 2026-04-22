@@ -123,8 +123,8 @@
         "weight": 0.2
       },
       {
-        "term": "upper",
-        "weight": 0.1
+        "term": "higher",
+        "weight": 0.15294117647058803
       }
     ]
   },
@@ -317,11 +317,11 @@
       },
       {
         "term": "arrangement",
-        "weight": 0.06666666666666667
+        "weight": 0.06666666666666668
       },
       {
-        "term": "dynamic",
-        "weight": 0.06666666666666667
+        "term": "organization",
+        "weight": 0.06666666666666668
       }
     ]
   },
@@ -374,11 +374,11 @@
         "weight": 0.2
       },
       {
-        "term": "conduct",
-        "weight": 0.12000000000000001
+        "term": "behavior",
+        "weight": 0.1
       },
       {
-        "term": "behavior",
+        "term": "conduct",
         "weight": 0.1
       },
       {

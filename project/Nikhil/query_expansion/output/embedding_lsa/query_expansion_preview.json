@@ -111,20 +111,20 @@
         "weight": 1.0
       },
       {
-        "term": "structure",
-        "weight": 0.10098945111260951
-      },
-      {
         "term": "low",
-        "weight": 0.09940508748864928
+        "weight": 0.1895743179153866
       },
       {
-        "term": "throw",
-        "weight": 0.0990105488873905
+        "term": "radiant",
+        "weight": 0.1468940939889651
       },
       {
-        "term": "effect",
-        "weight": 0.06596383441499967
+        "term": "diminishes",
+        "weight": 0.1341841624060987
+      },
+      {
+        "term": "stol",
+        "weight": 0.11394513822598372
       }
     ]
   },
@@ -141,12 +141,16 @@
     },
     "expanded_top_terms": [
       {
-        "term": "slab",
-        "weight": 1.066830330036121
+        "term": "composite",
+        "weight": 1.0767483491195509
       },
       {
-        "term": "composite",
-        "weight": 1.0337737322078344
+        "term": "slab",
+        "weight": 1.0671194313796089
+      },
+      {
+        "term": "problem",
+        "weight": 1.0063096798606186
       },
       {
         "term": "conduction",
@@ -161,32 +165,28 @@
         "weight": 1.0
       },
       {
-        "term": "problem",
-        "weight": 1.0
-      },
-      {
         "term": "solved",
         "weight": 1.0
       },
       {
         "term": "transfer",
-        "weight": 0.2
+        "weight": 0.18794458163087782
       },
       {
         "term": "numerical",
-        "weight": 0.1552368035156418
-      },
-      {
-        "term": "equation",
-        "weight": 0.09518868823018897
+        "weight": 0.18337253538831955
       },
       {
         "term": "closely",
-        "weight": 0.06808665103998351
+        "weight": 0.12554620303056857
+      },
+      {
+        "term": "boundary-value",
+        "weight": 0.09162182225277753
       },
       {
         "term": "shielded",
-        "weight": 0.06741828000781203
+        "weight": 0.07405594799052316
       }
     ]
   },
@@ -215,15 +215,15 @@
     "expanded_top_terms": [
       {
         "term": "mixture",
-        "weight": 1.2689986190238447
+        "weight": 1.294862031741392
       },
       {
         "term": "chemically",
-        "weight": 1.2674343265165968
+        "weight": 1.2748066926194472
       },
       {
         "term": "developed",
-        "weight": 1.0385016979835269
+        "weight": 1.0017007655659254
       },
       {
         "term": "assumption",
@@ -305,23 +305,23 @@
       },
       {
         "term": "reduced-frequency",
-        "weight": 0.10520276701732917
-      },
-      {
-        "term": "basically",
-        "weight": 0.09479723298267083
-      },
-      {
-        "term": "specie",
-        "weight": 0.09163473631542955
+        "weight": 0.165733374764532
       },
       {
         "term": "inviscid",
-        "weight": 0.0683232178495693
+        "weight": 0.09684361192117794
       },
       {
-        "term": "independence",
-        "weight": 0.06678765813279854
+        "term": "reaction",
+        "weight": 0.09409241368630628
+      },
+      {
+        "term": "boundary-value",
+        "weight": 0.09162182225277753
+      },
+      {
+        "term": "radiant",
+        "weight": 0.08862432780930296
       }
     ]
   },
@@ -339,11 +339,11 @@
     "expanded_top_terms": [
       {
         "term": "experimental",
-        "weight": 1.076886254577408
+        "weight": 1.1598248996317224
       },
       {
         "term": "theoretical",
-        "weight": 1.0337472443630313
+        "weight": 1.0449222602456214
       },
       {
         "term": "behaviour",
@@ -366,24 +366,24 @@
         "weight": 1.0
       },
       {
-        "term": "result",
-        "weight": 0.14530337388012077
-      },
-      {
         "term": "intake",
-        "weight": 0.10169836697592594
+        "weight": 0.16133299158583717
       },
       {
-        "term": "scarce",
-        "weight": 0.09830163302407408
-      },
-      {
-        "term": "prediction",
-        "weight": 0.09399522769319976
+        "term": "result",
+        "weight": 0.14684428911165678
       },
       {
         "term": "s-n",
-        "weight": 0.0683589624910257
+        "weight": 0.12444925902884962
+      },
+      {
+        "term": "two-dimensional",
+        "weight": 0.11523909816641942
+      },
+      {
+        "term": "electrically",
+        "weight": 0.10164489345626695
       }
     ]
   },
@@ -406,16 +406,16 @@
     },
     "expanded_top_terms": [
       {
+        "term": "attack",
+        "weight": 2.2644532836806577
+      },
+      {
         "term": "angle",
-        "weight": 2.1941840506656747
+        "weight": 2.218442276820486
       },
       {
         "term": "pressure",
-        "weight": 2.1445600541385716
-      },
-      {
-        "term": "attack",
-        "weight": 2.121314379319478
+        "weight": 2.0961053234256397
       },
       {
         "term": "forebody",
@@ -476,20 +476,20 @@
         "weight": 2.0
       },
       {
-        "term": "angle",
-        "weight": 1.0730784717871427
-      },
-      {
         "term": "attack",
-        "weight": 1.060657189659739
+        "weight": 1.1322266418403288
       },
       {
-        "term": "method",
-        "weight": 1.051207985005632
+        "term": "angle",
+        "weight": 1.100253792683741
       },
       {
         "term": "approximate",
-        "weight": 1.0406486872720115
+        "weight": 1.076610373779399
+      },
+      {
+        "term": "method",
+        "weight": 1.0667434945672416
       },
       {
         "term": "available",
@@ -517,7 +517,7 @@
       },
       {
         "term": "cooperation",
-        "weight": 0.2
+        "weight": 0.19523158613018338
       }
     ]
   }
