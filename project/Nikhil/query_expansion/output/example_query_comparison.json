@@ -1,0 +1,1146 @@
+{
+  "dataset_cases": [
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "21",
+        "326",
+        "306",
+        "1215",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "wordnet",
+      "top5_docs": [
+        "21",
+        "326",
+        "306",
+        "1215",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "21",
+        "1215",
+        "306",
+        "326",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "21",
+        "306",
+        "326",
+        "1215",
+        "22"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "21",
+        "306",
+        "326",
+        "1215",
+        "528"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "9",
+      "query_text": "papers on internal /slip flow/ heat transfer studies .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "21",
+        "326",
+        "306",
+        "1215",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "1257",
+        "1264",
+        "272",
+        "43",
+        "1278"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "wordnet",
+      "top5_docs": [
+        "1257",
+        "1264",
+        "272",
+        "43",
+        "1278"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "1257",
+        "272",
+        "1264",
+        "37",
+        "43"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "1257",
+        "272",
+        "1264",
+        "43",
+        "1278"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "1257",
+        "272",
+        "1264",
+        "37",
+        "43"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "39",
+      "query_text": "how can one detect transition phenomena in boundary layers .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "1257",
+        "272",
+        "1264",
+        "43",
+        "293"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "536",
+        "1141",
+        "1257",
+        "37",
+        "272"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "wordnet",
+      "top5_docs": [
+        "536",
+        "1141",
+        "1257",
+        "37",
+        "272"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "1257",
+        "536",
+        "1141",
+        "37",
+        "976"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "536",
+        "1257",
+        "1141",
+        "37",
+        "272"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "1257",
+        "536",
+        "1141",
+        "37",
+        "976"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "40",
+      "query_text": "how can one detect transition phenomena in hypersonic wakes .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "536",
+        "1141",
+        "1257",
+        "37",
+        "272"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "326",
+        "494",
+        "23",
+        "94",
+        "1301"
+      ],
+      "hits_at_5": 4,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "wordnet",
+      "top5_docs": [
+        "326",
+        "494",
+        "23",
+        "94",
+        "1301"
+      ],
+      "hits_at_5": 4,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "326",
+        "494",
+        "1301",
+        "1214",
+        "23"
+      ],
+      "hits_at_5": 3,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "326",
+        "494",
+        "1301",
+        "94",
+        "23"
+      ],
+      "hits_at_5": 4,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "326",
+        "494",
+        "1301",
+        "1214",
+        "23"
+      ],
+      "hits_at_5": 3,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "51",
+      "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "494",
+        "326",
+        "23",
+        "1301",
+        "94"
+      ],
+      "hits_at_5": 4,
+      "num_relevant_total": 11
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "878",
+        "391",
+        "52",
+        "390",
+        "593"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "wordnet",
+      "top5_docs": [
+        "391",
+        "878",
+        "52",
+        "593",
+        "390"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "391",
+        "878",
+        "1252",
+        "390",
+        "52"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "878",
+        "391",
+        "52",
+        "593",
+        "390"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "391",
+        "878",
+        "1252",
+        "390",
+        "52"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "64",
+      "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "391",
+        "878",
+        "390",
+        "593",
+        "52"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "652",
+        "206",
+        "249",
+        "799",
+        "714"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "wordnet",
+      "top5_docs": [
+        "652",
+        "206",
+        "249",
+        "799",
+        "714"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "206",
+        "652",
+        "714",
+        "249",
+        "799"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "206",
+        "652",
+        "249",
+        "714",
+        "799"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "206",
+        "652",
+        "714",
+        "249",
+        "799"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "81",
+      "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "652",
+        "206",
+        "249",
+        "714",
+        "799"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "wordnet",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "265",
+        "311",
+        "996",
+        "1187",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "1367",
+        "996"
+      ],
+      "hits_at_5": 3,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "265",
+        "311",
+        "996",
+        "1187",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "dataset",
+      "query_id": "90",
+      "query_text": "recent data on shock-induced boundary-layer separation .",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    }
+  ],
+  "custom_cases": [
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "1221",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "wordnet",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "1221",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "102",
+        "1221"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "102",
+        "1221"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "102",
+        "1221"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_slip_flow",
+      "case_title": "slip-flow heat transfer in internal channels",
+      "query_text": "slip-flow heat transfer in internal channels",
+      "mapped_query_id": "9",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "550",
+        "941",
+        "270",
+        "1221",
+        "102"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 4
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "1141",
+        "976",
+        "289",
+        "154",
+        "536"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "wordnet",
+      "top5_docs": [
+        "1141",
+        "976",
+        "289",
+        "154",
+        "536"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "1141",
+        "976",
+        "289",
+        "154",
+        "536"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "1141",
+        "289",
+        "976",
+        "154",
+        "536"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "1141",
+        "976",
+        "289",
+        "154",
+        "536"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_hypersonic_transition",
+      "case_title": "transition detection in hypersonic wakes behind slender bodies",
+      "query_text": "transition detection in hypersonic wakes behind slender bodies",
+      "mapped_query_id": "40",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "1141",
+        "976",
+        "1196",
+        "289",
+        "154"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 13
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "391",
+        "878",
+        "593",
+        "1111",
+        "202"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "wordnet",
+      "top5_docs": [
+        "391",
+        "878",
+        "593",
+        "1111",
+        "202"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "391",
+        "878",
+        "1252",
+        "593",
+        "1111"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "391",
+        "878",
+        "593",
+        "1111",
+        "1252"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "391",
+        "878",
+        "1252",
+        "593",
+        "1111"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_flutter_shapes",
+      "case_title": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "query_text": "replace vibrational shapes with static deflection shapes for flutter prediction",
+      "mapped_query_id": "64",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "391",
+        "878",
+        "593",
+        "1111",
+        "1252"
+      ],
+      "hits_at_5": 1,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "wordnet",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "265",
+        "311",
+        "996",
+        "1187",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "265",
+        "311",
+        "1367",
+        "1187",
+        "996"
+      ],
+      "hits_at_5": 3,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "265",
+        "311",
+        "996",
+        "1187",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_shock_separation",
+      "case_title": "shock-induced boundary-layer separation",
+      "query_text": "shock-induced boundary-layer separation",
+      "mapped_query_id": "90",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "265",
+        "311",
+        "1187",
+        "996",
+        "457"
+      ],
+      "hits_at_5": 2,
+      "num_relevant_total": 14
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "baseline_tfidf",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "wordnet",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "embedding_tfidf",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "embedding_lsa",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "embedding_esa",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    },
+    {
+      "case_type": "custom",
+      "case_id": "custom_oov_liftbody",
+      "case_title": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "query_text": "what corrections are needed for a liftbody in a propwash flowfield inside a test duct",
+      "mapped_query_id": "81",
+      "method": "embedding_word2vec",
+      "top5_docs": [
+        "669",
+        "450",
+        "1270",
+        "607",
+        "653"
+      ],
+      "hits_at_5": 0,
+      "num_relevant_total": 3
+    }
+  ]
+}
