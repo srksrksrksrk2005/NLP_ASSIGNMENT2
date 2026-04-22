@@ -22,8 +22,8 @@
       "method": "wordnet",
       "top5_docs": [
         "21",
-        "326",
         "306",
+        "326",
         "1215",
         "102"
       ],
@@ -55,9 +55,9 @@
         "306",
         "326",
         "1215",
-        "22"
+        "102"
       ],
-      "hits_at_5": 2,
+      "hits_at_5": 1,
       "num_relevant_total": 4
     },
     {
@@ -129,8 +129,8 @@
         "1257",
         "1264",
         "272",
-        "37",
-        "43"
+        "43",
+        "315"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 14
@@ -159,8 +159,8 @@
         "1257",
         "272",
         "1264",
-        "37",
-        "43"
+        "43",
+        "1278"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 14
@@ -172,10 +172,10 @@
       "method": "embedding_word2vec",
       "top5_docs": [
         "1257",
-        "272",
         "1264",
+        "272",
         "43",
-        "293"
+        "1278"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 14
@@ -218,11 +218,11 @@
       "top5_docs": [
         "1257",
         "536",
-        "37",
         "1141",
-        "976"
+        "976",
+        "272"
       ],
-      "hits_at_5": 2,
+      "hits_at_5": 3,
       "num_relevant_total": 13
     },
     {
@@ -234,8 +234,8 @@
         "1141",
         "1257",
         "536",
-        "37",
-        "272"
+        "272",
+        "37"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 13
@@ -248,11 +248,11 @@
       "top5_docs": [
         "1257",
         "536",
-        "37",
         "1141",
+        "272",
         "976"
       ],
-      "hits_at_5": 2,
+      "hits_at_5": 3,
       "num_relevant_total": 13
     },
     {
@@ -310,9 +310,9 @@
         "494",
         "1301",
         "23",
-        "1214"
+        "192"
       ],
-      "hits_at_5": 3,
+      "hits_at_5": 4,
       "num_relevant_total": 11
     },
     {
@@ -325,9 +325,9 @@
         "494",
         "1301",
         "23",
-        "94"
+        "133"
       ],
-      "hits_at_5": 4,
+      "hits_at_5": 3,
       "num_relevant_total": 11
     },
     {
@@ -338,11 +338,11 @@
       "top5_docs": [
         "326",
         "494",
-        "1301",
         "23",
-        "1214"
+        "1301",
+        "94"
       ],
-      "hits_at_5": 3,
+      "hits_at_5": 4,
       "num_relevant_total": 11
     },
     {
@@ -351,11 +351,11 @@
       "query_text": "what is the available information pertaining to boundary layers on very slender bodies of revolution in continuum flow (the ?transverse curvature  effect) .",
       "method": "embedding_word2vec",
       "top5_docs": [
-        "494",
         "326",
-        "1301",
+        "494",
         "23",
-        "94"
+        "94",
+        "1301"
       ],
       "hits_at_5": 4,
       "num_relevant_total": 11
@@ -383,8 +383,8 @@
       "top5_docs": [
         "391",
         "878",
-        "52",
         "593",
+        "52",
         "390"
       ],
       "hits_at_5": 2,
@@ -397,10 +397,10 @@
       "method": "embedding_tfidf",
       "top5_docs": [
         "391",
+        "390",
         "878",
         "1252",
-        "390",
-        "52"
+        "1008"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 3
@@ -411,13 +411,13 @@
       "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
       "method": "embedding_lsa",
       "top5_docs": [
-        "878",
         "391",
+        "878",
         "1252",
         "52",
-        "593"
+        "390"
       ],
-      "hits_at_5": 1,
+      "hits_at_5": 2,
       "num_relevant_total": 3
     },
     {
@@ -427,10 +427,10 @@
       "method": "embedding_esa",
       "top5_docs": [
         "391",
-        "878",
         "390",
+        "878",
         "1252",
-        "52"
+        "1008"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 3
@@ -441,10 +441,10 @@
       "query_text": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
       "method": "embedding_word2vec",
       "top5_docs": [
-        "391",
         "878",
-        "390",
+        "391",
         "52",
+        "390",
         "593"
       ],
       "hits_at_5": 2,
@@ -503,9 +503,9 @@
       "top5_docs": [
         "206",
         "652",
-        "799",
         "249",
-        "714"
+        "714",
+        "799"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -518,8 +518,8 @@
       "top5_docs": [
         "206",
         "652",
-        "714",
         "249",
+        "714",
         "799"
       ],
       "hits_at_5": 1,
@@ -531,8 +531,8 @@
       "query_text": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
       "method": "embedding_word2vec",
       "top5_docs": [
-        "206",
         "652",
+        "206",
         "249",
         "714",
         "799"
@@ -578,9 +578,9 @@
       "top5_docs": [
         "265",
         "311",
-        "996",
+        "1295",
         "1187",
-        "457"
+        "996"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 14
@@ -608,9 +608,9 @@
       "top5_docs": [
         "265",
         "311",
-        "996",
+        "1295",
         "1187",
-        "457"
+        "996"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 14
@@ -678,7 +678,7 @@
         "941",
         "270",
         "102",
-        "1221"
+        "846"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 4
@@ -694,8 +694,8 @@
         "550",
         "941",
         "270",
-        "102",
-        "571"
+        "571",
+        "102"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 4
@@ -712,7 +712,7 @@
         "941",
         "270",
         "102",
-        "1221"
+        "846"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 4
@@ -794,8 +794,8 @@
       "method": "embedding_lsa",
       "top5_docs": [
         "1141",
-        "976",
         "154",
+        "976",
         "289",
         "536"
       ],
@@ -828,10 +828,10 @@
       "method": "embedding_word2vec",
       "top5_docs": [
         "1141",
-        "1196",
         "976",
-        "154",
-        "536"
+        "536",
+        "289",
+        "154"
       ],
       "hits_at_5": 2,
       "num_relevant_total": 13
@@ -879,10 +879,10 @@
       "method": "embedding_tfidf",
       "top5_docs": [
         "391",
+        "1008",
         "878",
         "1252",
-        "593",
-        "1111"
+        "856"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -913,10 +913,10 @@
       "method": "embedding_esa",
       "top5_docs": [
         "391",
+        "1008",
         "878",
         "1252",
-        "593",
-        "1111"
+        "856"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -932,8 +932,8 @@
         "391",
         "878",
         "593",
-        "1008",
-        "1111"
+        "1111",
+        "202"
       ],
       "hits_at_5": 1,
       "num_relevant_total": 3
@@ -982,8 +982,8 @@
       "top5_docs": [
         "265",
         "311",
-        "996",
         "1187",
+        "996",
         "457"
       ],
       "hits_at_5": 2,
@@ -1000,8 +1000,8 @@
         "265",
         "311",
         "1367",
-        "996",
-        "1187"
+        "1187",
+        "996"
       ],
       "hits_at_5": 3,
       "num_relevant_total": 14
@@ -1016,8 +1016,8 @@
       "top5_docs": [
         "265",
         "311",
-        "996",
         "1187",
+        "996",
         "457"
       ],
       "hits_at_5": 2,
@@ -1099,9 +1099,9 @@
       "mapped_query_id": "81",
       "method": "embedding_lsa",
       "top5_docs": [
+        "607",
         "669",
         "450",
-        "607",
         "1270",
         "653"
       ],

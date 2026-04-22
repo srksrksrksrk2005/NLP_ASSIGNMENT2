@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       },
       {
         "term": "obeying",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       }
     ]
   },
@@ -109,22 +109,6 @@
       {
         "term": "structural",
         "weight": 1.0
-      },
-      {
-        "term": "cruise",
-        "weight": 0.16618988656539357
-      },
-      {
-        "term": "rotary",
-        "weight": 0.1487222683730198
-      },
-      {
-        "term": "low",
-        "weight": 0.14583338225681
-      },
-      {
-        "term": "travelling",
-        "weight": 0.1082921558982964
       }
     ]
   },
@@ -142,15 +126,15 @@
     "expanded_top_terms": [
       {
         "term": "composite",
-        "weight": 1.1248120569284628
+        "weight": 1.25
       },
       {
         "term": "slab",
-        "weight": 1.1043376672720222
+        "weight": 1.25
       },
       {
         "term": "conduction",
-        "weight": 1.0394554212412481
+        "weight": 1.0
       },
       {
         "term": "far",
@@ -167,26 +151,6 @@
       {
         "term": "solved",
         "weight": 1.0
-      },
-      {
-        "term": "two-layer",
-        "weight": 0.1377163892942215
-      },
-      {
-        "term": "transfer",
-        "weight": 0.11666891448583608
-      },
-      {
-        "term": "numerically",
-        "weight": 0.11643115781557034
-      },
-      {
-        "term": "boundary-value",
-        "weight": 0.09771786989751616
-      },
-      {
-        "term": "valid",
-        "weight": 0.09410718778074384
       }
     ]
   },
@@ -213,14 +177,6 @@
       "equilibrium": 1
     },
     "expanded_top_terms": [
-      {
-        "term": "simplifying",
-        "weight": 1.1490371217644542
-      },
-      {
-        "term": "mixture",
-        "weight": 1.1015893794692537
-      },
       {
         "term": "assumption",
         "weight": 1.0
@@ -259,6 +215,14 @@
       },
       {
         "term": "gas",
+        "weight": 1.0
+      },
+      {
+        "term": "instantaneous",
+        "weight": 1.0
+      },
+      {
+        "term": "local",
         "weight": 1.0
       }
     ]
@@ -302,26 +266,6 @@
       {
         "term": "system",
         "weight": 1.0
-      },
-      {
-        "term": "multiplying",
-        "weight": 0.10692702389467389
-      },
-      {
-        "term": "extinction",
-        "weight": 0.10351180717085667
-      },
-      {
-        "term": "boundary-value",
-        "weight": 0.09771786989751616
-      },
-      {
-        "term": "kinetics",
-        "weight": 0.09670201833681963
-      },
-      {
-        "term": "blunt",
-        "weight": 0.08728822847514688
       }
     ]
   },
@@ -364,26 +308,6 @@
       {
         "term": "turbulent",
         "weight": 1.0
-      },
-      {
-        "term": "checked",
-        "weight": 0.1415142452096276
-      },
-      {
-        "term": "postulated",
-        "weight": 0.13538548865843272
-      },
-      {
-        "term": "unification",
-        "weight": 0.13089820665261623
-      },
-      {
-        "term": "foreign-gas",
-        "weight": 0.1239277847571369
-      },
-      {
-        "term": "dvl",
-        "weight": 0.12096278881664618
       }
     ]
   },
@@ -406,12 +330,12 @@
     },
     "expanded_top_terms": [
       {
-        "term": "attack",
-        "weight": 2.3141410194704
+        "term": "angle",
+        "weight": 2.0
       },
       {
-        "term": "angle",
-        "weight": 2.2501433599239276
+        "term": "attack",
+        "weight": 2.0
       },
       {
         "term": "forebody",
@@ -424,10 +348,6 @@
       {
         "term": "pressure",
         "weight": 2.0
-      },
-      {
-        "term": "relate",
-        "weight": 1.0209264186726257
       },
       {
         "term": "available",
@@ -447,6 +367,10 @@
       },
       {
         "term": "possible",
+        "weight": 1.0
+      },
+      {
+        "term": "relate",
         "weight": 1.0
       },
       {
@@ -476,15 +400,15 @@
         "weight": 2.0
       },
       {
-        "term": "attack",
-        "weight": 1.1570705097352
-      },
-      {
         "term": "angle",
-        "weight": 1.1250716799619638
+        "weight": 1.0
       },
       {
         "term": "approximate",
+        "weight": 1.0
+      },
+      {
+        "term": "attack",
         "weight": 1.0
       },
       {
@@ -514,10 +438,6 @@
       {
         "term": "pressure",
         "weight": 1.0
-      },
-      {
-        "term": "4degrees",
-        "weight": 0.20752612999889522
       }
     ]
   }

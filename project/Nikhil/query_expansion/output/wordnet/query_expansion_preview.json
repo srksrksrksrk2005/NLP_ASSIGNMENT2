@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.3683333333333333
+        "weight": 0.42
       },
       {
         "term": "obeying",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       }
     ]
   },
@@ -112,19 +112,19 @@
       },
       {
         "term": "craft",
-        "weight": 0.2
-      },
-      {
-        "term": "functional",
-        "weight": 0.2
-      },
-      {
-        "term": "trouble",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "higher",
-        "weight": 0.15294117647058803
+        "weight": 0.25
+      },
+      {
+        "term": "trouble",
+        "weight": 0.25
+      },
+      {
+        "term": "upper",
+        "weight": 0.11626866708559469
       }
     ]
   },
@@ -170,23 +170,23 @@
       },
       {
         "term": "block",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "complex",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "conductivity",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "farther",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "trouble",
-        "weight": 0.2
+        "weight": 0.25
       }
     ]
   },
@@ -305,23 +305,23 @@
       },
       {
         "term": "flowing",
-        "weight": 0.2
-      },
-      {
-        "term": "relevant",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "trouble",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "arrangement",
-        "weight": 0.06666666666666668
+        "weight": 0.08333333333333333
       },
       {
         "term": "organization",
-        "weight": 0.06666666666666668
+        "weight": 0.08333333333333333
+      },
+      {
+        "term": "scheme",
+        "weight": 0.08333333333333333
       }
     ]
   },
@@ -367,23 +367,23 @@
       },
       {
         "term": "observational",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
         "term": "theoretic",
-        "weight": 0.2
-      },
-      {
-        "term": "behavior",
-        "weight": 0.1
+        "weight": 0.25
       },
       {
         "term": "conduct",
-        "weight": 0.1
+        "weight": 0.14772727272727273
+      },
+      {
+        "term": "behavior",
+        "weight": 0.125
       },
       {
         "term": "run",
-        "weight": 0.045000000000000005
+        "weight": 0.05397727272727273
       }
     ]
   },
@@ -516,8 +516,8 @@
         "weight": 1.0
       },
       {
-        "term": "fuselage",
-        "weight": 0.2
+        "term": "flash",
+        "weight": 0.49490766076689346
       }
     ]
   }

@@ -481,6 +481,8 @@ def _run_config_snapshot(args: argparse.Namespace) -> Dict[str, Any]:
     return {
         "top_k_neighbors": args.top_k_neighbors,
         "min_similarity": args.min_similarity,
+        "min_similarity_floor": args.min_similarity,
+        "method_threshold_quantile": args.similarity_quantile,
         "self_weight": args.self_weight,
         "expansion_weight": args.expansion_weight,
         "replacement_weight": args.replacement_weight,
@@ -556,6 +558,70 @@ def _format_config_changes(previous: Dict[str, Any] | None, current: Dict[str, A
     return lines
 
 
+def _collect_similarity_scores(neighbors: Dict[str, List[tuple[str, float]]]) -> np.ndarray:
+    scores: List[float] = []
+    for neighbor_list in neighbors.values():
+        for _, similarity in neighbor_list:
+            score = float(similarity)
+            if score > 0:
+                scores.append(score)
+    return np.asarray(scores, dtype=np.float64)
+
+
+def _derive_dynamic_min_similarity(
+    neighbors: Dict[str, List[tuple[str, float]]],
+    base_floor: float,
+    quantile: float,
+) -> tuple[float, Dict[str, Any]]:
+    scores = _collect_similarity_scores(neighbors)
+    summary: Dict[str, Any] = {
+        "base_min_similarity_floor": float(base_floor),
+        "method_threshold_quantile": float(quantile),
+        "score_count": int(scores.size),
+    }
+
+    if scores.size == 0:
+        summary.update(
+            {
+                "derived_min_similarity": float(base_floor),
+                "score_min": 0.0,
+                "score_mean": 0.0,
+                "score_std": 0.0,
+                "score_q25": 0.0,
+                "score_median": 0.0,
+                "score_q75": 0.0,
+                "score_q90": 0.0,
+                "score_max": 0.0,
+                "score_quantile": 0.0,
+            }
+        )
+        return float(base_floor), summary
+
+    quantile = float(np.clip(quantile, 0.0, 1.0))
+    score_min = float(np.min(scores))
+    score_mean = float(np.mean(scores))
+    score_std = float(np.std(scores))
+    score_q25, score_median, score_q75, score_q90 = [float(value) for value in np.quantile(scores, [0.25, 0.5, 0.75, 0.9])]
+    score_quantile = float(np.quantile(scores, quantile))
+
+    derived_min_similarity = max(float(base_floor), score_quantile)
+    summary.update(
+        {
+            "derived_min_similarity": float(derived_min_similarity),
+            "score_min": score_min,
+            "score_mean": score_mean,
+            "score_std": score_std,
+            "score_q25": score_q25,
+            "score_median": score_median,
+            "score_q75": score_q75,
+            "score_q90": score_q90,
+            "score_max": float(np.max(scores)),
+            "score_quantile": score_quantile,
+        }
+    )
+    return derived_min_similarity, summary
+
+
 def _write_experiment_report(
     report_path: Path,
     output_dir: Path,
@@ -601,18 +667,20 @@ def _write_experiment_report(
     lines.append("")
     lines.append("1. Added a true non-expanded TF-IDF baseline (`baseline_tfidf`) for correct comparison.")
     lines.append("2. Kept retrieval model fixed to base TF-IDF document index; expansion is applied only to queries.")
-    lines.append("3. Added adaptive similarity thresholding using mean similarity filtering.")
-    lines.append("4. Added normalized neighbor mass allocation so expansion does not overpower original query terms.")
-    lines.append("5. Added method-vs-baseline plots and full overlay plots.")
-    lines.append("6. Added explicit example-case comparisons for the report query set.")
-    lines.append("7. Added persistent WordNet graph caching on disk for faster reruns.")
+    lines.append("3. Added distribution-aware, method-specific min similarity floors derived from each method's score distribution.")
+    lines.append("4. Added adaptive similarity thresholding using mean and quantile filtering on top of the method-specific floor.")
+    lines.append("5. Added normalized neighbor mass allocation so expansion does not overpower original query terms.")
+    lines.append("6. Added method-vs-baseline plots and full overlay plots.")
+    lines.append("7. Added explicit example-case comparisons for the report query set.")
+    lines.append("8. Added persistent WordNet graph caching on disk for faster reruns.")
     lines.append("")
     lines.append("## Run Configuration")
     lines.append("")
     lines.append(f"- Dataset: {args.dataset}")
     lines.append(f"- Methods: {', '.join(ordered_methods)}")
     lines.append(f"- top_k_neighbors: {args.top_k_neighbors}")
-    lines.append(f"- min_similarity: {args.min_similarity}")
+    lines.append(f"- base_min_similarity_floor: {args.min_similarity}")
+    lines.append(f"- method_threshold_quantile: {args.similarity_quantile}")
     lines.append(f"- self_weight: {args.self_weight}")
     lines.append(f"- expansion_weight: {args.expansion_weight}")
     lines.append(f"- replacement_weight: {args.replacement_weight}")
@@ -621,6 +689,31 @@ def _write_experiment_report(
     lines.append(f"- mean_similarity_factor: {args.mean_sim_factor}")
     lines.append(f"- normalize_neighbor_mass: {not args.disable_neighbor_mass_normalization}")
     lines.append(f"- similarity_power: {args.similarity_power}")
+
+    lines.append("")
+    lines.append("## Dynamic Min Similarity by Method")
+    lines.append("")
+    quantile_label = int(round(args.similarity_quantile * 100))
+    lines.append(f"| Method | Base Floor | Derived Floor | Score Count | Mean | Std | Median | Q{quantile_label} | Max |")
+    lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+    for method in ordered_methods:
+        stats = method_details.get(method, {})
+        if not stats:
+            continue
+        lines.append(
+            "| {} | {:.4f} | {:.4f} | {} | {:.4f} | {:.4f} | {:.4f} | {:.4f} | {:.4f} |".format(
+                method,
+                float(stats.get("base_min_similarity_floor", args.min_similarity)),
+                float(stats.get("derived_min_similarity", args.min_similarity)),
+                int(stats.get("score_count", 0)),
+                float(stats.get("score_mean", 0.0)),
+                float(stats.get("score_std", 0.0)),
+                float(stats.get("score_median", 0.0)),
+                float(stats.get("score_quantile", 0.0)),
+                float(stats.get("score_max", 0.0)),
+            )
+        )
+
     lines.append("")
     lines.append("## k=10 Scores")
     lines.append("")
@@ -653,7 +746,6 @@ def _write_experiment_report(
                     m["mrr"] - baseline_k10["mrr"],
                 )
             )
-
     lines.append("")
     lines.append("## Best Method Per Metric at k=10")
     lines.append("")
@@ -919,6 +1011,18 @@ def run() -> None:
                 else:
                     raise ValueError(f"Unknown method: {method}")
 
+                method_min_similarity, similarity_stats = _derive_dynamic_min_similarity(
+                    neighbors,
+                    args.min_similarity,
+                    args.similarity_quantile,
+                )
+                method_details.setdefault(method, {}).update(similarity_stats)
+                log(
+                    f"[{method}] Dynamic min similarity floor: base={args.min_similarity:.4f}, "
+                    f"q{int(round(args.similarity_quantile * 100))}={float(similarity_stats.get('score_quantile', 0.0)):.4f}, "
+                    f"derived={method_min_similarity:.4f}"
+                )
+
                 log(f"[{method}] Neighbor map ready. Expanding queries")
                 expander = MatrixQueryExpander(
                     vocab=retriever.vocab,
@@ -929,7 +1033,7 @@ def run() -> None:
                     replacement_weight=args.replacement_weight,
                     replacement_expansion_weight=args.replacement_expansion_weight,
                     max_oov_candidates=args.max_oov_candidates,
-                    min_similarity=args.min_similarity,
+                    min_similarity=method_min_similarity,
                     expand_replacements=True,
                     use_mean_similarity_threshold=not args.disable_mean_sim_threshold,
                     mean_similarity_factor=args.mean_sim_factor,

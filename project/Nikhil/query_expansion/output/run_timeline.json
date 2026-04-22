@@ -198,5 +198,178 @@
         "model_coverage": 1.0
       }
     }
+  },
+  {
+    "timestamp": "2026-04-22T19:03:18.631407+00:00",
+    "trial_label": "tuned_more_expansion",
+    "methods": [
+      "baseline_tfidf",
+      "wordnet",
+      "embedding_tfidf",
+      "embedding_lsa",
+      "embedding_esa",
+      "embedding_word2vec"
+    ],
+    "config": {
+      "top_k_neighbors": 15,
+      "min_similarity": 0.03,
+      "min_similarity_floor": 0.03,
+      "method_threshold_quantile": 0.45,
+      "self_weight": 1.0,
+      "expansion_weight": 0.25,
+      "replacement_weight": 0.9,
+      "replacement_expansion_weight": 0.2,
+      "max_oov_candidates": 5,
+      "adaptive_mean_similarity_threshold": true,
+      "mean_similarity_factor": 0.85,
+      "adaptive_quantile_similarity_threshold": true,
+      "similarity_quantile": 0.45,
+      "normalize_neighbor_mass": true,
+      "scale_similarity_scores": true,
+      "similarity_scale_mode": "minmax",
+      "similarity_scale_epsilon": 1e-09,
+      "similarity_power": 1.15,
+      "lsa_components": 128,
+      "esa_top_concepts": 100,
+      "w2v_vector_size": 100,
+      "w2v_window": 5,
+      "w2v_min_count": 1,
+      "w2v_workers": 1,
+      "w2v_sg": 1,
+      "w2v_epochs": 20
+    },
+    "k10": {
+      "baseline_tfidf": {
+        "precision": 0.2813333333333333,
+        "recall": 0.4004766597938976,
+        "fscore": 0.30591327188433276,
+        "map": 0.3023784410028705,
+        "ndcg": 0.454638732617823,
+        "mrr": 0.7378730158730159
+      },
+      "wordnet": {
+        "precision": 0.2817777777777778,
+        "recall": 0.40345926360983475,
+        "fscore": 0.3071185164939021,
+        "map": 0.3061778781424793,
+        "ndcg": 0.46024088572306343,
+        "mrr": 0.7510582010582011
+      },
+      "embedding_tfidf": {
+        "precision": 0.2791111111111111,
+        "recall": 0.39853879746129844,
+        "fscore": 0.30447288631114744,
+        "map": 0.30370649305108405,
+        "ndcg": 0.45249413307299075,
+        "mrr": 0.7360723104056438
+      },
+      "embedding_lsa": {
+        "precision": 0.2786666666666667,
+        "recall": 0.3981690499248842,
+        "fscore": 0.30403311614211875,
+        "map": 0.3015095413405898,
+        "ndcg": 0.45075987230626186,
+        "mrr": 0.7365114638447972
+      },
+      "embedding_esa": {
+        "precision": 0.28,
+        "recall": 0.39979533948977025,
+        "fscore": 0.3054616109964238,
+        "map": 0.30399768083557593,
+        "ndcg": 0.4531099847839079,
+        "mrr": 0.7349241622574956
+      },
+      "embedding_word2vec": {
+        "precision": 0.27955555555555556,
+        "recall": 0.3990250003422382,
+        "fscore": 0.30395746734029294,
+        "map": 0.3001954764365725,
+        "ndcg": 0.4533742833279744,
+        "mrr": 0.7372486772486773
+      }
+    },
+    "method_details": {
+      "wordnet": {
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 37336,
+        "derived_min_similarity": 0.9230769230769231,
+        "score_min": 0.4,
+        "score_mean": 0.8817693553374004,
+        "score_std": 0.1534182303969302,
+        "score_q25": 0.8571428571428571,
+        "score_median": 0.9333333333333333,
+        "score_q75": 1.0,
+        "score_q90": 1.0,
+        "score_max": 1.0,
+        "score_quantile": 0.9230769230769231
+      },
+      "embedding_tfidf": {
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 119755,
+        "derived_min_similarity": 0.44721359549995787,
+        "score_min": 0.033883707378584926,
+        "score_mean": 0.53319472262317,
+        "score_std": 0.26061674111513344,
+        "score_q25": 0.3202563076101743,
+        "score_median": 0.4824181513244217,
+        "score_q75": 0.7071067811865476,
+        "score_q90": 1.0,
+        "score_max": 1.0,
+        "score_quantile": 0.44721359549995787
+      },
+      "embedding_lsa": {
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 119760,
+        "derived_min_similarity": 0.6932053417636239,
+        "score_min": 0.32884731542325607,
+        "score_mean": 0.7387218362824292,
+        "score_std": 0.1812473016749465,
+        "score_q25": 0.5871761014402875,
+        "score_median": 0.7202800842897478,
+        "score_q75": 0.9133314231839846,
+        "score_q90": 0.9999999999999999,
+        "score_max": 1.0,
+        "score_quantile": 0.6932053417636239
+      },
+      "embedding_esa": {
+        "vocab_terms": 7984,
+        "represented_terms": 7984,
+        "representation_coverage": 1.0,
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 119714,
+        "derived_min_similarity": 0.44721359549995787,
+        "score_min": 0.031265269974036114,
+        "score_mean": 0.5329051630305395,
+        "score_std": 0.26091829188540827,
+        "score_q25": 0.3198835295652526,
+        "score_median": 0.4829790154631147,
+        "score_q75": 0.7071067811865476,
+        "score_q90": 1.0,
+        "score_max": 1.0,
+        "score_quantile": 0.44721359549995787
+      },
+      "embedding_word2vec": {
+        "vocab_terms": 7984,
+        "present_in_model": 7984,
+        "model_coverage": 1.0,
+        "base_min_similarity_floor": 0.03,
+        "method_threshold_quantile": 0.45,
+        "score_count": 119760,
+        "derived_min_similarity": 0.8629126727581025,
+        "score_min": 0.09425508975982666,
+        "score_mean": 0.8350802439984752,
+        "score_std": 0.10529738333555841,
+        "score_q25": 0.7872587740421295,
+        "score_median": 0.8732032179832458,
+        "score_q75": 0.9072218090295792,
+        "score_q90": 0.9274460017681122,
+        "score_max": 0.9942396283149719,
+        "score_quantile": 0.8629126727581025
+      }
+    }
   }
 ]

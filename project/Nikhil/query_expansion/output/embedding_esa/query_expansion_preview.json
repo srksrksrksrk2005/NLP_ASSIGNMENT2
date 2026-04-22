@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       },
       {
         "term": "obeying",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       }
     ]
   },
@@ -79,15 +79,11 @@
     },
     "expanded_top_terms": [
       {
-        "term": "aircraft",
-        "weight": 1.057863506654604
-      },
-      {
-        "term": "structural",
-        "weight": 1.020593833234949
-      },
-      {
         "term": "aeroelastic",
+        "weight": 1.0
+      },
+      {
+        "term": "aircraft",
         "weight": 1.0
       },
       {
@@ -111,20 +107,24 @@
         "weight": 1.0
       },
       {
-        "term": "low-aspect",
-        "weight": 0.2
-      },
-      {
-        "term": "angular",
-        "weight": 0.1491311474225377
+        "term": "structural",
+        "weight": 1.0
       },
       {
         "term": "radiant",
-        "weight": 0.14639586842965763
+        "weight": 0.25
       },
       {
-        "term": "clamped",
-        "weight": 0.10017193801500626
+        "term": "vtol",
+        "weight": 0.25
+      },
+      {
+        "term": "ackeret's",
+        "weight": 0.022727272727272728
+      },
+      {
+        "term": "aeroelastician",
+        "weight": 0.022727272727272728
       }
     ]
   },
@@ -142,19 +142,15 @@
     "expanded_top_terms": [
       {
         "term": "composite",
-        "weight": 1.1195357217683266
+        "weight": 1.157144485636938
       },
       {
         "term": "slab",
-        "weight": 1.0680734620044032
-      },
-      {
-        "term": "solved",
-        "weight": 1.014384293512864
+        "weight": 1.0907615393386372
       },
       {
         "term": "conduction",
-        "weight": 1.0140211514241022
+        "weight": 1.0
       },
       {
         "term": "far",
@@ -169,24 +165,28 @@
         "weight": 1.0
       },
       {
-        "term": "whitham",
-        "weight": 0.2
-      },
-      {
-        "term": "thermal-boundary",
-        "weight": 0.18659972071880887
+        "term": "solved",
+        "weight": 1.0
       },
       {
         "term": "transfer",
-        "weight": 0.184583320726002
-      },
-      {
-        "term": "clamped",
-        "weight": 0.10017193801500626
+        "weight": 0.25
       },
       {
         "term": "shielded",
-        "weight": 0.07804619162420544
+        "weight": 0.1592384606613629
+      },
+      {
+        "term": "two-layer",
+        "weight": 0.07751164783489854
+      },
+      {
+        "term": "distributes",
+        "weight": 0.0625
+      },
+      {
+        "term": "enhanced",
+        "weight": 0.0625
       }
     ]
   },
@@ -215,19 +215,7 @@
     "expanded_top_terms": [
       {
         "term": "chemically",
-        "weight": 1.2
-      },
-      {
-        "term": "mixture",
-        "weight": 1.2
-      },
-      {
-        "term": "equilibrium",
-        "weight": 1.0388723565510571
-      },
-      {
-        "term": "chemical",
-        "weight": 1.0370716485279514
+        "weight": 1.25
       },
       {
         "term": "assumption",
@@ -235,6 +223,10 @@
       },
       {
         "term": "based",
+        "weight": 1.0
+      },
+      {
+        "term": "chemical",
         "weight": 1.0
       },
       {
@@ -250,6 +242,10 @@
         "weight": 1.0
       },
       {
+        "term": "equilibrium",
+        "weight": 1.0
+      },
+      {
         "term": "flow",
         "weight": 1.0
       },
@@ -259,6 +255,10 @@
       },
       {
         "term": "instantaneous",
+        "weight": 1.0
+      },
+      {
+        "term": "local",
         "weight": 1.0
       }
     ]
@@ -304,24 +304,8 @@
         "weight": 1.0
       },
       {
-        "term": "propulsion",
-        "weight": 0.2
-      },
-      {
-        "term": "inviscid",
-        "weight": 0.128784826402333
-      },
-      {
         "term": "reaction",
-        "weight": 0.12365340242428167
-      },
-      {
-        "term": "clamped",
-        "weight": 0.10017193801500626
-      },
-      {
-        "term": "chain",
-        "weight": 0.06312824469834342
+        "weight": 0.25
       }
     ]
   },
@@ -338,19 +322,15 @@
     },
     "expanded_top_terms": [
       {
-        "term": "theoretical",
-        "weight": 1.1127576119828821
-      },
-      {
-        "term": "experimental",
-        "weight": 1.1085288855208033
-      },
-      {
         "term": "behaviour",
         "weight": 1.0
       },
       {
         "term": "couette",
+        "weight": 1.0
+      },
+      {
+        "term": "experimental",
         "weight": 1.0
       },
       {
@@ -362,28 +342,16 @@
         "weight": 1.0
       },
       {
+        "term": "theoretical",
+        "weight": 1.0
+      },
+      {
         "term": "turbulent",
         "weight": 1.0
       },
       {
         "term": "couette-type",
-        "weight": 0.2
-      },
-      {
-        "term": "diffuser",
-        "weight": 0.2
-      },
-      {
-        "term": "agreement",
-        "weight": 0.09875830057707256
-      },
-      {
-        "term": "inviscid",
-        "weight": 0.09712402585409491
-      },
-      {
-        "term": "layer",
-        "weight": 0.09132859836610319
+        "weight": 0.25
       }
     ]
   },
@@ -406,16 +374,12 @@
     },
     "expanded_top_terms": [
       {
-        "term": "attack",
-        "weight": 2.363070841111317
-      },
-      {
         "term": "angle",
-        "weight": 2.310238291177491
+        "weight": 2.5
       },
       {
-        "term": "pressure",
-        "weight": 2.049402633815098
+        "term": "attack",
+        "weight": 2.5
       },
       {
         "term": "forebody",
@@ -423,6 +387,10 @@
       },
       {
         "term": "ogive",
+        "weight": 2.0
+      },
+      {
+        "term": "pressure",
         "weight": 2.0
       },
       {
@@ -476,12 +444,12 @@
         "weight": 2.0
       },
       {
-        "term": "attack",
-        "weight": 1.1815354205556585
+        "term": "angle",
+        "weight": 1.25
       },
       {
-        "term": "angle",
-        "weight": 1.1551191455887455
+        "term": "attack",
+        "weight": 1.25
       },
       {
         "term": "approximate",
@@ -516,8 +484,8 @@
         "weight": 1.0
       },
       {
-        "term": "solution",
-        "weight": 0.1973925713835925
+        "term": "collaboration",
+        "weight": 0.038461538461538464
       }
     ]
   }

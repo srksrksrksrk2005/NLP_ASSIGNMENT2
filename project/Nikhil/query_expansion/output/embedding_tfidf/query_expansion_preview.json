@@ -16,10 +16,6 @@
     },
     "expanded_top_terms": [
       {
-        "term": "speed",
-        "weight": 1.2
-      },
-      {
         "term": "aeroelastic",
         "weight": 1.0
       },
@@ -56,12 +52,16 @@
         "weight": 1.0
       },
       {
+        "term": "speed",
+        "weight": 1.0
+      },
+      {
         "term": "obey",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       },
       {
         "term": "obeying",
-        "weight": 0.2833333333333333
+        "weight": 0.3
       }
     ]
   },
@@ -79,19 +79,11 @@
     },
     "expanded_top_terms": [
       {
-        "term": "speed",
-        "weight": 1.2
+        "term": "aeroelastic",
+        "weight": 1.0
       },
       {
         "term": "aircraft",
-        "weight": 1.057863506654604
-      },
-      {
-        "term": "structural",
-        "weight": 1.020593833234949
-      },
-      {
-        "term": "aeroelastic",
         "weight": 1.0
       },
       {
@@ -111,20 +103,28 @@
         "weight": 1.0
       },
       {
-        "term": "low-aspect",
-        "weight": 0.2
+        "term": "speed",
+        "weight": 1.0
       },
       {
-        "term": "solution",
-        "weight": 0.15664526412191704
-      },
-      {
-        "term": "angular",
-        "weight": 0.1491311474225377
+        "term": "structural",
+        "weight": 1.0
       },
       {
         "term": "radiant",
-        "weight": 0.13557340683571859
+        "weight": 0.25
+      },
+      {
+        "term": "vtol",
+        "weight": 0.25
+      },
+      {
+        "term": "ackeret's",
+        "weight": 0.022727272727272728
+      },
+      {
+        "term": "aeroelastician",
+        "weight": 0.022727272727272728
       }
     ]
   },
@@ -142,19 +142,15 @@
     "expanded_top_terms": [
       {
         "term": "composite",
-        "weight": 1.1195357217683266
+        "weight": 1.157144485636938
       },
       {
         "term": "slab",
-        "weight": 1.0680734620044032
-      },
-      {
-        "term": "problem",
-        "weight": 1.0331937914780853
+        "weight": 1.0907615393386372
       },
       {
         "term": "conduction",
-        "weight": 1.0106312386179195
+        "weight": 1.0
       },
       {
         "term": "far",
@@ -165,28 +161,32 @@
         "weight": 1.0
       },
       {
+        "term": "problem",
+        "weight": 1.0
+      },
+      {
         "term": "solved",
         "weight": 1.0
       },
       {
-        "term": "whitham",
-        "weight": 0.2
-      },
-      {
-        "term": "solution",
-        "weight": 0.15664526412191704
-      },
-      {
         "term": "transfer",
-        "weight": 0.14951444196532498
-      },
-      {
-        "term": "thermal-boundary",
-        "weight": 0.14137704193098544
+        "weight": 0.25
       },
       {
         "term": "shielded",
-        "weight": 0.07804619162420544
+        "weight": 0.1592384606613629
+      },
+      {
+        "term": "two-layer",
+        "weight": 0.07751164783489854
+      },
+      {
+        "term": "distributes",
+        "weight": 0.0625
+      },
+      {
+        "term": "enhanced",
+        "weight": 0.0625
       }
     ]
   },
@@ -215,27 +215,7 @@
     "expanded_top_terms": [
       {
         "term": "chemically",
-        "weight": 1.2
-      },
-      {
-        "term": "mixture",
-        "weight": 1.1524809996640895
-      },
-      {
-        "term": "solution",
-        "weight": 1.093652138361069
-      },
-      {
-        "term": "equilibrium",
-        "weight": 1.0388723565510571
-      },
-      {
-        "term": "chemical",
-        "weight": 1.0370716485279514
-      },
-      {
-        "term": "flow",
-        "weight": 1.0062005022936984
+        "weight": 1.25
       },
       {
         "term": "assumption",
@@ -243,6 +223,10 @@
       },
       {
         "term": "based",
+        "weight": 1.0
+      },
+      {
+        "term": "chemical",
         "weight": 1.0
       },
       {
@@ -258,7 +242,23 @@
         "weight": 1.0
       },
       {
+        "term": "equilibrium",
+        "weight": 1.0
+      },
+      {
+        "term": "flow",
+        "weight": 1.0
+      },
+      {
         "term": "gas",
+        "weight": 1.0
+      },
+      {
+        "term": "instantaneous",
+        "weight": 1.0
+      },
+      {
+        "term": "local",
         "weight": 1.0
       }
     ]
@@ -304,24 +304,8 @@
         "weight": 1.0
       },
       {
-        "term": "propulsion",
-        "weight": 0.2
-      },
-      {
-        "term": "solution",
-        "weight": 0.15664526412191704
-      },
-      {
         "term": "reaction",
-        "weight": 0.12365340242428167
-      },
-      {
-        "term": "inviscid",
-        "weight": 0.10765667854951755
-      },
-      {
-        "term": "blunt",
-        "weight": 0.04295810151942006
+        "weight": 0.25
       }
     ]
   },
@@ -338,19 +322,15 @@
     },
     "expanded_top_terms": [
       {
-        "term": "experimental",
-        "weight": 1.1254535412836613
-      },
-      {
-        "term": "theoretical",
-        "weight": 1.0741510121554905
-      },
-      {
         "term": "behaviour",
         "weight": 1.0
       },
       {
         "term": "couette",
+        "weight": 1.0
+      },
+      {
+        "term": "experimental",
         "weight": 1.0
       },
       {
@@ -362,28 +342,20 @@
         "weight": 1.0
       },
       {
+        "term": "theoretical",
+        "weight": 1.0
+      },
+      {
         "term": "turbulent",
         "weight": 1.0
       },
       {
         "term": "couette-type",
-        "weight": 0.2
+        "weight": 0.25
       },
       {
-        "term": "diffuser",
-        "weight": 0.2
-      },
-      {
-        "term": "result",
-        "weight": 0.1271268396431259
-      },
-      {
-        "term": "two-dimensional",
-        "weight": 0.09573908452479295
-      },
-      {
-        "term": "solution",
-        "weight": 0.09365213836106884
+        "term": "layer",
+        "weight": 0.25
       }
     ]
   },
@@ -407,15 +379,11 @@
     "expanded_top_terms": [
       {
         "term": "angle",
-        "weight": 2.384586309448497
+        "weight": 2.5
       },
       {
         "term": "attack",
-        "weight": 2.3525073427262426
-      },
-      {
-        "term": "pressure",
-        "weight": 2.21449970242214
+        "weight": 2.5
       },
       {
         "term": "forebody",
@@ -426,11 +394,15 @@
         "weight": 2.0
       },
       {
-        "term": "distribution",
-        "weight": 1.0638812138979876
+        "term": "pressure",
+        "weight": 2.0
       },
       {
         "term": "available",
+        "weight": 1.0
+      },
+      {
+        "term": "distribution",
         "weight": 1.0
       },
       {
@@ -476,20 +448,16 @@
         "weight": 2.0
       },
       {
-        "term": "attack",
-        "weight": 1.1762536713631213
+        "term": "angle",
+        "weight": 1.25
       },
       {
-        "term": "angle",
-        "weight": 1.1572337778542958
+        "term": "attack",
+        "weight": 1.25
       },
       {
         "term": "approximate",
-        "weight": 1.0774496205180495
-      },
-      {
-        "term": "method",
-        "weight": 1.0461805163478406
+        "weight": 1.0
       },
       {
         "term": "available",
@@ -501,6 +469,10 @@
       },
       {
         "term": "exact",
+        "weight": 1.0
+      },
+      {
+        "term": "method",
         "weight": 1.0
       },
       {
@@ -516,8 +488,8 @@
         "weight": 1.0
       },
       {
-        "term": "solution",
-        "weight": 0.2672419264710435
+        "term": "number",
+        "weight": 0.25
       }
     ]
   }
