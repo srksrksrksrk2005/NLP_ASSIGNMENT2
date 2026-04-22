@@ -7,8 +7,8 @@ from sklearn.preprocessing import normalize
 class HybridRetrieval:
     def __init__(
         self,
-        n_components=250,
-        tfidf_weight=0.5,
+        n_components=240,
+        tfidf_weight=0.2,
         random_state=42,
         sublinear_tf=True,
         max_df=0.95,
