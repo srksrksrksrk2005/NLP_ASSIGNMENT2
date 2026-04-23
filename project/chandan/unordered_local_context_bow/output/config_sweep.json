@@ -1,0 +1,992 @@
+[
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 85835,
+    "avg_context_features_per_doc": 272.35857142857145,
+    "precision_at_10": 0.2902222222222223,
+    "recall_at_10": 0.4209714096833843,
+    "fscore_at_10": 0.3177288310849926,
+    "map_at_10": 0.3239985084233012,
+    "ndcg_at_10": 0.4829048563887548,
+    "mrr_at_10": 0.7661252204585537
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 258384,
+    "avg_context_features_per_doc": 617.9707142857143,
+    "precision_at_10": 0.2924444444444446,
+    "recall_at_10": 0.4233332823785906,
+    "fscore_at_10": 0.3202256201805433,
+    "map_at_10": 0.3237164734666639,
+    "ndcg_at_10": 0.48144090506538584,
+    "mrr_at_10": 0.7652310405643739
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 201843,
+    "avg_context_features_per_doc": 492.39785714285716,
+    "precision_at_10": 0.2924444444444446,
+    "recall_at_10": 0.4252656709776457,
+    "fscore_at_10": 0.32066268175643914,
+    "map_at_10": 0.32356674056666374,
+    "ndcg_at_10": 0.48394929851971547,
+    "mrr_at_10": 0.7658483245149911
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 35040,
+    "avg_context_features_per_doc": 94.22214285714286,
+    "precision_at_10": 0.29333333333333345,
+    "recall_at_10": 0.42587181837533067,
+    "fscore_at_10": 0.3215376615074775,
+    "map_at_10": 0.32220859795007023,
+    "ndcg_at_10": 0.48291987968308697,
+    "mrr_at_10": 0.7580282186948855
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 95312,
+    "avg_context_features_per_doc": 308.0107142857143,
+    "precision_at_10": 0.2906666666666668,
+    "recall_at_10": 0.42147095951626756,
+    "fscore_at_10": 0.3181762331935604,
+    "map_at_10": 0.3220061549028199,
+    "ndcg_at_10": 0.4801885736697853,
+    "mrr_at_10": 0.7609223985890652
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 29479,
+    "avg_context_features_per_doc": 83.03428571428572,
+    "precision_at_10": 0.2933333333333334,
+    "recall_at_10": 0.42551368268386175,
+    "fscore_at_10": 0.32165674345951134,
+    "map_at_10": 0.3217495722948329,
+    "ndcg_at_10": 0.48185193479790256,
+    "mrr_at_10": 0.7596349206349207
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 72674,
+    "avg_context_features_per_doc": 224.28857142857143,
+    "precision_at_10": 0.2920000000000001,
+    "recall_at_10": 0.42334546772410897,
+    "fscore_at_10": 0.31968673128210856,
+    "map_at_10": 0.3215784166915341,
+    "ndcg_at_10": 0.4804079825676513,
+    "mrr_at_10": 0.7641587301587303
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 141920,
+    "avg_context_features_per_doc": 355.92571428571426,
+    "precision_at_10": 0.29333333333333345,
+    "recall_at_10": 0.4260809174595589,
+    "fscore_at_10": 0.3212456832959624,
+    "map_at_10": 0.3209644264842317,
+    "ndcg_at_10": 0.4826251248955376,
+    "mrr_at_10": 0.7651375661375661
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 122278,
+    "avg_context_features_per_doc": 149.3192857142857,
+    "precision_at_10": 0.2906666666666668,
+    "recall_at_10": 0.4224359209394333,
+    "fscore_at_10": 0.3186756142496928,
+    "map_at_10": 0.32081370988837987,
+    "ndcg_at_10": 0.48036157478491953,
+    "mrr_at_10": 0.7673615520282187
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 95312,
+    "avg_context_features_per_doc": 308.0107142857143,
+    "precision_at_10": 0.2902222222222223,
+    "recall_at_10": 0.41997360501891307,
+    "fscore_at_10": 0.3176189164362436,
+    "map_at_10": 0.32071784343697246,
+    "ndcg_at_10": 0.4776546756741189,
+    "mrr_at_10": 0.7653791887125221
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 35040,
+    "avg_context_features_per_doc": 94.22214285714286,
+    "precision_at_10": 0.29111111111111115,
+    "recall_at_10": 0.4222139700508157,
+    "fscore_at_10": 0.3192442593853859,
+    "map_at_10": 0.3207067842512848,
+    "ndcg_at_10": 0.4784384059874487,
+    "mrr_at_10": 0.7654303350970019
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 29479,
+    "avg_context_features_per_doc": 83.03428571428572,
+    "precision_at_10": 0.29288888888888903,
+    "recall_at_10": 0.42417682201366763,
+    "fscore_at_10": 0.32074733357115404,
+    "map_at_10": 0.3198374888564803,
+    "ndcg_at_10": 0.4786351469384056,
+    "mrr_at_10": 0.7598253968253968
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 141920,
+    "avg_context_features_per_doc": 355.92571428571426,
+    "precision_at_10": 0.29288888888888903,
+    "recall_at_10": 0.4247303791090205,
+    "fscore_at_10": 0.3207384800511633,
+    "map_at_10": 0.319826284593015,
+    "ndcg_at_10": 0.47854456316349164,
+    "mrr_at_10": 0.7633544973544975
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 85835,
+    "avg_context_features_per_doc": 272.35857142857145,
+    "precision_at_10": 0.2906666666666668,
+    "recall_at_10": 0.4204796175249255,
+    "fscore_at_10": 0.31809933971666693,
+    "map_at_10": 0.3194712311523341,
+    "ndcg_at_10": 0.47744884979874824,
+    "mrr_at_10": 0.7624814814814814
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 258384,
+    "avg_context_features_per_doc": 617.9707142857143,
+    "precision_at_10": 0.29288888888888903,
+    "recall_at_10": 0.4214374991494739,
+    "fscore_at_10": 0.31990267645759957,
+    "map_at_10": 0.31920413291268657,
+    "ndcg_at_10": 0.47688829340937977,
+    "mrr_at_10": 0.759241622574956
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 201843,
+    "avg_context_features_per_doc": 492.39785714285716,
+    "precision_at_10": 0.2902222222222223,
+    "recall_at_10": 0.41771936543134014,
+    "fscore_at_10": 0.3168700515203306,
+    "map_at_10": 0.31914066941655106,
+    "ndcg_at_10": 0.47686271873849273,
+    "mrr_at_10": 0.7631693121693122
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 329208,
+    "avg_context_features_per_doc": 475.07928571428573,
+    "precision_at_10": 0.28888888888888903,
+    "recall_at_10": 0.416936567981876,
+    "fscore_at_10": 0.31572473654206373,
+    "map_at_10": 0.3190949303967047,
+    "ndcg_at_10": 0.4775517215143208,
+    "mrr_at_10": 0.7611252204585537
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 54373,
+    "avg_context_features_per_doc": 161.20357142857142,
+    "precision_at_10": 0.28977777777777786,
+    "recall_at_10": 0.41854142732006894,
+    "fscore_at_10": 0.3170676145803126,
+    "map_at_10": 0.31893555028038584,
+    "ndcg_at_10": 0.4783357846307941,
+    "mrr_at_10": 0.7618007054673721
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 84538,
+    "avg_context_features_per_doc": 219.46428571428572,
+    "precision_at_10": 0.29200000000000015,
+    "recall_at_10": 0.422213303591945,
+    "fscore_at_10": 0.3195253577532113,
+    "map_at_10": 0.318893168765774,
+    "ndcg_at_10": 0.47883832838504853,
+    "mrr_at_10": 0.7605643738977073
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 301312,
+    "avg_context_features_per_doc": 426.2707142857143,
+    "precision_at_10": 0.2880000000000001,
+    "recall_at_10": 0.41701064205595,
+    "fscore_at_10": 0.31520410162142887,
+    "map_at_10": 0.31865278098300803,
+    "ndcg_at_10": 0.47791254572830416,
+    "mrr_at_10": 0.7602786596119929
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 72674,
+    "avg_context_features_per_doc": 224.28857142857143,
+    "precision_at_10": 0.28933333333333344,
+    "recall_at_10": 0.4202947036733451,
+    "fscore_at_10": 0.31689615020457085,
+    "map_at_10": 0.31835547014971266,
+    "ndcg_at_10": 0.4763296113368927,
+    "mrr_at_10": 0.7634708994708996
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 217950,
+    "avg_context_features_per_doc": 224.87214285714285,
+    "precision_at_10": 0.28977777777777797,
+    "recall_at_10": 0.42048220798572034,
+    "fscore_at_10": 0.3175894712808559,
+    "map_at_10": 0.31767457519922143,
+    "ndcg_at_10": 0.4765200270290208,
+    "mrr_at_10": 0.7663298059964727
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 84538,
+    "avg_context_features_per_doc": 219.46428571428572,
+    "precision_at_10": 0.29111111111111126,
+    "recall_at_10": 0.4216488186941268,
+    "fscore_at_10": 0.3186569675282993,
+    "map_at_10": 0.31735416483304124,
+    "ndcg_at_10": 0.47744644169421685,
+    "mrr_at_10": 0.765310405643739
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 54373,
+    "avg_context_features_per_doc": 161.20357142857142,
+    "precision_at_10": 0.2906666666666668,
+    "recall_at_10": 0.42075095112959254,
+    "fscore_at_10": 0.3179955918669236,
+    "map_at_10": 0.3172814302509839,
+    "ndcg_at_10": 0.47555638175830384,
+    "mrr_at_10": 0.7596331569664904
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 122278,
+    "avg_context_features_per_doc": 149.3192857142857,
+    "precision_at_10": 0.2897777777777779,
+    "recall_at_10": 0.4212824817859941,
+    "fscore_at_10": 0.3177116609916219,
+    "map_at_10": 0.3170264754133921,
+    "ndcg_at_10": 0.47648247509841196,
+    "mrr_at_10": 0.7636507936507937
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 204784,
+    "avg_context_features_per_doc": 268.64,
+    "precision_at_10": 0.29111111111111126,
+    "recall_at_10": 0.4213035713488795,
+    "fscore_at_10": 0.31853328069446757,
+    "map_at_10": 0.31690876120430295,
+    "ndcg_at_10": 0.4769670537798685,
+    "mrr_at_10": 0.761373897707231
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 261418,
+    "avg_context_features_per_doc": 359.10571428571427,
+    "precision_at_10": 0.28933333333333344,
+    "recall_at_10": 0.4180918818038565,
+    "fscore_at_10": 0.3163333248405071,
+    "map_at_10": 0.3166466121424446,
+    "ndcg_at_10": 0.4760154750219685,
+    "mrr_at_10": 0.7587619047619049
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 217950,
+    "avg_context_features_per_doc": 224.87214285714285,
+    "precision_at_10": 0.28888888888888903,
+    "recall_at_10": 0.42009404059755306,
+    "fscore_at_10": 0.3167369522675526,
+    "map_at_10": 0.31607215453626125,
+    "ndcg_at_10": 0.4748046881641179,
+    "mrr_at_10": 0.7625661375661374
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 700562,
+    "avg_context_features_per_doc": 659.4814285714285,
+    "precision_at_10": 0.2915555555555557,
+    "recall_at_10": 0.41929624534155346,
+    "fscore_at_10": 0.3183493837540488,
+    "map_at_10": 0.31605671653120737,
+    "ndcg_at_10": 0.4763943382234066,
+    "mrr_at_10": 0.7622063492063492
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 1302979,
+    "avg_context_features_per_doc": 1185.2535714285714,
+    "precision_at_10": 0.28888888888888903,
+    "recall_at_10": 0.4159702380155461,
+    "fscore_at_10": 0.3153990519602387,
+    "map_at_10": 0.31603776681221296,
+    "ndcg_at_10": 0.4742716738796251,
+    "mrr_at_10": 0.7586631393298062
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 329208,
+    "avg_context_features_per_doc": 475.07928571428573,
+    "precision_at_10": 0.2875555555555557,
+    "recall_at_10": 0.41495244099774903,
+    "fscore_at_10": 0.31422561837627894,
+    "map_at_10": 0.31587062302483415,
+    "ndcg_at_10": 0.4735564038579931,
+    "mrr_at_10": 0.7560881834215168
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 301312,
+    "avg_context_features_per_doc": 426.2707142857143,
+    "precision_at_10": 0.2875555555555557,
+    "recall_at_10": 0.41486586091116895,
+    "fscore_at_10": 0.3141727083233689,
+    "map_at_10": 0.315763157125994,
+    "ndcg_at_10": 0.47338852348986854,
+    "mrr_at_10": 0.7553421516754851
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 1918215,
+    "avg_context_features_per_doc": 1718.3778571428572,
+    "precision_at_10": 0.28888888888888903,
+    "recall_at_10": 0.41624520995718467,
+    "fscore_at_10": 0.31560410162142877,
+    "map_at_10": 0.3155669001873151,
+    "ndcg_at_10": 0.4739275575720152,
+    "mrr_at_10": 0.7551569664903001
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 261418,
+    "avg_context_features_per_doc": 359.10571428571427,
+    "precision_at_10": 0.2875555555555557,
+    "recall_at_10": 0.41648357652888446,
+    "fscore_at_10": 0.31481469493240355,
+    "map_at_10": 0.31530728984963446,
+    "ndcg_at_10": 0.47289568356251893,
+    "mrr_at_10": 0.7543862433862435
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.75,
+    "context_feature_vocab_size": 2480712,
+    "avg_context_features_per_doc": 2205.3478571428573,
+    "precision_at_10": 0.2880000000000002,
+    "recall_at_10": 0.4148344355464103,
+    "fscore_at_10": 0.3145705919212523,
+    "map_at_10": 0.31526762820709076,
+    "ndcg_at_10": 0.4727692461576257,
+    "mrr_at_10": 0.7560194003527339
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 35040,
+    "avg_context_features_per_doc": 94.22214285714286,
+    "precision_at_10": 0.2906666666666668,
+    "recall_at_10": 0.42023529440547347,
+    "fscore_at_10": 0.31796406135080196,
+    "map_at_10": 0.31487581054604535,
+    "ndcg_at_10": 0.47237534311477847,
+    "mrr_at_10": 0.7557689594356262
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 72674,
+    "avg_context_features_per_doc": 224.28857142857143,
+    "precision_at_10": 0.2875555555555557,
+    "recall_at_10": 0.4156323744496123,
+    "fscore_at_10": 0.3145855415892756,
+    "map_at_10": 0.31480471275534583,
+    "ndcg_at_10": 0.47065212901538106,
+    "mrr_at_10": 0.754509700176367
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 204784,
+    "avg_context_features_per_doc": 268.64,
+    "precision_at_10": 0.28977777777777786,
+    "recall_at_10": 0.41797970613027746,
+    "fscore_at_10": 0.31685639691413553,
+    "map_at_10": 0.3147658230345894,
+    "ndcg_at_10": 0.47440885257784404,
+    "mrr_at_10": 0.7584356261022928
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 84538,
+    "avg_context_features_per_doc": 219.46428571428572,
+    "precision_at_10": 0.28977777777777786,
+    "recall_at_10": 0.4161734383240097,
+    "fscore_at_10": 0.3162217359229528,
+    "map_at_10": 0.31463634558667364,
+    "ndcg_at_10": 0.4722595850585879,
+    "mrr_at_10": 0.7566701940035274
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 29479,
+    "avg_context_features_per_doc": 83.03428571428572,
+    "precision_at_10": 0.28888888888888903,
+    "recall_at_10": 0.419486224761667,
+    "fscore_at_10": 0.31651308992971566,
+    "map_at_10": 0.3144326855547582,
+    "ndcg_at_10": 0.4724153361134274,
+    "mrr_at_10": 0.7580599647266313
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 85835,
+    "avg_context_features_per_doc": 272.35857142857145,
+    "precision_at_10": 0.2866666666666668,
+    "recall_at_10": 0.4146072514244894,
+    "fscore_at_10": 0.313696882744095,
+    "map_at_10": 0.31399855302736085,
+    "ndcg_at_10": 0.4693296039232776,
+    "mrr_at_10": 0.7497671957671959
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 95312,
+    "avg_context_features_per_doc": 308.0107142857143,
+    "precision_at_10": 0.2866666666666668,
+    "recall_at_10": 0.41461975743699536,
+    "fscore_at_10": 0.3137013079485202,
+    "map_at_10": 0.31389285007673046,
+    "ndcg_at_10": 0.4695655523426912,
+    "mrr_at_10": 0.7520793650793652
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 258384,
+    "avg_context_features_per_doc": 617.9707142857143,
+    "precision_at_10": 0.2862222222222224,
+    "recall_at_10": 0.414215717032955,
+    "fscore_at_10": 0.3132780275252398,
+    "map_at_10": 0.31385731933081806,
+    "ndcg_at_10": 0.46915744030568246,
+    "mrr_at_10": 0.7528994708994712
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 201843,
+    "avg_context_features_per_doc": 492.39785714285716,
+    "precision_at_10": 0.2880000000000001,
+    "recall_at_10": 0.4151717856556903,
+    "fscore_at_10": 0.3147539766573292,
+    "map_at_10": 0.3137222474367375,
+    "ndcg_at_10": 0.4699238980941205,
+    "mrr_at_10": 0.75178835978836
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 54373,
+    "avg_context_features_per_doc": 161.20357142857142,
+    "precision_at_10": 0.28844444444444456,
+    "recall_at_10": 0.4156212497718212,
+    "fscore_at_10": 0.3152873443885612,
+    "map_at_10": 0.31334969751548764,
+    "ndcg_at_10": 0.4697529481099722,
+    "mrr_at_10": 0.7523315696649032
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 2,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 141920,
+    "avg_context_features_per_doc": 355.92571428571426,
+    "precision_at_10": 0.2884444444444446,
+    "recall_at_10": 0.41512693317224125,
+    "fscore_at_10": 0.3148481516528167,
+    "map_at_10": 0.31334798892231636,
+    "ndcg_at_10": 0.47016504597635356,
+    "mrr_at_10": 0.7539911816578485
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 1918215,
+    "avg_context_features_per_doc": 1718.3778571428572,
+    "precision_at_10": 0.2862222222222223,
+    "recall_at_10": 0.4131217531670612,
+    "fscore_at_10": 0.3128309903921772,
+    "map_at_10": 0.3131169993431436,
+    "ndcg_at_10": 0.46967897041311296,
+    "mrr_at_10": 0.7504232804232807
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 700562,
+    "avg_context_features_per_doc": 659.4814285714285,
+    "precision_at_10": 0.2880000000000001,
+    "recall_at_10": 0.4145720273892654,
+    "fscore_at_10": 0.3145922690934859,
+    "map_at_10": 0.3128760940123868,
+    "ndcg_at_10": 0.4714667789946959,
+    "mrr_at_10": 0.7585767195767197
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 122278,
+    "avg_context_features_per_doc": 149.3192857142857,
+    "precision_at_10": 0.28711111111111126,
+    "recall_at_10": 0.4157472476893566,
+    "fscore_at_10": 0.3144357167582248,
+    "map_at_10": 0.3127481785399173,
+    "ndcg_at_10": 0.4694829932891618,
+    "mrr_at_10": 0.7557513227513228
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 1302979,
+    "avg_context_features_per_doc": 1185.2535714285714,
+    "precision_at_10": 0.2875555555555557,
+    "recall_at_10": 0.41473567011431145,
+    "fscore_at_10": 0.3141938419655551,
+    "map_at_10": 0.3125204476018271,
+    "ndcg_at_10": 0.47027349289612436,
+    "mrr_at_10": 0.7517954144620814
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.5,
+    "context_feature_vocab_size": 2480712,
+    "avg_context_features_per_doc": 2205.3478571428573,
+    "precision_at_10": 0.2862222222222223,
+    "recall_at_10": 0.4131217531670612,
+    "fscore_at_10": 0.3128309903921772,
+    "map_at_10": 0.3121577008653034,
+    "ndcg_at_10": 0.4690760757165968,
+    "mrr_at_10": 0.7543368606701942
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 329208,
+    "avg_context_features_per_doc": 475.07928571428573,
+    "precision_at_10": 0.2862222222222223,
+    "recall_at_10": 0.4134188595694308,
+    "fscore_at_10": 0.31302183147957,
+    "map_at_10": 0.3119620846954807,
+    "ndcg_at_10": 0.46758298022425065,
+    "mrr_at_10": 0.7503492063492065
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 301312,
+    "avg_context_features_per_doc": 426.2707142857143,
+    "precision_at_10": 0.2866666666666668,
+    "recall_at_10": 0.4137363198868912,
+    "fscore_at_10": 0.3133922018499404,
+    "map_at_10": 0.31170110097021125,
+    "ndcg_at_10": 0.4679488101920959,
+    "mrr_at_10": 0.7512380952380954
+  },
+  {
+    "radius": 1,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 217950,
+    "avg_context_features_per_doc": 224.87214285714285,
+    "precision_at_10": 0.28533333333333355,
+    "recall_at_10": 0.4123783696538119,
+    "fscore_at_10": 0.31235114102177125,
+    "map_at_10": 0.31097009631937483,
+    "ndcg_at_10": 0.46641039518199656,
+    "mrr_at_10": 0.7536455026455029
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 261418,
+    "avg_context_features_per_doc": 359.10571428571427,
+    "precision_at_10": 0.28533333333333355,
+    "recall_at_10": 0.41144718926442725,
+    "fscore_at_10": 0.3118726964097637,
+    "map_at_10": 0.31039801014400425,
+    "ndcg_at_10": 0.46589271808772403,
+    "mrr_at_10": 0.7503932980599649
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 204784,
+    "avg_context_features_per_doc": 268.64,
+    "precision_at_10": 0.2857777777777779,
+    "recall_at_10": 0.4118137609643322,
+    "fscore_at_10": 0.31219874098981293,
+    "map_at_10": 0.3102215402984729,
+    "ndcg_at_10": 0.4665964227043123,
+    "mrr_at_10": 0.7508253968253972
+  },
+  {
+    "radius": 3,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 1302979,
+    "avg_context_features_per_doc": 1185.2535714285714,
+    "precision_at_10": 0.2848888888888891,
+    "recall_at_10": 0.4109001807174187,
+    "fscore_at_10": 0.3113702809508265,
+    "map_at_10": 0.3089525461924417,
+    "ndcg_at_10": 0.464494008941986,
+    "mrr_at_10": 0.7492398589065258
+  },
+  {
+    "radius": 4,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 1918215,
+    "avg_context_features_per_doc": 1718.3778571428572,
+    "precision_at_10": 0.2848888888888891,
+    "recall_at_10": 0.41123351405075204,
+    "fscore_at_10": 0.3116369476174932,
+    "map_at_10": 0.308935832800984,
+    "ndcg_at_10": 0.4650847660400805,
+    "mrr_at_10": 0.7491340388007057
+  },
+  {
+    "radius": 5,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 2480712,
+    "avg_context_features_per_doc": 2205.3478571428573,
+    "precision_at_10": 0.2848888888888891,
+    "recall_at_10": 0.41123351405075204,
+    "fscore_at_10": 0.3116369476174932,
+    "map_at_10": 0.3088014887499732,
+    "ndcg_at_10": 0.46498087318984843,
+    "mrr_at_10": 0.7487636684303354
+  },
+  {
+    "radius": 2,
+    "orders": [
+      2,
+      3
+    ],
+    "min_df": 1,
+    "alpha": 0.25,
+    "context_feature_vocab_size": 700562,
+    "avg_context_features_per_doc": 659.4814285714285,
+    "precision_at_10": 0.2853333333333335,
+    "recall_at_10": 0.41119294967685427,
+    "fscore_at_10": 0.3116568306584289,
+    "map_at_10": 0.30763124521241064,
+    "ndcg_at_10": 0.46361807080854567,
+    "mrr_at_10": 0.7463015873015876
+  }
+]
