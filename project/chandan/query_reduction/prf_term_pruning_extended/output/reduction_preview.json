@@ -1,0 +1,550 @@
+[
+  {
+    "query_index": 1,
+    "original_len": 11,
+    "reduced_len": 11,
+    "original_tokens": [
+      "similar",
+      "law",
+      "must",
+      "obey",
+      "construct",
+      "aeroelast",
+      "model",
+      "heat",
+      "high",
+      "speed",
+      "aircraft"
+    ],
+    "reduced_tokens": [
+      "similar",
+      "law",
+      "must",
+      "obey",
+      "construct",
+      "aeroelast",
+      "model",
+      "heat",
+      "high",
+      "speed",
+      "aircraft"
+    ]
+  },
+  {
+    "query_index": 2,
+    "original_len": 8,
+    "reduced_len": 8,
+    "original_tokens": [
+      "structur",
+      "aeroelast",
+      "problem",
+      "associ",
+      "flight",
+      "high",
+      "speed",
+      "aircraft"
+    ],
+    "reduced_tokens": [
+      "structur",
+      "aeroelast",
+      "problem",
+      "associ",
+      "flight",
+      "high",
+      "speed",
+      "aircraft"
+    ]
+  },
+  {
+    "query_index": 3,
+    "original_len": 7,
+    "reduced_len": 7,
+    "original_tokens": [
+      "problem",
+      "heat",
+      "conduct",
+      "composit",
+      "slab",
+      "solv",
+      "far"
+    ],
+    "reduced_tokens": [
+      "problem",
+      "heat",
+      "conduct",
+      "composit",
+      "slab",
+      "solv",
+      "far"
+    ]
+  },
+  {
+    "query_index": 4,
+    "original_len": 18,
+    "reduced_len": 12,
+    "original_tokens": [
+      "criterion",
+      "develop",
+      "show",
+      "empir",
+      "valid",
+      "flow",
+      "solut",
+      "chemic",
+      "react",
+      "ga",
+      "mixtur",
+      "base",
+      "simplifi",
+      "assumpt",
+      "instantan",
+      "local",
+      "chemic",
+      "equilibrium"
+    ],
+    "reduced_tokens": [
+      "criterion",
+      "empir",
+      "flow",
+      "solut",
+      "chemic",
+      "react",
+      "ga",
+      "mixtur",
+      "assumpt",
+      "instantan",
+      "chemic",
+      "equilibrium"
+    ]
+  },
+  {
+    "query_index": 5,
+    "original_len": 7,
+    "reduced_len": 7,
+    "original_tokens": [
+      "chemic",
+      "kinet",
+      "system",
+      "applic",
+      "hyperson",
+      "aerodynam",
+      "problem"
+    ],
+    "reduced_tokens": [
+      "chemic",
+      "kinet",
+      "system",
+      "applic",
+      "hyperson",
+      "aerodynam",
+      "problem"
+    ]
+  },
+  {
+    "query_index": 6,
+    "original_len": 7,
+    "reduced_len": 7,
+    "original_tokens": [
+      "theoret",
+      "experiment",
+      "guid",
+      "turbul",
+      "couett",
+      "flow",
+      "behaviour"
+    ],
+    "reduced_tokens": [
+      "theoret",
+      "experiment",
+      "guid",
+      "turbul",
+      "couett",
+      "flow",
+      "behaviour"
+    ]
+  },
+  {
+    "query_index": 7,
+    "original_len": 18,
+    "reduced_len": 12,
+    "original_tokens": [
+      "possibl",
+      "relat",
+      "avail",
+      "pressur",
+      "distribut",
+      "ogiv",
+      "forebodi",
+      "zero",
+      "angl",
+      "attack",
+      "lower",
+      "surfac",
+      "pressur",
+      "equival",
+      "ogiv",
+      "forebodi",
+      "angl",
+      "attack"
+    ],
+    "reduced_tokens": [
+      "pressur",
+      "ogiv",
+      "forebodi",
+      "zero",
+      "angl",
+      "attack",
+      "surfac",
+      "pressur",
+      "ogiv",
+      "forebodi",
+      "angl",
+      "attack"
+    ]
+  },
+  {
+    "query_index": 8,
+    "original_len": 12,
+    "reduced_len": 12,
+    "original_tokens": [
+      "method",
+      "-dash",
+      "exact",
+      "approxim",
+      "-dash",
+      "present",
+      "avail",
+      "predict",
+      "bodi",
+      "pressur",
+      "angl",
+      "attack"
+    ],
+    "reduced_tokens": [
+      "method",
+      "-dash",
+      "exact",
+      "approxim",
+      "-dash",
+      "present",
+      "avail",
+      "predict",
+      "bodi",
+      "pressur",
+      "angl",
+      "attack"
+    ]
+  },
+  {
+    "query_index": 9,
+    "original_len": 7,
+    "reduced_len": 7,
+    "original_tokens": [
+      "paper",
+      "intern",
+      "/slip",
+      "flow/",
+      "heat",
+      "transfer",
+      "studi"
+    ],
+    "reduced_tokens": [
+      "paper",
+      "intern",
+      "/slip",
+      "flow/",
+      "heat",
+      "transfer",
+      "studi"
+    ]
+  },
+  {
+    "query_index": 10,
+    "original_len": 9,
+    "reduced_len": 9,
+    "original_tokens": [
+      "real-ga",
+      "transport",
+      "properti",
+      "air",
+      "avail",
+      "wide",
+      "rang",
+      "enthalpi",
+      "densiti"
+    ],
+    "reduced_tokens": [
+      "real-ga",
+      "transport",
+      "properti",
+      "air",
+      "avail",
+      "wide",
+      "rang",
+      "enthalpi",
+      "densiti"
+    ]
+  },
+  {
+    "query_index": 11,
+    "original_len": 11,
+    "reduced_len": 11,
+    "original_tokens": [
+      "possibl",
+      "find",
+      "analyt",
+      "similar",
+      "solut",
+      "strong",
+      "blast",
+      "wave",
+      "problem",
+      "newtonian",
+      "approxim"
+    ],
+    "reduced_tokens": [
+      "possibl",
+      "find",
+      "analyt",
+      "similar",
+      "solut",
+      "strong",
+      "blast",
+      "wave",
+      "problem",
+      "newtonian",
+      "approxim"
+    ]
+  },
+  {
+    "query_index": 12,
+    "original_len": 8,
+    "reduced_len": 8,
+    "original_tokens": [
+      "aerodynam",
+      "perform",
+      "channel",
+      "flow",
+      "ground",
+      "effect",
+      "machin",
+      "calcul"
+    ],
+    "reduced_tokens": [
+      "aerodynam",
+      "perform",
+      "channel",
+      "flow",
+      "ground",
+      "effect",
+      "machin",
+      "calcul"
+    ]
+  },
+  {
+    "query_index": 13,
+    "original_len": 5,
+    "reduced_len": 5,
+    "original_tokens": [
+      "basic",
+      "mechan",
+      "transon",
+      "aileron",
+      "buzz"
+    ],
+    "reduced_tokens": [
+      "basic",
+      "mechan",
+      "transon",
+      "aileron",
+      "buzz"
+    ]
+  },
+  {
+    "query_index": 14,
+    "original_len": 4,
+    "reduced_len": 4,
+    "original_tokens": [
+      "paper",
+      "shock-sound",
+      "wave",
+      "interact"
+    ],
+    "reduced_tokens": [
+      "paper",
+      "shock-sound",
+      "wave",
+      "interact"
+    ]
+  },
+  {
+    "query_index": 15,
+    "original_len": 4,
+    "reduced_len": 4,
+    "original_tokens": [
+      "materi",
+      "properti",
+      "photoelast",
+      "materi"
+    ],
+    "reduced_tokens": [
+      "materi",
+      "properti",
+      "photoelast",
+      "materi"
+    ]
+  },
+  {
+    "query_index": 16,
+    "original_len": 9,
+    "reduced_len": 9,
+    "original_tokens": [
+      "transvers",
+      "potenti",
+      "flow",
+      "bodi",
+      "revolut",
+      "calcul",
+      "effici",
+      "electron",
+      "comput"
+    ],
+    "reduced_tokens": [
+      "transvers",
+      "potenti",
+      "flow",
+      "bodi",
+      "revolut",
+      "calcul",
+      "effici",
+      "electron",
+      "comput"
+    ]
+  },
+  {
+    "query_index": 17,
+    "original_len": 10,
+    "reduced_len": 10,
+    "original_tokens": [
+      "three-dimension",
+      "problem",
+      "transvers",
+      "potenti",
+      "flow",
+      "bodi",
+      "revolut",
+      "reduc",
+      "two-dimension",
+      "problem"
+    ],
+    "reduced_tokens": [
+      "three-dimension",
+      "problem",
+      "transvers",
+      "potenti",
+      "flow",
+      "bodi",
+      "revolut",
+      "reduc",
+      "two-dimension",
+      "problem"
+    ]
+  },
+  {
+    "query_index": 18,
+    "original_len": 8,
+    "reduced_len": 8,
+    "original_tokens": [
+      "experiment",
+      "pressur",
+      "distribut",
+      "bodi",
+      "revolut",
+      "angl",
+      "attack",
+      "avail"
+    ],
+    "reduced_tokens": [
+      "experiment",
+      "pressur",
+      "distribut",
+      "bodi",
+      "revolut",
+      "angl",
+      "attack",
+      "avail"
+    ]
+  },
+  {
+    "query_index": 19,
+    "original_len": 14,
+    "reduced_len": 12,
+    "original_tokens": [
+      "doe",
+      "exist",
+      "good",
+      "basic",
+      "treatment",
+      "dynam",
+      "re-entri",
+      "combin",
+      "consider",
+      "realist",
+      "effect",
+      "rel",
+      "simplic",
+      "result"
+    ],
+    "reduced_tokens": [
+      "doe",
+      "good",
+      "basic",
+      "treatment",
+      "dynam",
+      "re-entri",
+      "combin",
+      "realist",
+      "effect",
+      "rel",
+      "simplic",
+      "result"
+    ]
+  },
+  {
+    "query_index": 20,
+    "original_len": 16,
+    "reduced_len": 12,
+    "original_tokens": [
+      "ha",
+      "anyon",
+      "formal",
+      "determin",
+      "influenc",
+      "joul",
+      "heat",
+      "produc",
+      "induc",
+      "current",
+      "magnetohydrodynam",
+      "free",
+      "convect",
+      "flow",
+      "gener",
+      "condit"
+    ],
+    "reduced_tokens": [
+      "ha",
+      "formal",
+      "influenc",
+      "joul",
+      "heat",
+      "induc",
+      "current",
+      "magnetohydrodynam",
+      "free",
+      "convect",
+      "flow",
+      "gener"
+    ]
+  }
+]

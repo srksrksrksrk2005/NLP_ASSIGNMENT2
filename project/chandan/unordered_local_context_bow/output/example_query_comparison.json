@@ -19,9 +19,9 @@
     ],
     "method_top5": [
       102,
-      45,
       398,
-      846,
+      45,
+      983,
       5
     ],
     "relevant_hits_in_method_top5": []
@@ -32,8 +32,8 @@
     "baseline_hits_at_5": 2,
     "method_hits_at_5": 2,
     "baseline_ap_at_10": 0.1538,
-    "method_ap_at_10": 0.1484,
-    "delta_ap_at_10": -0.0055,
+    "method_ap_at_10": 0.1538,
+    "delta_ap_at_10": 0.0,
     "delta_hits_at_5": 0,
     "baseline_first_relevant_rank": 1,
     "method_first_relevant_rank": 1,
@@ -47,9 +47,9 @@
     "method_top5": [
       536,
       37,
-      1141,
+      1205,
       272,
-      1205
+      1141
     ],
     "relevant_hits_in_method_top5": [
       536,
@@ -76,14 +76,14 @@
     ],
     "method_top5": [
       52,
-      390,
-      878,
       391,
-      593
+      878,
+      390,
+      482
     ],
     "relevant_hits_in_method_top5": [
-      390,
-      391
+      391,
+      390
     ]
   },
   {
@@ -92,11 +92,11 @@
     "baseline_hits_at_5": 1,
     "method_hits_at_5": 1,
     "baseline_ap_at_10": 0.2869,
-    "method_ap_at_10": 0.3036,
-    "delta_ap_at_10": 0.0167,
+    "method_ap_at_10": 0.3869,
+    "delta_ap_at_10": 0.1,
     "delta_hits_at_5": 0,
     "baseline_first_relevant_rank": 5,
-    "method_first_relevant_rank": 4,
+    "method_first_relevant_rank": 2,
     "baseline_top5": [
       249,
       206,
@@ -106,9 +106,9 @@
     ],
     "method_top5": [
       714,
+      799,
       652,
       206,
-      799,
       249
     ],
     "relevant_hits_in_method_top5": [
@@ -151,8 +151,8 @@
     "baseline_hits_at_5": 0,
     "method_hits_at_5": 2,
     "baseline_ap_at_10": 0.1944,
-    "method_ap_at_10": 0.7,
-    "delta_ap_at_10": 0.5056,
+    "method_ap_at_10": 0.8333,
+    "delta_ap_at_10": 0.6389,
     "delta_hits_at_5": 2,
     "baseline_first_relevant_rank": 6,
     "method_first_relevant_rank": 1,
@@ -166,9 +166,9 @@
     "method_top5": [
       897,
       928,
-      1133,
-      1132,
-      926
+      926,
+      1116,
+      789
     ],
     "relevant_hits_in_method_top5": [
       897,
@@ -181,8 +181,8 @@
     "baseline_hits_at_5": 1,
     "method_hits_at_5": 1,
     "baseline_ap_at_10": 0.25,
-    "method_ap_at_10": 0.6111,
-    "delta_ap_at_10": 0.3611,
+    "method_ap_at_10": 0.625,
+    "delta_ap_at_10": 0.375,
     "delta_hits_at_5": 0,
     "baseline_first_relevant_rank": 2,
     "method_first_relevant_rank": 1,
@@ -196,43 +196,43 @@
     "method_top5": [
       954,
       827,
+      1136,
       887,
-      1134,
-      1136
+      1125
     ],
     "relevant_hits_in_method_top5": [
       954
     ]
   },
   {
-    "query_id": 200,
-    "query": "are asymptotic methods sufficiently accurate in the determination of pre-buckling stresses in torispherical shells,  or must we resort to numerical methods .",
-    "baseline_hits_at_5": 2,
+    "query_id": 61,
+    "query": "does there exist a closed-form expression for the local heat transfer around a yawed cylinder .",
+    "baseline_hits_at_5": 3,
     "method_hits_at_5": 3,
-    "baseline_ap_at_10": 0.5833,
-    "method_ap_at_10": 0.8167,
-    "delta_ap_at_10": 0.2333,
-    "delta_hits_at_5": 1,
+    "baseline_ap_at_10": 0.4611,
+    "method_ap_at_10": 0.7153,
+    "delta_ap_at_10": 0.2542,
+    "delta_hits_at_5": 0,
     "baseline_first_relevant_rank": 1,
     "method_first_relevant_rank": 1,
     "baseline_top5": [
-      1071,
-      1134,
-      1044,
-      890,
-      930
+      564,
+      333,
+      1213,
+      566,
+      539
     ],
     "method_top5": [
-      1071,
-      1134,
-      1043,
-      889,
-      1137
+      539,
+      564,
+      566,
+      333,
+      1213
     ],
     "relevant_hits_in_method_top5": [
-      1071,
-      1134,
-      1137
+      539,
+      564,
+      566
     ]
   }
 ]

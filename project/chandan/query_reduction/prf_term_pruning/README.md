@@ -1,7 +1,9 @@
-# Pseudo-Relevance-Feedback Query Pruning
+# Pseudo-Relevance-Feedback Query Pruning (legacy grid)
 
-- Best parameter: `{'top_docs': 3, 'keep_k': 4, 'alpha': 0.5}`
-- Avg reduced query length: `4.00`
-- MAP@10: `0.2791`
-- nDCG@10: `0.4244`
-- MRR@10: `0.6860`
+- Method key: `prf_term_pruning_legacy`
+- Candidate count: `48`
+- Best parameter: `{'top_docs': 3, 'keep_k': 6, 'alpha': 0.3}`
+- Avg reduced query length: `5.86`
+- MAP@10: `0.2943`
+- nDCG@10: `0.4436`
+- MRR@10: `0.7254`

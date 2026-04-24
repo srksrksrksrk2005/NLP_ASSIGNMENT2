@@ -441,7 +441,85 @@ def run_method_sweep(
         reverse=True,
     )
     write_json(output_dir / "sweep_results.json", sweep_rows)
-    return sweep_rows[0]
+    return {
+        "best": sweep_rows[0],
+        "all": sweep_rows,
+    }
+
+
+def save_tuning_combo_overlay(
+    path: Path,
+    baseline_metrics: Dict[str, List[float]],
+    sweep_rows: Sequence[Dict[str, object]],
+    best_row: Dict[str, object],
+    title: str,
+) -> None:
+    ks = list(range(1, 11))
+    fig, axes = plt.subplots(2, 3, figsize=(16, 9))
+    axes = axes.flatten()
+
+    overlap_with_baseline = all(
+        np.allclose(
+            np.array(best_row["metrics_by_k"][metric_name], dtype=np.float64),
+            np.array(baseline_metrics[metric_name], dtype=np.float64),
+            atol=1e-12,
+        )
+        for metric_name in METRIC_LABELS
+    )
+    best_label = "best_tuned_config"
+    if overlap_with_baseline:
+        best_label = "best_tuned_config (overlaps baseline)"
+
+    for axis, metric_name in zip(axes, METRIC_LABELS):
+        for row in sweep_rows:
+            axis.plot(
+                ks,
+                row["metrics_by_k"][metric_name],
+                color="tab:blue",
+                alpha=0.16,
+                linewidth=1.0,
+                zorder=1,
+            )
+
+        axis.plot(
+            ks,
+            best_row["metrics_by_k"][metric_name],
+            marker="s",
+            markersize=7,
+            markerfacecolor="none",
+            markeredgewidth=1.6,
+            linewidth=2.2,
+            color="tab:red",
+            label=best_label,
+            zorder=2,
+        )
+
+        axis.plot(
+            ks,
+            baseline_metrics[metric_name],
+            marker="o",
+            markersize=5,
+            markerfacecolor="white",
+            markeredgewidth=1.1,
+            linewidth=2.8,
+            color="black",
+            linestyle="--",
+            label="baseline_tfidf",
+            zorder=3,
+        )
+
+        axis.set_title(METRIC_LABELS[metric_name])
+        axis.set_xlabel("k")
+        axis.set_ylabel("Score")
+        axis.set_xticks(ks)
+        axis.grid(alpha=0.25)
+
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.965), ncol=2, frameon=False)
+    fig.suptitle(title, y=0.992, fontsize=15)
+    fig.subplots_adjust(top=0.86, hspace=0.42, wspace=0.28)
+    fig.savefig(path, dpi=180)
+    plt.close(fig)
 
 
 def save_unified_overlay(
@@ -550,6 +628,14 @@ def build_report(
     baseline = summary["methods"]["baseline_tfidf"]
     best_method_name = summary["best_query_reduction_method"]
     best_method = summary["methods"][best_method_name]
+    delta_map = summary["delta_best_method_vs_baseline_at_10"]["map"]
+    if delta_map > 0.0:
+        result_line = "- `result = best query-reduction variant is above baseline on MAP@10`"
+    elif delta_map < 0.0:
+        result_line = "- `result = best query-reduction variant is below baseline on MAP@10`"
+    else:
+        result_line = "- `result = best query-reduction variant matches baseline on MAP@10`"
+
     lines = [
         "# Query Reduction Experiment Report",
         "",
@@ -567,7 +653,7 @@ def build_report(
         "",
         f"- `method = {best_method_name}`",
         f"- `best_parameter = {best_method['best_parameter']}`",
-        "- `result = best query-reduction variant, but still below the full baseline TF-IDF system on this dataset`",
+        result_line,
         "",
         "## k=10 Comparison",
         "",
@@ -616,6 +702,10 @@ def build_report(
             f"- Summary JSON: `{summary['paths']['summary_json']}`",
             f"- Summary CSV: `{summary['paths']['summary_csv']}`",
             f"- Unified overlay: `{summary['paths']['unified_overlay']}`",
+            f"- IDF top-k all-combinations overlay: `{summary['paths']['idf_topk_tuning_overlay']}`",
+            f"- IDF top-k extended all-combinations overlay: `{summary['paths']['idf_topk_extended_tuning_overlay']}`",
+            f"- PRF pruning all-combinations overlay: `{summary['paths']['prf_tuning_overlay']}`",
+            f"- PRF pruning extended all-combinations overlay: `{summary['paths']['prf_extended_tuning_overlay']}`",
             f"- Comparison summary: `{summary['paths']['comparison_summary']}`",
             f"- Example comparison markdown: `{summary['paths']['example_markdown']}`",
         ]
@@ -636,14 +726,10 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     baseline_dir = output_dir / "baseline_tfidf"
-    topk_dir = SCRIPT_DIR / "idf_topk"
-    prf_dir = SCRIPT_DIR / "prf_term_pruning"
-    method_dirs = {
-        "idf_topk": topk_dir / "output",
-        "prf_term_pruning": prf_dir / "output",
-    }
-    for path in [baseline_dir, method_dirs["idf_topk"], method_dirs["prf_term_pruning"]]:
-        path.mkdir(parents=True, exist_ok=True)
+    topk_legacy_dir = SCRIPT_DIR / "idf_topk"
+    topk_extended_dir = SCRIPT_DIR / "idf_topk_extended"
+    prf_legacy_dir = SCRIPT_DIR / "prf_term_pruning"
+    prf_extended_dir = SCRIPT_DIR / "prf_term_pruning_extended"
 
     docs_json = load_json(dataset_dir / "cran_docs.json")
     queries_json = load_json(dataset_dir / "cran_queries.json")
@@ -677,28 +763,58 @@ def main() -> None:
         },
     )
 
-    method_specs = {
-        "idf_topk": {
-            "candidates": [3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18],
-            "output_dir": method_dirs["idf_topk"],
-            "readme_path": topk_dir / "README.md",
-            "method_title": "IDF Top-k Query Reduction",
+    legacy_idf_candidates = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20]
+    extended_idf_candidates = sorted(set(legacy_idf_candidates + [22, 24, 26, 28, 30, 35, 40]))
+
+    prf_legacy_candidates = [
+        {"top_docs": top_docs, "keep_k": keep_k, "alpha": alpha}
+        for top_docs in [3, 5, 8, 10]
+        for keep_k in [3, 4, 5, 6]
+        for alpha in [0.3, 0.5, 0.7]
+    ]
+    prf_extended_candidates = [
+        {"top_docs": top_docs, "keep_k": keep_k, "alpha": alpha}
+        for top_docs in [3, 5, 8, 10, 12, 15]
+        for keep_k in [3, 4, 5, 6, 7, 8, 10, 12, 15, 20]
+        for alpha in [0.1, 0.2, 0.3, 0.5, 0.7, 0.9]
+    ]
+
+    method_specs = [
+        {
+            "summary_name": "idf_topk_legacy",
+            "reducer_name": "idf_topk",
+            "candidates": legacy_idf_candidates,
+            "output_dir": topk_legacy_dir / "output",
+            "readme_path": topk_legacy_dir / "README.md",
+            "method_title": "IDF Top-k Query Reduction (legacy grid)",
         },
-        "prf_term_pruning": {
-            "candidates": [
-                {"top_docs": 3, "keep_k": 3, "alpha": 0.5},
-                {"top_docs": 3, "keep_k": 4, "alpha": 0.5},
-                {"top_docs": 5, "keep_k": 3, "alpha": 0.5},
-                {"top_docs": 5, "keep_k": 4, "alpha": 0.5},
-                {"top_docs": 5, "keep_k": 4, "alpha": 0.7},
-                {"top_docs": 10, "keep_k": 4, "alpha": 0.7},
-                {"top_docs": 10, "keep_k": 5, "alpha": 0.7},
-            ],
-            "output_dir": method_dirs["prf_term_pruning"],
-            "readme_path": prf_dir / "README.md",
-            "method_title": "Pseudo-Relevance-Feedback Query Pruning",
+        {
+            "summary_name": "idf_topk_extended",
+            "reducer_name": "idf_topk",
+            "candidates": extended_idf_candidates,
+            "output_dir": topk_extended_dir / "output",
+            "readme_path": topk_extended_dir / "README.md",
+            "method_title": "IDF Top-k Query Reduction (extended grid)",
         },
-    }
+        {
+            "summary_name": "prf_term_pruning_legacy",
+            "reducer_name": "prf_term_pruning",
+            "candidates": prf_legacy_candidates,
+            "output_dir": prf_legacy_dir / "output",
+            "readme_path": prf_legacy_dir / "README.md",
+            "method_title": "Pseudo-Relevance-Feedback Query Pruning (legacy grid)",
+        },
+        {
+            "summary_name": "prf_term_pruning_extended",
+            "reducer_name": "prf_term_pruning",
+            "candidates": prf_extended_candidates,
+            "output_dir": prf_extended_dir / "output",
+            "readme_path": prf_extended_dir / "README.md",
+            "method_title": "Pseudo-Relevance-Feedback Query Pruning (extended grid)",
+        },
+    ]
+    for path in [baseline_dir] + [spec["output_dir"] for spec in method_specs]:
+        path.mkdir(parents=True, exist_ok=True)
 
     summary_methods = {
         "baseline_tfidf": {
@@ -710,9 +826,11 @@ def main() -> None:
     method_rankings_by_name = {"baseline_tfidf": baseline_rankings}
     method_per_query_by_name = {"baseline_tfidf": baseline_per_query}
 
-    for method_name, spec in method_specs.items():
+    for spec in method_specs:
+        method_name = spec["reducer_name"]
+        summary_name = spec["summary_name"]
         start_time = time.time()
-        best = run_method_sweep(
+        sweep_payload = run_method_sweep(
             method_name=method_name,
             candidate_values=spec["candidates"],
             queries=processed_queries,
@@ -724,6 +842,8 @@ def main() -> None:
             doc_id_to_index=doc_id_to_index,
             doc_unigrams=doc_unigrams,
         )
+        best = sweep_payload["best"]
+        all_rows = sweep_payload["all"]
         reduced_queries, reduction_preview = reduce_queries(
             processed_queries,
             reducer_name=method_name,
@@ -740,6 +860,13 @@ def main() -> None:
         per_query = compute_per_query_metrics(evaluator, rankings, query_ids, qrels)
 
         save_metric_plot(spec["output_dir"] / "eval_plot.png", metrics, spec["method_title"])
+        save_tuning_combo_overlay(
+            spec["output_dir"] / "all_tuned_combinations_overlay.png",
+            baseline_metrics,
+            all_rows,
+            best,
+            f"Baseline vs All Tuned Combinations ({summary_name})",
+        )
         save_rankings(spec["output_dir"] / "rankings_top20.json", query_ids, rankings)
         write_json(
             spec["output_dir"] / "reduction_preview.json",
@@ -755,53 +882,66 @@ def main() -> None:
                 "avg_reduced_query_len": best["avg_reduced_query_len"],
             },
         )
-        summary_methods[method_name] = {
+        summary_methods[summary_name] = {
             "best_parameter": best["value"],
             "k10": {metric: values[9] for metric, values in metrics.items()},
             "metrics_by_k": metrics,
             "runtime_seconds": runtime,
             "avg_reduced_query_len": best["avg_reduced_query_len"],
         }
-        method_rankings_by_name[method_name] = rankings
-        method_per_query_by_name[method_name] = per_query
+        method_rankings_by_name[summary_name] = rankings
+        method_per_query_by_name[summary_name] = per_query
 
         spec["readme_path"].write_text(
             "\n".join(
                 [
                     f"# {spec['method_title']}",
                     "",
+                    f"- Method key: `{summary_name}`",
+                    f"- Candidate count: `{len(spec['candidates'])}`",
                     f"- Best parameter: `{best['value']}`",
                     f"- Avg reduced query length: `{best['avg_reduced_query_len']:.2f}`",
-                    f"- MAP@10: `{summary_methods[method_name]['k10']['map']:.4f}`",
-                    f"- nDCG@10: `{summary_methods[method_name]['k10']['ndcg']:.4f}`",
-                    f"- MRR@10: `{summary_methods[method_name]['k10']['mrr']:.4f}`",
+                    f"- MAP@10: `{summary_methods[summary_name]['k10']['map']:.4f}`",
+                    f"- nDCG@10: `{summary_methods[summary_name]['k10']['ndcg']:.4f}`",
+                    f"- MRR@10: `{summary_methods[summary_name]['k10']['mrr']:.4f}`",
                 ]
             ),
             encoding="utf-8",
         )
 
-    best_query_reduction_method = max(
-        ["idf_topk", "prf_term_pruning"],
-        key=lambda name: (
+    query_reduction_variant_names = [spec["summary_name"] for spec in method_specs]
+    legacy_variant_names = [name for name in query_reduction_variant_names if name.endswith("_legacy")]
+    extended_variant_names = [name for name in query_reduction_variant_names if name.endswith("_extended")]
+
+    def method_rank_key(name: str) -> Tuple[float, float, float]:
+        return (
             summary_methods[name]["k10"]["map"],
             summary_methods[name]["k10"]["ndcg"],
             summary_methods[name]["k10"]["mrr"],
-        ),
-    )
+        )
+
+    best_legacy_query_reduction_method = max(legacy_variant_names, key=method_rank_key)
+    best_extended_query_reduction_method = max(extended_variant_names, key=method_rank_key)
+    best_query_reduction_method = max(query_reduction_variant_names, key=method_rank_key)
+
+    baseline_map = summary_methods["baseline_tfidf"]["k10"]["map"]
+    improved_candidates_vs_baseline = [
+        name for name in query_reduction_variant_names if summary_methods[name]["k10"]["map"] > baseline_map
+    ]
+    best_improved_query_reduction_method = None
+    if improved_candidates_vs_baseline:
+        best_improved_query_reduction_method = max(improved_candidates_vs_baseline, key=method_rank_key)
 
     previous_method_path = CHANDAN_DIR / "unordered_local_context_bow" / "output" / "summary.json"
     previous_method_summary = load_json(previous_method_path)
-    unified_methods = [
-        "baseline_tfidf",
-        "unordered_local_context_bow",
-        "idf_topk",
-        "prf_term_pruning",
-    ]
+    unified_methods = ["baseline_tfidf", "unordered_local_context_bow", *query_reduction_variant_names]
     unified_metrics_by_method = {
         "baseline_tfidf": summary_methods["baseline_tfidf"]["metrics_by_k"],
         "unordered_local_context_bow": previous_method_summary["methods"]["unordered_local_context_bow"]["metrics_by_k"],
-        "idf_topk": summary_methods["idf_topk"]["metrics_by_k"],
-        "prf_term_pruning": summary_methods["prf_term_pruning"]["metrics_by_k"],
+        **{
+            method_name: summary_methods[method_name]["metrics_by_k"]
+            for method_name in query_reduction_variant_names
+        },
     }
     save_unified_overlay(output_dir / "unified_eval_overlay.png", unified_metrics_by_method, unified_methods)
 
@@ -851,6 +991,10 @@ def main() -> None:
     summary = {
         "dataset": str(dataset_dir),
         "best_query_reduction_method": best_query_reduction_method,
+        "best_legacy_query_reduction_method": best_legacy_query_reduction_method,
+        "best_extended_query_reduction_method": best_extended_query_reduction_method,
+        "best_improved_query_reduction_method_vs_baseline": best_improved_query_reduction_method,
+        "query_reduction_variants": query_reduction_variant_names,
         "methods": {
             **summary_methods,
             "unordered_local_context_bow": previous_method_summary["methods"]["unordered_local_context_bow"],
@@ -861,10 +1005,26 @@ def main() -> None:
             - summary_methods["baseline_tfidf"]["k10"][metric]
             for metric in ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
         },
+        "delta_extended_vs_legacy_at_10": {
+            "idf_topk": {
+                metric: summary_methods["idf_topk_extended"]["k10"][metric]
+                - summary_methods["idf_topk_legacy"]["k10"][metric]
+                for metric in ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
+            },
+            "prf_term_pruning": {
+                metric: summary_methods["prf_term_pruning_extended"]["k10"][metric]
+                - summary_methods["prf_term_pruning_legacy"]["k10"][metric]
+                for metric in ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
+            },
+        },
         "paths": {
             "summary_json": str(output_dir / "summary.json"),
             "summary_csv": str(output_dir / "summary_k10.csv"),
             "unified_overlay": str(output_dir / "unified_eval_overlay.png"),
+            "idf_topk_tuning_overlay": str((topk_legacy_dir / "output") / "all_tuned_combinations_overlay.png"),
+            "idf_topk_extended_tuning_overlay": str((topk_extended_dir / "output") / "all_tuned_combinations_overlay.png"),
+            "prf_tuning_overlay": str((prf_legacy_dir / "output") / "all_tuned_combinations_overlay.png"),
+            "prf_extended_tuning_overlay": str((prf_extended_dir / "output") / "all_tuned_combinations_overlay.png"),
             "comparison_summary": str(output_dir / "comparison_summary.json"),
             "example_markdown": str(output_dir / "example_query_comparison.md"),
         },
@@ -902,7 +1062,9 @@ def main() -> None:
                 "",
                 "Implemented method folders:",
                 "- `idf_topk`",
+                "- `idf_topk_extended`",
                 "- `prf_term_pruning`",
+                "- `prf_term_pruning_extended`",
                 "",
                 "Main runner:",
                 "- `run_experiments.py`",
@@ -914,7 +1076,13 @@ def main() -> None:
         encoding="utf-8",
     )
 
-    print("Best query reduction method:", best_query_reduction_method)
+    print("Best legacy query reduction method:", best_legacy_query_reduction_method)
+    print("Best extended query reduction method:", best_extended_query_reduction_method)
+    print("Best overall query reduction method:", best_query_reduction_method)
+    if best_improved_query_reduction_method:
+        print("Best method improving baseline:", best_improved_query_reduction_method)
+    else:
+        print("No query-reduction variant beat baseline MAP@10 in this run.")
     print("Best MAP@10:", f"{summary_methods[best_query_reduction_method]['k10']['map']:.4f}")
     print("Unified overlay written to:", output_dir / "unified_eval_overlay.png")
 

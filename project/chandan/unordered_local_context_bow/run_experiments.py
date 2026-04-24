@@ -344,67 +344,118 @@ def save_overlay_plot(
     n_values: List[int],
 ) -> None:
     ks = list(range(1, 11))
-    fig = plt.figure(figsize=(16, 12))
-    grid = fig.add_gridspec(3, 3, height_ratios=[1, 1, 1.15])
+    fig, axes = plt.subplots(2, 3, figsize=(16, 9))
+    axes = axes.flatten()
 
-    metric_axes = [
-        fig.add_subplot(grid[0, 0]),
-        fig.add_subplot(grid[0, 1]),
-        fig.add_subplot(grid[0, 2]),
-        fig.add_subplot(grid[1, 0]),
-        fig.add_subplot(grid[1, 1]),
-        fig.add_subplot(grid[1, 2]),
-    ]
-
-    colors = plt.cm.tab10(np.linspace(0, 1, len(n_values) + 1))
-    for axis, metric_name in zip(metric_axes, METRIC_LABELS):
-        axis.plot(ks, baseline_metrics[metric_name], marker="o", linewidth=2, label="Baseline TF-IDF", color="black", linestyle="--")
+    colors = plt.cm.tab10(np.linspace(0, 1, max(1, len(n_values))))
+    for axis, metric_name in zip(axes, METRIC_LABELS):
         for i, n in enumerate(n_values):
-            axis.plot(ks, all_n_metrics[n][metric_name], marker="s", linewidth=2, label=method_labels[n], color=colors[i])
+            axis.plot(
+                ks,
+                all_n_metrics[n][metric_name],
+                marker="s",
+                linewidth=1.8,
+                color=colors[i],
+                label=method_labels[n],
+                zorder=1,
+            )
+        axis.plot(
+            ks,
+            baseline_metrics[metric_name],
+            marker="o",
+            markersize=5,
+            markerfacecolor="white",
+            markeredgewidth=1.1,
+            linewidth=2.8,
+            color="black",
+            linestyle="--",
+            label="baseline_tfidf",
+            zorder=2,
+        )
         axis.set_title(METRIC_LABELS[metric_name])
         axis.set_xlabel("k")
         axis.set_ylabel("Score")
         axis.set_xticks(ks)
         axis.grid(alpha=0.25)
 
-    sweep_axis = fig.add_subplot(grid[2, :])
-    sweep_metric_keys = [
-        ("precision", "precision"),
-        ("recall", "recall"),
-        ("fscore", "fscore"),
-        ("map", "map"),
-        ("ndcg", "ndcg"),
-        ("mrr", "mrr"),
-    ]
-    for metric_key, metric_name in sweep_metric_keys:
-        for i, n in enumerate(n_values):
-            values = [all_n_metrics[n_val][metric_name][9] for n_val in n_values]
-            sweep_axis.plot(
-                n_values,
-                values,
-                marker="o",
-                linewidth=2,
-                label=f"n={n} - {metric_key.upper()}",
-                color=colors[i],
-            )
-    sweep_axis.set_title("Best k=10 Scores Across Local Context Size n")
-    sweep_axis.set_xlabel("Local context size n")
-    sweep_axis.set_ylabel("Score")
-    sweep_axis.set_xticks(n_values)
-    sweep_axis.grid(alpha=0.25)
-    sweep_axis.legend(ncol=3, fontsize=9, frameon=False, loc="upper left")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.965), ncol=4, frameon=False)
+    fig.suptitle("Baseline vs Tuned Local Context Sizes", y=0.992, fontsize=15)
+    fig.subplots_adjust(top=0.86, hspace=0.42, wspace=0.28)
+    fig.savefig(path, dpi=180)
+    plt.close(fig)
 
-    handles, labels = metric_axes[0].get_legend_handles_labels()
-    fig.legend(
-        handles,
-        labels,
-        loc="upper center",
-        bbox_to_anchor=(0.5, 0.955),
-        ncol=min(4, len(labels)),
-        frameon=False,
+
+def save_all_tuned_combinations_overlay(
+    path: Path,
+    baseline_metrics: Dict[str, List[float]],
+    sweep_results: Sequence[Dict[str, object]],
+    best_config: Dict[str, object],
+) -> None:
+    ks = list(range(1, 11))
+    fig, axes = plt.subplots(2, 3, figsize=(16, 9))
+    axes = axes.flatten()
+
+    overlap_with_baseline = all(
+        np.allclose(
+            np.array(best_config["metrics_by_k"][metric_name], dtype=np.float64),
+            np.array(baseline_metrics[metric_name], dtype=np.float64),
+            atol=1e-12,
+        )
+        for metric_name in METRIC_LABELS
     )
-    fig.suptitle("Baseline vs All Local Context Sizes", y=0.992, fontsize=15)
-    fig.subplots_adjust(top=0.88, hspace=0.48, wspace=0.28)
+    best_label = "best_tuned_config"
+    if overlap_with_baseline:
+        best_label = "best_tuned_config (overlaps baseline)"
+
+    for axis, metric_name in zip(axes, METRIC_LABELS):
+        for row in sweep_results:
+            axis.plot(
+                ks,
+                row["metrics_by_k"][metric_name],
+                color="tab:blue",
+                alpha=0.13,
+                linewidth=1.0,
+                zorder=1,
+            )
+
+        axis.plot(
+            ks,
+            best_config["metrics_by_k"][metric_name],
+            marker="s",
+            markersize=7,
+            markerfacecolor="none",
+            markeredgewidth=1.6,
+            linewidth=2.2,
+            color="tab:red",
+            label=best_label,
+            zorder=2,
+        )
+
+        axis.plot(
+            ks,
+            baseline_metrics[metric_name],
+            marker="o",
+            markersize=5,
+            markerfacecolor="white",
+            markeredgewidth=1.1,
+            linewidth=2.8,
+            color="black",
+            linestyle="--",
+            label="baseline_tfidf",
+            zorder=3,
+        )
+
+        axis.set_title(METRIC_LABELS[metric_name])
+        axis.set_xlabel("k")
+        axis.set_ylabel("Score")
+        axis.set_xticks(ks)
+        axis.grid(alpha=0.25)
+
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="upper center", bbox_to_anchor=(0.5, 0.965), ncol=2, frameon=False)
+    fig.suptitle("Baseline vs All Tuned Local-Context Combinations", y=0.992, fontsize=15)
+    fig.subplots_adjust(top=0.86, hspace=0.42, wspace=0.28)
     fig.savefig(path, dpi=180)
     plt.close(fig)
 
@@ -455,14 +506,17 @@ def find_best_config(
     evaluator = Evaluation()
     sweep_results = []
     config_index = 0
-    radius_values = [1, 2, 3, 4, 5]
-    total_configs = len(radius_values) * 2 * 2 * 3
+    radius_values = [1, 2, 3, 4, 5, 6]
+    order_values = [(2,), (2, 3), (2, 3, 4)]
+    min_df_values = [1, 2, 3]
+    alpha_values = [0.2, 0.35, 0.5, 0.65, 0.8]
+    total_configs = len(radius_values) * len(order_values) * len(min_df_values) * len(alpha_values)
 
     for radius in radius_values:
-        for orders in [(2,), (2, 3)]:
+        for orders in order_values:
             raw_doc_contexts = [context_feature_map(doc, radius=radius, orders=orders) for doc in docs]
             raw_query_contexts = [context_feature_map(query, radius=radius, orders=orders) for query in queries]
-            for min_df in [1, 2]:
+            for min_df in min_df_values:
                 filtered_docs, doc_freq = filter_context_feature_maps(raw_doc_contexts, min_df=min_df)
                 filtered_queries = [
                     {feature: value for feature, value in fmap.items() if doc_freq[feature] >= min_df}
@@ -476,7 +530,7 @@ def find_best_config(
                 )
                 _, context_scores = model.rank(filtered_queries)
 
-                for alpha in [0.25, 0.5, 0.75]:
+                for alpha in alpha_values:
                     config_index += 1
                     rankings = []
                     for base_scores, ctx_scores in zip(baseline_scores, context_scores):
@@ -487,7 +541,8 @@ def find_best_config(
                         )[:10]
                         rankings.append([doc_ids[idx] for idx in ranked_indexes])
 
-                    metrics = compute_k10_summary(evaluator, rankings, query_ids, qrels)
+                    metrics_by_k = compute_metrics(evaluator, rankings, query_ids, qrels)
+                    k10 = {metric: values[9] for metric, values in metrics_by_k.items()}
                     result = {
                         "radius": radius,
                         "orders": list(orders),
@@ -497,13 +552,20 @@ def find_best_config(
                         "avg_context_features_per_doc": float(
                             np.mean([len(fmap) for fmap in filtered_docs])
                         ),
-                        **metrics,
+                        "metrics_by_k": metrics_by_k,
+                        "k10": k10,
+                        "precision_at_10": k10["precision"],
+                        "recall_at_10": k10["recall"],
+                        "fscore_at_10": k10["fscore"],
+                        "map_at_10": k10["map"],
+                        "ndcg_at_10": k10["ndcg"],
+                        "mrr_at_10": k10["mrr"],
                     }
                     sweep_results.append(result)
                     print(
                         f"[sweep {config_index}/{total_configs}] "
                         f"r={radius} orders={orders} min_df={min_df} alpha={alpha} "
-                        f"MAP@10={metrics['map_at_10']:.4f}"
+                        f"MAP@10={k10['map']:.4f}"
                     )
 
     sweep_results.sort(
@@ -544,6 +606,7 @@ def find_best_config(
     return {
         "best_config": sweep_results[0],
         "best_by_radius": best_by_radius,
+        "all_configs": sweep_results,
     }
 
 
@@ -803,6 +866,7 @@ def build_report(
             f"- Summary JSON: `{summary['paths']['summary_json']}`",
             f"- Summary CSV: `{summary['paths']['summary_csv']}`",
             f"- Overlay plot: `{summary['paths']['overlay_plot']}`",
+            f"- All-combinations overlay: `{summary['paths']['all_configs_overlay']}`",
             f"- n-sweep JSON: `{summary['paths']['n_sweep_json']}`",
             f"- n-sweep CSV: `{summary['paths']['n_sweep_csv']}`",
             f"- n-sweep plot: `{summary['paths']['n_sweep_plot']}`",
@@ -876,6 +940,7 @@ def main() -> None:
     )
     best_config = sweep_payload["best_config"]
     n_sweep_rows = sweep_payload["best_by_radius"]
+    all_tuned_configs = sweep_payload["all_configs"]
 
     raw_doc_contexts = [
         context_feature_map(doc, radius=best_config["radius"], orders=best_config["orders"])
@@ -966,6 +1031,12 @@ def main() -> None:
         all_n_metrics,
         method_labels,
         list(all_n_metrics.keys()),
+    )
+    save_all_tuned_combinations_overlay(
+        output_dir / "all_tuned_combinations_overlay.png",
+        baseline_metrics,
+        all_tuned_configs,
+        best_config,
     )
     save_rankings(method_dir / "rankings_top20.json", query_ids, method_rankings, top_k=20)
 
@@ -1062,6 +1133,7 @@ def main() -> None:
             "summary_json": str(output_dir / "summary.json"),
             "summary_csv": str(output_dir / "summary_k10.csv"),
             "overlay_plot": str(output_dir / "eval_overlay.png"),
+            "all_configs_overlay": str(output_dir / "all_tuned_combinations_overlay.png"),
             "n_sweep_json": str(output_dir / "n_sweep_best_by_radius.json"),
             "n_sweep_csv": str(output_dir / "n_sweep_best_by_radius.csv"),
             "n_sweep_plot": str(output_dir / "n_sweep_best_by_radius.png"),

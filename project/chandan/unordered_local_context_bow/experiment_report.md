@@ -22,19 +22,20 @@ Here, `n` is the local context radius. For each token position, we inspect up to
 
 - `n = 4`
 - `context_orders = [2]`
-- `min_context_df = 2`
-- `context_weight_alpha = 0.75`
-- `context_feature_vocab_size = 85835`
+- `min_context_df = 3`
+- `context_weight_alpha = 0.8`
+- `context_feature_vocab_size = 45535`
 
 ## Local Context Size Sweep
 
 | n | Best orders | Best min_df | Best alpha | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 1 | [2, 3] | 2 | 0.75 | 0.2933 | 0.4259 | 0.3215 | 0.3222 | 0.4829 | 0.7580 |
-| 2 | [2] | 2 | 0.75 | 0.2898 | 0.4185 | 0.3171 | 0.3189 | 0.4783 | 0.7618 |
-| 3 | [2] | 2 | 0.75 | 0.2920 | 0.4233 | 0.3197 | 0.3216 | 0.4804 | 0.7642 |
-| 4 | [2] | 2 | 0.75 | 0.2902 | 0.4210 | 0.3177 | 0.3240 | 0.4829 | 0.7661 |
-| 5 | [2, 3] | 2 | 0.75 | 0.2924 | 0.4233 | 0.3202 | 0.3237 | 0.4814 | 0.7652 |
+| 1 | [2] | 3 | 0.50 | 0.2978 | 0.4303 | 0.3258 | 0.3255 | 0.4843 | 0.7655 |
+| 2 | [2] | 3 | 0.80 | 0.2947 | 0.4253 | 0.3224 | 0.3261 | 0.4840 | 0.7709 |
+| 3 | [2, 3] | 3 | 0.80 | 0.2960 | 0.4279 | 0.3238 | 0.3277 | 0.4889 | 0.7758 |
+| 4 | [2] | 3 | 0.80 | 0.2938 | 0.4251 | 0.3215 | 0.3297 | 0.4883 | 0.7779 |
+| 5 | [2] | 3 | 0.80 | 0.2911 | 0.4224 | 0.3188 | 0.3258 | 0.4827 | 0.7711 |
+| 6 | [2] | 3 | 0.80 | 0.2933 | 0.4255 | 0.3212 | 0.3274 | 0.4856 | 0.7720 |
 
 The sweep shows a trade-off rather than a single monotonic pattern. `n = 1` is strongest on precision, recall, F-score, and tied nDCG, while `n = 4` gives the best MAP@10 and MRR@10. In this dataset, a moderately larger window captures useful technical co-occurrence without drifting too far from the local topic.
 
@@ -42,17 +43,17 @@ The sweep shows a trade-off rather than a single monotonic pattern. `n = 1` is s
 
 | Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 | Runtime (s) |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| baseline_tfidf | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 | 0.26 |
-| unordered_local_context_bow | 0.2902 | 0.4210 | 0.3177 | 0.3240 | 0.4829 | 0.7661 | 65.50 |
+| baseline_tfidf | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 | 0.20 |
+| unordered_local_context_bow | 0.2938 | 0.4251 | 0.3215 | 0.3297 | 0.4883 | 0.7779 | 379.85 |
 
 ## Delta vs Baseline at k=10
 
-- `dP@10 = +0.0071`
-- `dR@10 = +0.0116`
-- `dF@10 = +0.0079`
-- `dMAP@10 = +0.0179`
-- `dnDCG@10 = +0.0218`
-- `dMRR@10 = +0.0200`
+- `dP@10 = +0.0107`
+- `dR@10 = +0.0158`
+- `dF@10 = +0.0116`
+- `dMAP@10 = +0.0236`
+- `dnDCG@10 = +0.0272`
+- `dMRR@10 = +0.0318`
 
 ## Significance Checks
 
@@ -72,21 +73,22 @@ At the same time, the method is still limited by lexical overlap: if the right c
 | Query ID | Baseline Hits@5 | Method Hits@5 | Baseline AP@10 | Method AP@10 | Delta AP@10 |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | 9 | 0 | 0 | 0.0000 | 0.0000 | 0.0000 |
-| 40 | 2 | 2 | 0.1538 | 0.1484 | -0.0055 |
+| 40 | 2 | 2 | 0.1538 | 0.1538 | 0.0000 |
 | 64 | 1 | 2 | 0.2619 | 0.3333 | 0.0714 |
-| 81 | 1 | 1 | 0.2869 | 0.3036 | 0.0167 |
+| 81 | 1 | 1 | 0.2869 | 0.3869 | 0.1000 |
 | 90 | 2 | 2 | 0.1048 | 0.1071 | 0.0024 |
-| 119 | 0 | 2 | 0.1944 | 0.7000 | 0.5056 |
-| 142 | 1 | 1 | 0.2500 | 0.6111 | 0.3611 |
-| 200 | 2 | 3 | 0.5833 | 0.8167 | 0.2333 |
+| 119 | 0 | 2 | 0.1944 | 0.8333 | 0.6389 |
+| 142 | 1 | 1 | 0.2500 | 0.6250 | 0.3750 |
+| 61 | 3 | 3 | 0.4611 | 0.7153 | 0.2542 |
 
 ## Output Files
 
-- Summary JSON: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary.json`
-- Summary CSV: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary_k10.csv`
-- Overlay plot: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/eval_overlay.png`
-- n-sweep JSON: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.json`
-- n-sweep CSV: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.csv`
-- n-sweep plot: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.png`
-- Example comparison markdown: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/example_query_comparison.md`
-- Config sweep JSON: `/home/chandanmannepula/NLP PROJECT/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/config_sweep.json`
+- Summary JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary.json`
+- Summary CSV: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary_k10.csv`
+- Overlay plot: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/eval_overlay.png`
+- All-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/all_tuned_combinations_overlay.png`
+- n-sweep JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.json`
+- n-sweep CSV: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.csv`
+- n-sweep plot: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.png`
+- Example comparison markdown: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/example_query_comparison.md`
+- Config sweep JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/config_sweep.json`
