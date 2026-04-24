@@ -1,0 +1,3701 @@
+[
+  {
+    "value": 18,
+    "metrics_by_k": {
+      "precision": [
+        0.6666666666666666,
+        0.5555555555555556,
+        0.48888888888888915,
+        0.43777777777777777,
+        0.3911111111111112,
+        0.36148148148148146,
+        0.33714285714285736,
+        0.31722222222222224,
+        0.2997530864197534,
+        0.28311111111111126
+      ],
+      "recall": [
+        0.11103612581003769,
+        0.18417761946525688,
+        0.23043541117856978,
+        0.2663954945851142,
+        0.29196841758489034,
+        0.3257878512376573,
+        0.35050423883383924,
+        0.3715862723910017,
+        0.39304011049189874,
+        0.40937964388315623
+      ],
+      "fscore": [
+        0.18321531181875003,
+        0.2600522009577152,
+        0.2915541178017117,
+        0.30674018975236517,
+        0.30885895122743506,
+        0.3160423623219552,
+        0.3171815054888327,
+        0.316006329106591,
+        0.3143174891833384,
+        0.30986622378540024
+      ],
+      "map": [
+        0.11103612581003769,
+        0.1766674783717825,
+        0.21358637326735444,
+        0.23918220041974542,
+        0.2539749459686028,
+        0.2697472436297894,
+        0.28168506029415524,
+        0.29191796214510407,
+        0.29988720378863776,
+        0.3058330357769984
+      ],
+      "ndcg": [
+        0.5288888888888889,
+        0.48728792876279264,
+        0.46264661111290156,
+        0.449972522791035,
+        0.4404662410699198,
+        0.4438006407895213,
+        0.4465118718057133,
+        0.45142613593321396,
+        0.4577097708799896,
+        0.4611219807515199
+      ],
+      "mrr": [
+        0.6666666666666666,
+        0.7088888888888889,
+        0.7237037037037038,
+        0.7292592592592594,
+        0.7354814814814815,
+        0.7414074074074075,
+        0.7426772486772487,
+        0.7432328042328044,
+        0.7452081128747798,
+        0.7460970017636687
+      ]
+    },
+    "k10": {
+      "precision": 0.28311111111111126,
+      "recall": 0.40937964388315623,
+      "fscore": 0.30986622378540024,
+      "map": 0.3058330357769984,
+      "ndcg": 0.4611219807515199,
+      "mrr": 0.7460970017636687
+    },
+    "avg_reduced_query_len": 10.155555555555555,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 11,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 18,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 18,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 12,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 16,
+    "metrics_by_k": {
+      "precision": [
+        0.6666666666666666,
+        0.5555555555555556,
+        0.48888888888888915,
+        0.43777777777777777,
+        0.39022222222222225,
+        0.3607407407407407,
+        0.33650793650793676,
+        0.31666666666666665,
+        0.2997530864197534,
+        0.28311111111111126
+      ],
+      "recall": [
+        0.11103612581003769,
+        0.18417761946525688,
+        0.23043541117856978,
+        0.2663954945851142,
+        0.2910795286960015,
+        0.3251529306027367,
+        0.34986931819891853,
+        0.3708455316502611,
+        0.39304011049189874,
+        0.40937964388315623
+      ],
+      "fscore": [
+        0.18321531181875003,
+        0.2600522009577152,
+        0.2915541178017117,
+        0.30674018975236517,
+        0.3079700623385462,
+        0.31535860163819457,
+        0.3165465848539121,
+        0.31537140847167033,
+        0.3143174891833384,
+        0.30986622378540024
+      ],
+      "map": [
+        0.11103612581003769,
+        0.1766674783717825,
+        0.21358637326735444,
+        0.23918220041974542,
+        0.25361939041304726,
+        0.2692647039472497,
+        0.28129322355946135,
+        0.2915790354633202,
+        0.29971288616035185,
+        0.3056587181487125
+      ],
+      "ndcg": [
+        0.5288888888888889,
+        0.48728792876279264,
+        0.46264661111290156,
+        0.449972522791035,
+        0.4396926582605131,
+        0.4433568158406936,
+        0.44597153978760806,
+        0.4509621813227663,
+        0.4575859801964418,
+        0.4609981900679721
+      ],
+      "mrr": [
+        0.6666666666666666,
+        0.7088888888888889,
+        0.7237037037037038,
+        0.7292592592592594,
+        0.7354814814814815,
+        0.7414074074074075,
+        0.7426772486772487,
+        0.7432328042328044,
+        0.7452081128747798,
+        0.7460970017636687
+      ]
+    },
+    "k10": {
+      "precision": 0.28311111111111126,
+      "recall": 0.40937964388315623,
+      "fscore": 0.30986622378540024,
+      "map": 0.3056587181487125,
+      "ndcg": 0.4609981900679721,
+      "mrr": 0.7460970017636687
+    },
+    "avg_reduced_query_len": 10.044444444444444,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 11,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 16,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 16,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 12,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 14,
+    "metrics_by_k": {
+      "precision": [
+        0.6666666666666666,
+        0.5533333333333333,
+        0.4903703703703706,
+        0.43777777777777777,
+        0.3893333333333334,
+        0.36074074074074064,
+        0.3358730158730161,
+        0.31555555555555553,
+        0.2987654320987657,
+        0.2817777777777779
+      ],
+      "recall": [
+        0.11103612581003769,
+        0.18328873057636802,
+        0.2310703318134904,
+        0.26587697606659566,
+        0.29063508425155704,
+        0.3248989623487684,
+        0.3492343975639979,
+        0.36942754223227153,
+        0.3915163009680892,
+        0.40803925587610157
+      ],
+      "fscore": [
+        0.18321531181875003,
+        0.25878235968787394,
+        0.2924430066906006,
+        0.30622167123384664,
+        0.30737746974595365,
+        0.3152342815138744,
+        0.3159116642189914,
+        0.3141373832376451,
+        0.3131270129928622,
+        0.30858877335984236
+      ],
+      "map": [
+        0.11103612581003769,
+        0.17577858948289363,
+        0.2139249976059788,
+        0.2387298194673645,
+        0.2530633057569626,
+        0.26913189971444557,
+        0.2805980610500132,
+        0.29049762956762865,
+        0.2986785114228025,
+        0.304665260518747
+      ],
+      "ndcg": [
+        0.5288888888888889,
+        0.4862220955780454,
+        0.46317051689663175,
+        0.44986573940808183,
+        0.439287328016685,
+        0.4429522876276214,
+        0.44541927332993236,
+        0.44987797322706496,
+        0.4566962748186397,
+        0.46005801735689367
+      ],
+      "mrr": [
+        0.6666666666666666,
+        0.7088888888888889,
+        0.7237037037037038,
+        0.7303703703703706,
+        0.7357037037037039,
+        0.7416296296296297,
+        0.7428994708994711,
+        0.7434550264550266,
+        0.7454303350970021,
+        0.7463192239858909
+      ]
+    },
+    "k10": {
+      "precision": 0.2817777777777779,
+      "recall": 0.40803925587610157,
+      "fscore": 0.30858877335984236,
+      "map": 0.304665260518747,
+      "ndcg": 0.46005801735689367,
+      "mrr": 0.7463192239858909
+    },
+    "avg_reduced_query_len": 9.826666666666666,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 11,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 14,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "show",
+          "empir",
+          "valid",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 14,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 12,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 12,
+    "metrics_by_k": {
+      "precision": [
+        0.6622222222222223,
+        0.5466666666666666,
+        0.4874074074074076,
+        0.43777777777777777,
+        0.38844444444444454,
+        0.35925925925925917,
+        0.3358730158730161,
+        0.31666666666666665,
+        0.29925925925925956,
+        0.28177777777777796
+      ],
+      "recall": [
+        0.11040120517511705,
+        0.18064322793086537,
+        0.23013719088034945,
+        0.26696499915461874,
+        0.28995078090058707,
+        0.3232710963875691,
+        0.3486047679343683,
+        0.3705069073116367,
+        0.39292370837549667,
+        0.40684172501190413
+      ],
+      "fscore": [
+        0.1821042007076389,
+        0.25515273005824435,
+        0.29101796259888985,
+        0.3073158511280265,
+        0.3065944009628849,
+        0.31379797707757,
+        0.3154170288307391,
+        0.3152238029907316,
+        0.3139355300119055,
+        0.30816438332492607
+      ],
+      "map": [
+        0.11040120517511705,
+        0.17318599689030106,
+        0.21142219176983965,
+        0.23740378130799297,
+        0.2512231101501003,
+        0.2669333854714868,
+        0.27877420037218414,
+        0.2892028694189001,
+        0.29699809577730735,
+        0.3027601535152271
+      ],
+      "ndcg": [
+        0.5322222222222223,
+        0.48379291966522164,
+        0.46210825243610704,
+        0.44985178098103695,
+        0.4384993706640692,
+        0.4425685638988337,
+        0.4456396570782518,
+        0.45065390183616144,
+        0.456926871352981,
+        0.4597906756072517
+      ],
+      "mrr": [
+        0.6622222222222223,
+        0.7066666666666667,
+        0.722962962962963,
+        0.7285185185185186,
+        0.732962962962963,
+        0.738888888888889,
+        0.7407936507936509,
+        0.741904761904762,
+        0.7438800705467374,
+        0.7443245149911818
+      ]
+    },
+    "k10": {
+      "precision": 0.28177777777777796,
+      "recall": 0.40684172501190413,
+      "fscore": 0.30816438332492607,
+      "map": 0.3027601535152271,
+      "ndcg": 0.4597906756072517,
+      "mrr": 0.7443245149911818
+    },
+    "avg_reduced_query_len": 9.373333333333333,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 11,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 12,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "valid",
+          "chemic",
+          "react",
+          "mixtur",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 12,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "attack",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 12,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 10,
+    "metrics_by_k": {
+      "precision": [
+        0.6666666666666666,
+        0.5422222222222223,
+        0.48000000000000015,
+        0.43222222222222223,
+        0.38400000000000006,
+        0.3622222222222222,
+        0.3352380952380955,
+        0.31666666666666665,
+        0.2967901234567904,
+        0.277777777777778
+      ],
+      "recall": [
+        0.11103612581003769,
+        0.1800030162906537,
+        0.226920419996912,
+        0.2631219656449186,
+        0.28823809852123805,
+        0.32720373420526444,
+        0.3511107804403808,
+        0.3726760591474553,
+        0.3892604087121969,
+        0.4012807402325286
+      ],
+      "fscore": [
+        0.18321531181875003,
+        0.25407689231573993,
+        0.2867424109900049,
+        0.3032130942357959,
+        0.30422115147232937,
+        0.31705608785315736,
+        0.31624240392228015,
+        0.31585792073618985,
+        0.3112138716679562,
+        0.3039144614698443
+      ],
+      "map": [
+        0.11103612581003769,
+        0.1728632455675497,
+        0.2089861381115638,
+        0.23436707829906775,
+        0.2491245504793185,
+        0.267260309427338,
+        0.27845144274403516,
+        0.2887037449477177,
+        0.2952683226680689,
+        0.300231658098071
+      ],
+      "ndcg": [
+        0.5333333333333333,
+        0.47951266813876536,
+        0.4591414687253163,
+        0.44702175614870876,
+        0.4355404076182482,
+        0.44222498383520376,
+        0.44429450706635465,
+        0.4496607523128057,
+        0.45348826128316944,
+        0.45492141329765845
+      ],
+      "mrr": [
+        0.6666666666666666,
+        0.7088888888888889,
+        0.7237037037037037,
+        0.7314814814814815,
+        0.7350370370370372,
+        0.741703703703704,
+        0.7429735449735452,
+        0.7446402116402118,
+        0.7461216931216933,
+        0.7465661375661378
+      ]
+    },
+    "k10": {
+      "precision": 0.277777777777778,
+      "recall": 0.4012807402325286,
+      "fscore": 0.3039144614698443,
+      "map": 0.300231658098071,
+      "ndcg": 0.45492141329765845,
+      "mrr": 0.7465661375661378
+    },
+    "avg_reduced_query_len": 8.564444444444444,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 10,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 10,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "valid",
+          "chemic",
+          "react",
+          "mixtur",
+          "simplifi",
+          "instantan",
+          "chemic",
+          "equilibrium"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 10,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "avail",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "attack",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 10,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "avail",
+          "predict",
+          "bodi",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 9,
+    "metrics_by_k": {
+      "precision": [
+        0.6444444444444445,
+        0.5444444444444444,
+        0.48000000000000015,
+        0.4255555555555556,
+        0.3857777777777779,
+        0.3570370370370369,
+        0.330793650793651,
+        0.31166666666666665,
+        0.2923456790123459,
+        0.27555555555555583
+      ],
+      "recall": [
+        0.10699187376578567,
+        0.17829137607901346,
+        0.22896611504260705,
+        0.26003217888846514,
+        0.29109716538030495,
+        0.32596742475056417,
+        0.3475164241793579,
+        0.3682862884243511,
+        0.38538210183389,
+        0.3996847806365689
+      ],
+      "fscore": [
+        0.17654864515208335,
+        0.25262010219228315,
+        0.28880088424227657,
+        0.29918092887029724,
+        0.3061933557386513,
+        0.31399194671712083,
+        0.31234391195189276,
+        0.3113653660487033,
+        0.30734525739425717,
+        0.3021658002545164
+      ],
+      "map": [
+        0.10699187376578567,
+        0.1686731301274343,
+        0.20858221795764365,
+        0.23000660852193133,
+        0.24672316359459825,
+        0.26383184092549794,
+        0.2739410311898087,
+        0.2839517108185353,
+        0.29059095050243716,
+        0.29645680316828993
+      ],
+      "ndcg": [
+        0.5155555555555555,
+        0.47869090718145124,
+        0.45645926671729536,
+        0.4408283361096371,
+        0.4347751334371978,
+        0.4370014107457862,
+        0.4394013795833332,
+        0.4445705505101595,
+        0.44858160710229095,
+        0.45101300913182935
+      ],
+      "mrr": [
+        0.6444444444444445,
+        0.7022222222222222,
+        0.7140740740740742,
+        0.721851851851852,
+        0.7271851851851853,
+        0.73162962962963,
+        0.732899470899471,
+        0.7340105820105821,
+        0.7354920634920636,
+        0.7359365079365082
+      ]
+    },
+    "k10": {
+      "precision": 0.27555555555555583,
+      "recall": 0.3996847806365689,
+      "fscore": 0.3021658002545164,
+      "map": 0.29645680316828993,
+      "ndcg": 0.45101300913182935,
+      "mrr": 0.7359365079365082
+    },
+    "avg_reduced_query_len": 8.026666666666667,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 9,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "high",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 9,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "valid",
+          "chemic",
+          "react",
+          "mixtur",
+          "simplifi",
+          "instantan",
+          "chemic"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 9,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "avail",
+          "ogiv",
+          "forebodi",
+          "attack",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "attack"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 9,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "avail",
+          "predict",
+          "bodi",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 8,
+    "metrics_by_k": {
+      "precision": [
+        0.6222222222222222,
+        0.5311111111111111,
+        0.4874074074074075,
+        0.4266666666666667,
+        0.38488888888888906,
+        0.3562962962962963,
+        0.3295238095238098,
+        0.31,
+        0.29185185185185214,
+        0.27333333333333354
+      ],
+      "recall": [
+        0.10449869637787142,
+        0.17391379070142812,
+        0.23180562121544654,
+        0.2610024678587541,
+        0.2911847383012112,
+        0.32461301628121325,
+        0.34581448414408456,
+        0.3662757064137691,
+        0.3853521194705743,
+        0.3983264131632589
+      ],
+      "fscore": [
+        0.1722406748928936,
+        0.24667002757554188,
+        0.2926592481006404,
+        0.3003229560515401,
+        0.30615512328349415,
+        0.3131529200113256,
+        0.3113338039395451,
+        0.30989663579565946,
+        0.30718232360475695,
+        0.3004770145762569
+      ],
+      "map": [
+        0.10449869637787142,
+        0.16454991805685368,
+        0.20919980007230182,
+        0.22940027257933812,
+        0.24603116763301175,
+        0.26195277447799037,
+        0.27157521898790354,
+        0.2808473624614272,
+        0.28861417416179014,
+        0.29369611325292455
+      ],
+      "ndcg": [
+        0.5,
+        0.4672339885609906,
+        0.4555977973989437,
+        0.4388729087420146,
+        0.43143296473743964,
+        0.4338029205394355,
+        0.43576481539790335,
+        0.44054085129546366,
+        0.44591375739361283,
+        0.44809564408039976
+      ],
+      "mrr": [
+        0.6222222222222222,
+        0.68,
+        0.7007407407407408,
+        0.7062962962962964,
+        0.7116296296296296,
+        0.7168148148148149,
+        0.7193544973544974,
+        0.7204656084656085,
+        0.7214532627865962,
+        0.7218977072310407
+      ]
+    },
+    "k10": {
+      "precision": 0.27333333333333354,
+      "recall": 0.3983264131632589,
+      "fscore": 0.3004770145762569,
+      "map": 0.29369611325292455,
+      "ndcg": 0.44809564408039976,
+      "mrr": 0.7218977072310407
+    },
+    "avg_reduced_query_len": 7.4,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 8,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 8,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 8,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "chemic",
+          "react",
+          "mixtur",
+          "simplifi",
+          "instantan",
+          "chemic"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 8,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "avail",
+          "ogiv",
+          "forebodi",
+          "attack",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 8,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "-dash",
+          "avail",
+          "predict",
+          "bodi",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 7,
+    "metrics_by_k": {
+      "precision": [
+        0.6,
+        0.5333333333333333,
+        0.47555555555555556,
+        0.4211111111111111,
+        0.3795555555555557,
+        0.34962962962962946,
+        0.32698412698412727,
+        0.3055555555555556,
+        0.28790123456790145,
+        0.26977777777777795
+      ],
+      "recall": [
+        0.10120769108686613,
+        0.17661749440513178,
+        0.22610368118017318,
+        0.2586622401851932,
+        0.2861415284246679,
+        0.3137894052392115,
+        0.34145498923286544,
+        0.36203516168816696,
+        0.3830970337304311,
+        0.39681377254716993
+      ],
+      "fscore": [
+        0.16658988124209992,
+        0.24957302581187346,
+        0.28555375374024417,
+        0.2972517231908336,
+        0.30195676245768227,
+        0.3058199777175991,
+        0.308815704372942,
+        0.30628885447347054,
+        0.3041834065092515,
+        0.29765373586726
+      ],
+      "map": [
+        0.10120769108686613,
+        0.16571129371822943,
+        0.20428827743855693,
+        0.22586425407109736,
+        0.24193670756632937,
+        0.25573815920111437,
+        0.26774591681062637,
+        0.276781866539623,
+        0.2851888939913127,
+        0.29040465798040993
+      ],
+      "ndcg": [
+        0.48,
+        0.4639632635644017,
+        0.4438706001770508,
+        0.4321478821428775,
+        0.42269954850578556,
+        0.4244949814179392,
+        0.4296634223261757,
+        0.43388258479712205,
+        0.43945624454821447,
+        0.44178617468221737
+      ],
+      "mrr": [
+        0.6,
+        0.6666666666666666,
+        0.6844444444444445,
+        0.6922222222222223,
+        0.6975555555555556,
+        0.7020000000000002,
+        0.7051746031746032,
+        0.7062857142857144,
+        0.7072733686067021,
+        0.7077178130511464
+      ]
+    },
+    "k10": {
+      "precision": 0.26977777777777795,
+      "recall": 0.39681377254716993,
+      "fscore": 0.29765373586726,
+      "map": 0.29040465798040993,
+      "ndcg": 0.44178617468221737,
+      "mrr": 0.7077178130511464
+    },
+    "avg_reduced_query_len": 6.68,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 7,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 7,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 7,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "chemic",
+          "react",
+          "mixtur",
+          "instantan",
+          "chemic"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 7,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 7,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "avail",
+          "ogiv",
+          "forebodi",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 7,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "-dash",
+          "avail",
+          "predict",
+          "angl",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 6,
+    "metrics_by_k": {
+      "precision": [
+        0.5955555555555555,
+        0.52,
+        0.45777777777777784,
+        0.4,
+        0.3706666666666668,
+        0.33851851851851844,
+        0.3155555555555559,
+        0.2922222222222222,
+        0.27604938271604956,
+        0.2591111111111113
+      ],
+      "recall": [
+        0.10066079353996858,
+        0.17180862036818761,
+        0.21514609810764765,
+        0.24570467922763217,
+        0.28196457319598844,
+        0.3069911492839682,
+        0.3326372711484809,
+        0.3489121686318407,
+        0.36922437059110136,
+        0.38141537588210656
+      ],
+      "fscore": [
+        0.16567630099518638,
+        0.24345341702559803,
+        0.2727722546917593,
+        0.28251271782437726,
+        0.2966132022606649,
+        0.2978852500049918,
+        0.2996733160388249,
+        0.2946390482555504,
+        0.29272151950280606,
+        0.28640810746745193
+      ],
+      "map": [
+        0.10066079353996858,
+        0.16265333737957133,
+        0.19584753816095532,
+        0.21587326130071352,
+        0.2362419984611947,
+        0.24831886014185758,
+        0.2597833940571304,
+        0.26790860734907496,
+        0.2746627965553338,
+        0.2793434314759687
+      ],
+      "ndcg": [
+        0.47888888888888886,
+        0.4546204278470895,
+        0.4310013305234656,
+        0.41620152950523903,
+        0.4121219811316882,
+        0.41270655081754004,
+        0.41727966693580854,
+        0.4193579563897672,
+        0.4254555575007751,
+        0.42788759697879525
+      ],
+      "mrr": [
+        0.5955555555555555,
+        0.6511111111111111,
+        0.6718518518518519,
+        0.6796296296296297,
+        0.6849629629629631,
+        0.6901481481481483,
+        0.6920529100529103,
+        0.6926084656084658,
+        0.6955714285714288,
+        0.6969047619047621
+      ]
+    },
+    "k10": {
+      "precision": 0.2591111111111113,
+      "recall": 0.38141537588210656,
+      "fscore": 0.28640810746745193,
+      "map": 0.2793434314759687,
+      "ndcg": 0.42788759697879525,
+      "mrr": 0.6969047619047621
+    },
+    "avg_reduced_query_len": 5.857777777777778,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 6,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 6,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "associ",
+          "flight",
+          "high",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 6,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 6,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "chemic",
+          "react",
+          "mixtur",
+          "instantan"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 6,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 6,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 6,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "ogiv",
+          "forebodi",
+          "lower",
+          "equival",
+          "ogiv",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 6,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "-dash",
+          "avail",
+          "predict",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 5,
+    "metrics_by_k": {
+      "precision": [
+        0.5688888888888889,
+        0.4866666666666667,
+        0.4251851851851852,
+        0.3844444444444444,
+        0.3484444444444448,
+        0.3199999999999999,
+        0.29841269841269863,
+        0.28055555555555556,
+        0.26666666666666683,
+        0.25155555555555564
+      ],
+      "recall": [
+        0.09740711873456966,
+        0.1619620816365914,
+        0.2031184130817773,
+        0.23725290367240834,
+        0.26647724315693433,
+        0.2928168294965208,
+        0.3144062254806537,
+        0.3376637352185555,
+        0.35900264142291116,
+        0.37215594746127456
+      ],
+      "fscore": [
+        0.16020187418742624,
+        0.22893377577477395,
+        0.256237132244356,
+        0.27236827175712425,
+        0.27961273563054867,
+        0.28279657024331584,
+        0.28354757459743773,
+        0.28360677513628557,
+        0.28369142624684707,
+        0.2787021286812134
+      ],
+      "map": [
+        0.09740711873456966,
+        0.15430076147527125,
+        0.1836419521820279,
+        0.20545619333398826,
+        0.22073246051234433,
+        0.23422286722497332,
+        0.2434491925101958,
+        0.25237037562990833,
+        0.26034831010844384,
+        0.26519464355362793
+      ],
+      "ndcg": [
+        0.4533333333333333,
+        0.4271108137141105,
+        0.4069517726221271,
+        0.3978840730097141,
+        0.3907056873877922,
+        0.39197551436774536,
+        0.396327325798082,
+        0.40103131023416305,
+        0.4082750466007749,
+        0.41140694408338946
+      ],
+      "mrr": [
+        0.5688888888888889,
+        0.6155555555555555,
+        0.6362962962962962,
+        0.6485185185185186,
+        0.6565185185185185,
+        0.6587407407407408,
+        0.6625502645502646,
+        0.6642169312169313,
+        0.6661922398589066,
+        0.6670811287477953
+      ]
+    },
+    "k10": {
+      "precision": 0.25155555555555564,
+      "recall": 0.37215594746127456,
+      "fscore": 0.2787021286812134,
+      "map": 0.26519464355362793,
+      "ndcg": 0.41140694408338946,
+      "mrr": 0.6670811287477953
+    },
+    "avg_reduced_query_len": 4.955555555555556,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 5,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 5,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "associ",
+          "flight",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 5,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 5,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "empir",
+          "react",
+          "mixtur",
+          "instantan"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 5,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "hyperson",
+          "aerodynam"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 5,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "theoret",
+          "guid",
+          "turbul",
+          "couett",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 5,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "ogiv",
+          "forebodi",
+          "equival",
+          "ogiv",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 5,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "-dash",
+          "avail",
+          "attack"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 4,
+    "metrics_by_k": {
+      "precision": [
+        0.52,
+        0.4444444444444444,
+        0.39555555555555577,
+        0.3488888888888889,
+        0.3235555555555559,
+        0.29777777777777764,
+        0.2774603174603177,
+        0.2627777777777778,
+        0.25037037037037047,
+        0.23644444444444462
+      ],
+      "recall": [
+        0.09009302542047637,
+        0.15151037285154925,
+        0.19201835654312432,
+        0.2192522438384151,
+        0.24772783026046258,
+        0.2720204445948727,
+        0.2952801319062841,
+        0.31487099347753794,
+        0.33344353641553043,
+        0.3469401152305
+      ],
+      "fscore": [
+        0.14790457889013092,
+        0.21296321692186224,
+        0.24092851493573877,
+        0.24984479382084954,
+        0.26010400877280215,
+        0.2632246591720584,
+        0.2643104259552229,
+        0.2650378197605648,
+        0.2648146546390719,
+        0.2604959059832152
+      ],
+      "map": [
+        0.09009302542047637,
+        0.14211103761888072,
+        0.17127550100271124,
+        0.18820136720927913,
+        0.20326406291916166,
+        0.21454345884080056,
+        0.22415339372741847,
+        0.23224621693543773,
+        0.23872032356404077,
+        0.24376846607287295
+      ],
+      "ndcg": [
+        0.42,
+        0.3895580268000785,
+        0.3749628251348875,
+        0.36637147444431906,
+        0.3646712953548209,
+        0.36555809902707465,
+        0.3696482060787735,
+        0.3751175563813389,
+        0.38132182591516545,
+        0.3850194236012577
+      ],
+      "mrr": [
+        0.52,
+        0.5733333333333334,
+        0.5955555555555555,
+        0.6055555555555555,
+        0.6135555555555555,
+        0.6179999999999999,
+        0.6205396825396824,
+        0.6238730158730157,
+        0.6253544973544971,
+        0.6257989417989417
+      ]
+    },
+    "k10": {
+      "precision": 0.23644444444444462,
+      "recall": 0.3469401152305,
+      "fscore": 0.2604959059832152,
+      "map": 0.24376846607287295,
+      "ndcg": 0.3850194236012577,
+      "mrr": 0.6257989417989417
+    },
+    "avg_reduced_query_len": 4.0,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 4,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "law",
+          "obey",
+          "construct",
+          "aeroelast"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 4,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "structur",
+          "aeroelast",
+          "associ",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 4,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 4,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "criterion",
+          "react",
+          "mixtur",
+          "instantan"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 4,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "hyperson"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 4,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "guid",
+          "turbul",
+          "couett",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 4,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "ogiv",
+          "forebodi",
+          "ogiv",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 4,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "exact",
+          "-dash",
+          "avail"
+        ]
+      }
+    ]
+  },
+  {
+    "value": 3,
+    "metrics_by_k": {
+      "precision": [
+        0.43555555555555553,
+        0.41555555555555557,
+        0.3807407407407411,
+        0.3333333333333333,
+        0.29866666666666686,
+        0.2792592592592592,
+        0.255873015873016,
+        0.23722222222222222,
+        0.2232098765432099,
+        0.2106666666666667
+      ],
+      "recall": [
+        0.07692117874862966,
+        0.1422780498990206,
+        0.18729573376696254,
+        0.21072737031172661,
+        0.23222608402883124,
+        0.25638248993229595,
+        0.274033012249485,
+        0.28850520853540673,
+        0.3014409870033016,
+        0.31508296231194355
+      ],
+      "fscore": [
+        0.1257332157579835,
+        0.1990560221183993,
+        0.23304604646967897,
+        0.23849801376728985,
+        0.24066932338785868,
+        0.24588816411184417,
+        0.24375698694847975,
+        0.24006902170950645,
+        0.2366560310883077,
+        0.23338630305472444
+      ],
+      "map": [
+        0.07692117874862966,
+        0.1286219157696561,
+        0.1606106775538083,
+        0.17613287098124975,
+        0.18748996973604967,
+        0.19862853290369778,
+        0.20662963761908817,
+        0.21201741124705784,
+        0.2162096135069109,
+        0.22175361703424779
+      ],
+      "ndcg": [
+        0.3488888888888889,
+        0.35597870900368594,
+        0.3503476730173954,
+        0.3401214753536283,
+        0.3329503481378097,
+        0.3366833905755891,
+        0.3378852317454522,
+        0.3409268807008812,
+        0.34439986616294677,
+        0.34768385156553444
+      ],
+      "mrr": [
+        0.43555555555555553,
+        0.5155555555555555,
+        0.5407407407407407,
+        0.5462962962962962,
+        0.5525185185185184,
+        0.5554814814814815,
+        0.5573862433862433,
+        0.5601640211640211,
+        0.5631269841269841,
+        0.5631269841269841
+      ]
+    },
+    "k10": {
+      "precision": 0.2106666666666667,
+      "recall": 0.31508296231194355,
+      "fscore": 0.23338630305472444,
+      "map": 0.22175361703424779,
+      "ndcg": 0.34768385156553444,
+      "mrr": 0.5631269841269841
+    },
+    "avg_reduced_query_len": 3.0,
+    "preview": [
+      {
+        "query_index": 1,
+        "original_len": 11,
+        "reduced_len": 3,
+        "original_tokens": [
+          "similar",
+          "law",
+          "must",
+          "obey",
+          "construct",
+          "aeroelast",
+          "model",
+          "heat",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "obey",
+          "construct",
+          "aeroelast"
+        ]
+      },
+      {
+        "query_index": 2,
+        "original_len": 8,
+        "reduced_len": 3,
+        "original_tokens": [
+          "structur",
+          "aeroelast",
+          "problem",
+          "associ",
+          "flight",
+          "high",
+          "speed",
+          "aircraft"
+        ],
+        "reduced_tokens": [
+          "aeroelast",
+          "associ",
+          "aircraft"
+        ]
+      },
+      {
+        "query_index": 3,
+        "original_len": 7,
+        "reduced_len": 3,
+        "original_tokens": [
+          "problem",
+          "heat",
+          "conduct",
+          "composit",
+          "slab",
+          "solv",
+          "far"
+        ],
+        "reduced_tokens": [
+          "composit",
+          "slab",
+          "far"
+        ]
+      },
+      {
+        "query_index": 4,
+        "original_len": 18,
+        "reduced_len": 3,
+        "original_tokens": [
+          "criterion",
+          "develop",
+          "show",
+          "empir",
+          "valid",
+          "flow",
+          "solut",
+          "chemic",
+          "react",
+          "ga",
+          "mixtur",
+          "base",
+          "simplifi",
+          "assumpt",
+          "instantan",
+          "local",
+          "chemic",
+          "equilibrium"
+        ],
+        "reduced_tokens": [
+          "react",
+          "mixtur",
+          "instantan"
+        ]
+      },
+      {
+        "query_index": 5,
+        "original_len": 7,
+        "reduced_len": 3,
+        "original_tokens": [
+          "chemic",
+          "kinet",
+          "system",
+          "applic",
+          "hyperson",
+          "aerodynam",
+          "problem"
+        ],
+        "reduced_tokens": [
+          "chemic",
+          "kinet",
+          "system"
+        ]
+      },
+      {
+        "query_index": 6,
+        "original_len": 7,
+        "reduced_len": 3,
+        "original_tokens": [
+          "theoret",
+          "experiment",
+          "guid",
+          "turbul",
+          "couett",
+          "flow",
+          "behaviour"
+        ],
+        "reduced_tokens": [
+          "guid",
+          "couett",
+          "behaviour"
+        ]
+      },
+      {
+        "query_index": 7,
+        "original_len": 18,
+        "reduced_len": 3,
+        "original_tokens": [
+          "possibl",
+          "relat",
+          "avail",
+          "pressur",
+          "distribut",
+          "ogiv",
+          "forebodi",
+          "zero",
+          "angl",
+          "attack",
+          "lower",
+          "surfac",
+          "pressur",
+          "equival",
+          "ogiv",
+          "forebodi",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "ogiv",
+          "forebodi",
+          "forebodi"
+        ]
+      },
+      {
+        "query_index": 8,
+        "original_len": 12,
+        "reduced_len": 3,
+        "original_tokens": [
+          "method",
+          "-dash",
+          "exact",
+          "approxim",
+          "-dash",
+          "present",
+          "avail",
+          "predict",
+          "bodi",
+          "pressur",
+          "angl",
+          "attack"
+        ],
+        "reduced_tokens": [
+          "-dash",
+          "-dash",
+          "avail"
+        ]
+      }
+    ]
+  }
+]
