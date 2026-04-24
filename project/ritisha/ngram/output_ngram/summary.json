@@ -94,7 +94,7 @@
           0.7368377425044094
         ]
       },
-      "runtime_seconds": 1.6515891551971436
+      "runtime_seconds": 1.5392460823059082
     },
     "ngram_best": {
       "best_n": 2,
@@ -180,7 +180,7 @@
           0.747915343915344
         ]
       },
-      "runtime_seconds": 22.60830569267273
+      "runtime_seconds": 20.266234159469604
     }
   },
   "delta_best_vs_baseline_at_10": {
@@ -197,6 +197,7 @@
     "n_sweep_json": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/ritisha/ngram/output_ngram/n_sweep_results.json",
     "n_sweep_csv": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/ritisha/ngram/output_ngram/n_sweep_results.csv",
     "overlay_plot": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/ritisha/ngram/output_ngram/eval_overlay.png",
+    "all_configs_overlay": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/ritisha/ngram/output_ngram/all_tuned_combinations_overlay.png",
     "n_sweep_plot": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/ritisha/ngram/output_ngram/n_sweep_k10.png"
   }
 }
