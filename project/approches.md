@@ -115,3 +115,234 @@ If you want a clean project story, the strongest merges are:
 3. `WordNet expansion + WordNet local context retrieval`
 
 These combinations are easier to justify than a very large hybrid built from everything at once.
+
+## Next backbones to try: BM25 and Word2Vec
+
+Your current methods already separate nicely into:
+
+- `backbones`: TF-IDF, LSA, ESA, WordNet-style lexical semantics
+- `add-ons`: n-grams, unordered local context, query expansion, query reduction
+
+That same structure can be reused for new backbones.
+
+### A) BM25 as a backbone
+
+BM25 should be treated as the strongest lexical baseline/backbone to add next.
+
+Natural variants:
+
+1. `BM25 unigram`
+   - Direct replacement for TF-IDF as the lexical backbone.
+   - Best first comparison because it is simple and standard.
+
+2. `BM25 + n-gram indexing`
+   - Use unigram + bigram, or unigram + bigram + trigram.
+   - Good when phrase structure matters.
+
+3. `BM25 + unordered local-context bag-of-words`
+   - Retrieve with BM25, then add a reranking score based on local window overlap or local co-occurrence.
+   - This keeps BM25 as the main retriever and uses local context as a second signal.
+
+4. `BM25 + query reduction`
+   - Reduce noisy terms before retrieval.
+   - Especially useful for long technical queries.
+
+5. `BM25 + WordNet query expansion`
+   - Strong portable version of your current WordNet expansion idea.
+
+6. `BM25 + embedding-based query expansion`
+   - Expand the query with nearest neighbors from embedding space, but score with BM25.
+   - This is one of the cleanest "same implementation on a new backbone" experiments.
+
+7. `BM25 + semantic reranking`
+   - First-stage retrieval with BM25, second-stage rerank with Word2Vec similarity, WMD, or document embeddings.
+   - Very strong design because BM25 gives precision and semantic reranking improves recall/order.
+
+### B) Word2Vec as a backbone
+
+If you want Word2Vec to be a true backbone, the key question is:
+
+- how do we convert word embeddings into a single query/document representation or score?
+
+The most practical methods are below.
+
+#### 1) Average Word2Vec / centroid embedding
+
+- Represent a query or document by the mean of its word vectors.
+- Score with cosine similarity.
+- This is the simplest Word2Vec backbone.
+
+Good:
+- very easy to implement
+- fast
+- reusable across query expansion and reranking
+
+Weakness:
+- ignores word order
+- common words can dominate unless weighted
+
+#### 2) IDF-weighted average Word2Vec
+
+- Average word vectors, but weight each token by IDF or TF-IDF-like importance.
+- Better than plain averaging for retrieval because important terms matter more.
+
+This is probably the best first Word2Vec backbone to try.
+
+#### 3) SIF-style sentence/document embeddings
+
+- Use weighted averaging of word vectors with stronger downweighting of frequent words.
+- Then remove the top principal component.
+- This often improves sentence/document embeddings over plain averaging.
+
+This is still simple, but more principled than raw averaging.
+
+#### 4) Paragraph Vector / Doc2Vec
+
+- Learn document-level dense vectors directly rather than averaging word vectors.
+- This is the classic "word2vec-family document embedding" method.
+
+Good:
+- genuine document embedding backbone
+- better than raw averaging when trained well
+
+Risk:
+- needs careful training and may be unstable on small datasets like Cranfield
+
+#### 5) Word Mover's Distance (WMD)
+
+- Compare query and document by the minimum transport cost between their word embeddings.
+- Strong semantic matching method for short texts and vocabulary mismatch.
+
+Good:
+- semantically powerful
+- handles partial lexical mismatch well
+
+Weakness:
+- expensive
+- better as reranker on top of BM25 than as full first-stage retrieval
+
+#### 6) Soft Cosine with embedding-based term similarity
+
+- Keep a bag-of-words style representation, but when scoring, allow similar words to partially match.
+- This is a nice bridge between lexical backbones and embeddings.
+
+Why it is useful:
+- can be applied on top of TF-IDF or BM25-style term weighting
+- gives a Word2Vec-informed similarity without fully switching to dense retrieval
+
+### Best Word2Vec-specific experiment order
+
+If you want a clean and defensible progression, try them in this order:
+
+1. `IDF-weighted average Word2Vec`
+2. `SIF-style embeddings`
+3. `BM25 + Word2Vec reranking`
+4. `BM25 + WMD reranking`
+5. `Doc2Vec`
+
+This order goes from easiest and most stable to more expensive or harder-to-tune methods.
+
+## Which of your current ideas transfer to the new backbones?
+
+### Cleanly transferable to BM25, TF-IDF, LSA, ESA, and Word2Vec-style systems
+
+1. `Query reduction`
+   - Works everywhere.
+
+2. `WordNet query expansion`
+   - Works everywhere.
+
+3. `Embedding-based query expansion`
+   - Works everywhere, as long as scoring is done by the backbone afterward.
+
+4. `n-gram features`
+   - Natural for TF-IDF and BM25.
+   - Can also be adapted to Word2Vec if phrase embeddings are built or phrase tokens are learned.
+
+5. `unordered local-context bag-of-words`
+   - Best used as an extra feature or reranking signal on top of any backbone.
+
+### Less directly transferable
+
+1. `LSA`
+   - Already a document-space embedding method, so it does not combine as naturally with another dense document embedding backbone like Doc2Vec unless used in score fusion.
+
+2. `ESA`
+   - Works best as its own concept-space backbone or as a fused semantic signal.
+
+## Recommended experiment matrix
+
+To keep the project organized, the cleanest experiment matrix is:
+
+### Lexical backbones
+
+1. `TF-IDF unigram`
+2. `TF-IDF unigram + bigram`
+3. `BM25 unigram`
+4. `BM25 unigram + bigram`
+
+For each lexical backbone, try:
+
+- `baseline`
+- `+ query reduction`
+- `+ WordNet expansion`
+- `+ embedding expansion`
+- `+ local-context reranking`
+
+### Dense / semantic backbones
+
+1. `LSA`
+2. `ESA`
+3. `Word2Vec average`
+4. `Word2Vec IDF-weighted average`
+5. `Word2Vec SIF`
+6. `Doc2Vec`
+
+For each dense backbone, try:
+
+- `baseline`
+- `+ query reduction`
+- `+ WordNet expansion`
+- `+ embedding expansion`
+- optional `+ n-gram phrase handling` if phrase tokens are learned
+
+### Hybrid systems
+
+1. `BM25 + LSA`
+2. `BM25 + ESA`
+3. `BM25 + Word2Vec average`
+4. `BM25 + Word2Vec SIF`
+5. `BM25 + WMD reranking`
+
+These hybrids may be your best-performing final systems, because lexical and semantic signals usually complement each other.
+
+## Suggested project story
+
+If you want the experiments to read clearly in the report, frame them as:
+
+1. `Stage 1: lexical backbones`
+   - TF-IDF vs BM25
+
+2. `Stage 2: semantic backbones`
+   - LSA, ESA, Word2Vec-based document/query embeddings
+
+3. `Stage 3: reusable query processing`
+   - query reduction, WordNet expansion, embedding expansion
+
+4. `Stage 4: hybrid retrieval`
+   - lexical backbone + semantic reranking/fusion
+
+This gives you one clean narrative:
+- first improve lexical retrieval,
+- then test semantic backbones,
+- then apply the same query-side methods across them,
+- then combine the strongest lexical and semantic systems.
+
+## Research-backed methods to cite
+
+- `Word2Vec`: Mikolov et al., "Distributed Representations of Words and Phrases and their Compositionality" (NeurIPS 2013)
+- `SIF sentence embeddings`: Arora, Liang, and Ma, "A Simple but Tough-to-Beat Baseline for Sentence Embeddings" (ICLR 2017)
+- `Doc2Vec / Paragraph Vector`: Le and Mikolov, "Distributed Representations of Sentences and Documents" (2014)
+- `WMD`: Kusner et al., "From Word Embeddings to Document Distances" (ICML 2015)
+- `BM25`: Robertson and Zaragoza, "The Probabilistic Relevance Framework: BM25 and Beyond" (2009)
+- `Soft Cosine`: Sidorov et al., "Soft Similarity and Soft Cosine Measure" (2014)
