@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_20newsgroups
 
 CURRENT_DIR = Path(__file__).resolve().parent
 ASSIGNMENT_ROOT = CURRENT_DIR.parents[2]
@@ -63,6 +64,7 @@ class ESAExperiment:
         self.inflection_reducer = InflectionReduction()
         self.stopword_remover = StopwordRemoval()
         self.evaluator = Evaluation()
+        self._concept_cache = None
 
     def segment_sentences(self, text):
         if self.args.segmenter == "naive":
@@ -92,6 +94,42 @@ class ESAExperiment:
         docs_json = json.load(open(dataset / "cran_docs.json", "r"))
         qrels = json.load(open(dataset / "cran_qrels.json", "r"))
         return queries_json, docs_json, qrels
+
+    def load_concept_corpus(self):
+        if self.args.concept_source == "cranfield":
+            return None, None, "cranfield"
+
+        if self._concept_cache is not None:
+            return self._concept_cache
+
+        if self.args.concept_source == "20news-technical":
+            categories = [
+                "sci.space",
+                "sci.electronics",
+                "sci.med",
+                "comp.graphics",
+                "comp.sys.ibm.pc.hardware",
+                "comp.sys.mac.hardware",
+                "comp.windows.x",
+            ]
+            dataset = fetch_20newsgroups(
+                subset="train",
+                categories=categories,
+                remove=("headers", "footers", "quotes"),
+                shuffle=True,
+                random_state=self.args.random_state,
+            )
+            concept_texts = dataset.data
+            if self.args.concept_limit and self.args.concept_limit > 0:
+                concept_texts = concept_texts[: self.args.concept_limit]
+            concept_ids = [f"20news-{index + 1}" for index in range(len(concept_texts))]
+            self._concept_cache = (concept_texts, concept_ids, "20news-technical")
+            return self._concept_cache
+
+        raise ValueError(
+            f"Unsupported concept source: {self.args.concept_source}. "
+            "Use 'cranfield' or '20news-technical'."
+        )
 
     def evaluate_rankings(self, ranked_docs, query_ids, qrels):
         metric_values = {metric_key: [] for metric_key, _ in METRICS}
@@ -148,7 +186,16 @@ class ESAExperiment:
         hybrid_retriever.build_index(processed_docs, doc_ids)
         return hybrid_retriever.rank(processed_queries), hybrid_retriever
 
-    def rank_esa(self, processed_docs, doc_ids, processed_queries):
+    def rank_esa(
+        self,
+        processed_docs,
+        doc_ids,
+        processed_queries,
+        concept_docs=None,
+        concept_ids=None,
+        concept_source=None,
+        prebuilt_index_path=None,
+    ):
         esa_retriever = ESARetrieval(
             top_concepts=self.args.esa_top_concepts,
             min_similarity=self.args.esa_min_similarity,
@@ -159,7 +206,14 @@ class ESAExperiment:
             norm=self.args.tfidf_norm,
             ngram_range=(1, self.args.ngram_max),
         )
-        esa_retriever.build_index(processed_docs, doc_ids)
+        esa_retriever.build_index(
+            processed_docs,
+            doc_ids,
+            concept_docs=concept_docs,
+            concept_ids=concept_ids,
+            concept_source=concept_source,
+            prebuilt_index_path=prebuilt_index_path,
+        )
         return esa_retriever.rank(processed_queries), esa_retriever
 
     @staticmethod
@@ -293,6 +347,7 @@ class ESAExperiment:
                     "requested_top_concepts": self.args.esa_top_concepts,
                     "used_top_concepts": retrievers["esa"].actual_concepts,
                     "min_similarity": self.args.esa_min_similarity,
+                    "concept_source": retrievers["esa"].concept_source,
                     "avg_active_concepts": retrievers["esa"].avg_active_concepts,
                     "concept_density": retrievers["esa"].concept_density,
                     "vocab_size": retrievers["esa"].vocab_size,
@@ -318,6 +373,7 @@ class ESAExperiment:
             "esa_top_concepts_requested": self.args.esa_top_concepts,
             "esa_top_concepts_used": esa_retriever.actual_concepts,
             "esa_min_similarity": self.args.esa_min_similarity,
+            "concept_source": esa_retriever.concept_source,
             "avg_active_concepts": esa_retriever.avg_active_concepts,
             "concept_density": esa_retriever.concept_density,
             "vectorizer": {
@@ -480,6 +536,10 @@ class ESAExperiment:
 
     def run_full_evaluation(self):
         queries_json, docs_json, qrels = self.load_dataset()
+        if self.args.prebuilt_index_path:
+            concept_docs = concept_ids = concept_source = None
+        else:
+            concept_docs, concept_ids, concept_source = self.load_concept_corpus()
         query_ids = [item["query number"] for item in queries_json]
         queries = [item["query"] for item in queries_json]
         doc_ids = [item["id"] for item in docs_json]
@@ -495,7 +555,15 @@ class ESAExperiment:
         ranked_hybrid, hybrid_retriever = self.rank_hybrid(
             processed_docs, doc_ids, processed_queries
         )
-        ranked_esa, esa_retriever = self.rank_esa(processed_docs, doc_ids, processed_queries)
+        ranked_esa, esa_retriever = self.rank_esa(
+            processed_docs,
+            doc_ids,
+            processed_queries,
+            concept_docs=concept_docs,
+            concept_ids=concept_ids,
+            concept_source=concept_source,
+            prebuilt_index_path=self.args.prebuilt_index_path,
+        )
 
         rankings = {
             "tfidf": ranked_tfidf,
