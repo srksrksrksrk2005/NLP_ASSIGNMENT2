@@ -1,0 +1,16 @@
+[
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": {
+      "precision@10": 0.2862222222222222,
+      "recall@10": 0.41404896673838343,
+      "map@10": 0.3427040144452843,
+      "ndcg@10": 0.4780869555347863,
+      "mrr@10": 0.7686190476190475
+    }
+  }
+]

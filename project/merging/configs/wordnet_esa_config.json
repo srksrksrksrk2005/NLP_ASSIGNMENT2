@@ -1,0 +1,59 @@
+{
+  "name": "WordNet + ESA Configuration",
+  "description": "WordNet-based query expansion with ESA ranking",
+  "block1_query_processing": {
+    "expansion_mode": "wordnet",
+    "reduction_enabled": false,
+    "segmenter": "punkt",
+    "tokenizer": "ptb",
+    "stemmer": true,
+    "stopword_removal": true,
+    "expansion_params": {
+      "wordnet": {
+        "synset_limit": 3,
+        "pos_filter": null
+      }
+    }
+  },
+  "block2_retrieval_mode": {
+    "retrieval_type": "ngram",
+    "retrieval_params": {
+      "ngram": {
+        "ngram_range": [1, 2],
+        "analyzer": "char",
+        "max_features": 5000
+      }
+    }
+  },
+  "block3_ranking_mode": {
+    "ranking_type": "esa",
+    "ranking_params": {
+      "esa": {
+        "top_concepts": 25,
+        "min_similarity": 0.0,
+        "max_df": 0.9,
+        "min_df": 1,
+        "concept_source": "cranfield"
+      }
+    }
+  },
+  "dataset": {
+    "path": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\cranfield",
+    "queries_file": "cran_queries.json",
+    "docs_file": "cran_docs.json",
+    "qrels_file": "cran_qrels.json"
+  },
+  "output": {
+    "output_dir": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\project\\merging\\output",
+    "save_plots": true,
+    "save_rankings": true,
+    "save_metrics": true
+  },
+  "logging": {
+    "use_wandb": false,
+    "wandb_project": "nlp-merging",
+    "wandb_entity": null,
+    "log_level": "INFO",
+    "log_file": true
+  }
+}

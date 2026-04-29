@@ -1,0 +1,108 @@
+{
+  "block1_query_processing": {
+    "expansion_mode": "none",
+    "reduction_enabled": false,
+    "segmenter": "punkt",
+    "tokenizer": "ptb",
+    "stemmer": true,
+    "stopword_removal": true,
+    "expansion_params": {
+      "lsa": {
+        "n_components": 100,
+        "random_state": 42
+      },
+      "esa": {
+        "top_concepts": 25,
+        "concept_source": "cranfield"
+      },
+      "wordnet": {
+        "synset_limit": 3,
+        "pos_filter": null
+      },
+      "word2vec": {
+        "model_path": "path/to/word2vec/model",
+        "window": 5,
+        "vector_size": 100
+      },
+      "tfidf": {
+        "max_features": 5000,
+        "max_df": 0.95,
+        "min_df": 2
+      }
+    },
+    "reduction_params": {
+      "method": "keyword_extraction",
+      "top_k": 10,
+      "algorithm": "tfidf"
+    }
+  },
+  "block2_retrieval_mode": {
+    "retrieval_type": "tfidf",
+    "retrieval_params": {
+      "tfidf": {
+        "max_features": 5000,
+        "max_df": 0.95,
+        "min_df": 2,
+        "norm": "l2",
+        "sublinear_tf": true
+      },
+      "ngram": {
+        "ngram_range": [1, 2],
+        "analyzer": "char"
+      },
+      "local_bow": {
+        "window_size": 5,
+        "overlap": 2
+      }
+    }
+  },
+  "block3_ranking_mode": {
+    "ranking_type": "lsa",
+    "ranking_params": {
+      "lsa": {
+        "n_components": 250,
+        "random_state": 42,
+        "sublinear_tf": true,
+        "max_df": 0.95,
+        "min_df": 2,
+        "norm": "l2"
+      },
+      "esa": {
+        "top_concepts": 25,
+        "min_similarity": 0.0,
+        "max_df": 0.9,
+        "min_df": 1,
+        "concept_source": "cranfield"
+      },
+      "tfidf": {
+        "max_features": 5000,
+        "max_df": 0.95,
+        "min_df": 2,
+        "norm": "l2"
+      }
+    }
+  },
+  "dataset": {
+    "path": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\cranfield",
+    "queries_file": "cran_queries.json",
+    "docs_file": "cran_docs.json",
+    "qrels_file": "cran_qrels.json"
+  },
+  "output": {
+    "output_dir": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\project\\merging\\output",
+    "save_plots": true,
+    "save_rankings": true,
+    "save_metrics": true
+  },
+  "logging": {
+    "use_wandb": false,
+    "wandb_project": "nlp-merging",
+    "wandb_entity": "your_entity",
+    "log_level": "INFO",
+    "log_file": true
+  },
+  "batch_processing": {
+    "enabled": true,
+    "batch_size": 32
+  }
+}
