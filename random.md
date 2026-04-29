@@ -398,6 +398,30 @@
 378. The archive includes that `random.md` is the chosen destination.
 379. The archive includes that the file is Markdown and readable in the editor.
 380. The archive includes that the summary is meant to be self-contained.
+381. The user later asked for immediate interactive plotting in the grid-search mode.
+382. The desired plot was not a scatter of single points.
+383. The user wanted several curves, one for each metric versus k.
+384. The user wanted the curves overlayed by method so comparisons would be visible on one chart.
+385. The user also wanted an interactive window so hovering the cursor would reveal values.
+386. The plotting request shifted the dashboard from summary points to metric-vs-k curves.
+387. The work then focused on making the experiment runner and quick-start menu expose that option.
+388. The runner was extended to collect metrics from completed runs.
+389. The runner also gained a plotting entry point for saved grid-search results.
+390. The Windows quick-start menu was updated to ask whether to launch the plot window after the grid search completed.
+391. The plotting logic was validated first in a save-to-file mode.
+392. The save-mode validation confirmed that the plotting path could generate an image file.
+393. The user then reported a failure during a larger grid search.
+394. One error showed `ValueError: X has 4599 features, but TruncatedSVD is expecting 4499 features as input.`
+395. Another error showed `ValueError: Incompatible dimension for X and Y matrices` during ESA ranking.
+396. The failing combinations included LSA query expansion with ESA ranking.
+397. The failing combinations also included LSA query expansion with TF-IDF and LSA ranking when paired with n-gram retrieval.
+398. The stack traces showed the mismatch occurred after Block 1 produced query vectors and Block 2 built a different feature space for retrieval.
+399. The mismatch meant that query vectors and document vectors were not aligned to the same vocabulary or dimensionality in those combinations.
+400. The issue was not a complete pipeline crash for every configuration.
+401. The issue was configuration-dependent and exposed by some combinations only.
+402. The user then asked to try again and continue debugging.
+403. The final instruction in that exchange was to append the above conversation to `random.md` at the end.
+404. That instruction is now recorded here as part of the workspace archive.
 
 381. The archive includes that the editing process used the patch-based file editor.
 382. The archive includes that the file was verified after writing.
@@ -537,3 +561,226 @@
 508. The archive preserves the user’s request for a much larger summary.
 509. The archive preserves the completion of that request.
 510. The archive concludes with the statement that the whole thread has been recorded in detail.
+
+    raise ValueError(
+ValueError: X has 4599 features, but TruncatedSVD is expecting 4499 features as input.
+✗ FAILED
+
+[12/36] 
+======================================================================
+Running: C:\Program Files\Python312\python.exe main.py --config configs/default_config.json --block1-mode lsa --block2-retrieval tfidf --block3-ranking esa
+======================================================================
+
+[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\srksr\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+
+============================================================
+Running Merging Pipeline
+============================================================
+Block 1 (Query): expansion_mode=lsa, reduce=False
+Block 2 (Retrieval): tfidf
+Block 3 (Ranking): esa
+============================================================
+
+2026-04-28 23:05:01,606 - MergingPipeline - INFO - Pipeline initialized with config from <in-memory-config>
+2026-04-28 23:05:01,606 - MergingPipeline - INFO - Block 1 (Query): mode=lsa, reduce=False
+2026-04-28 23:05:01,607 - MergingPipeline - INFO - Block 2 (Retrieval): tfidf
+2026-04-28 23:05:01,607 - MergingPipeline - INFO - Block 3 (Ranking): esa
+2026-04-28 23:05:01,607 - MergingPipeline - INFO - Loading dataset...
+2026-04-28 23:05:01,619 - MergingPipeline - INFO - Dataset loaded: 225 queries, 1400 documents
+2026-04-28 23:05:01,620 - MergingPipeline - INFO - Preprocessing documents...
+2026-04-28 23:05:01,635 - MergingPipeline - INFO - Building retrieval index...
+2026-04-28 23:05:01,745 - MergingPipeline - INFO - Processing queries...
+2026-04-28 23:05:01,853 - MergingPipeline - INFO - Applying Block 1 processing (expansion=lsa, reduce=False)...
+2026-04-28 23:05:02,656 - MergingPipeline - INFO - Ranking with Block 2/3 (retrieval=tfidf, ranking=esa)...
+Traceback (most recent call last):
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 271, in <module>
+    main()
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 260, in main
+    results, metrics = pipeline.run()
+                       ^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 79, in run
+    ranked_results = self.retrieval_ranking.rank(processed_queries)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 232, in rank
+    return self.rank_esa(query_vectors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 211, in rank_esa
+    query_concept_similarity = cosine_similarity(query_vectors, doc_dense)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\utils\_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 1679, in cosine_similarity
+    X, Y = check_pairwise_arrays(X, Y)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 214, in check_pairwise_arrays
+    raise ValueError(
+ValueError: Incompatible dimension for X and Y matrices: X.shape[1] == 4599 while Y.shape[1] == 4499
+✗ FAILED
+
+[13/36] 
+======================================================================
+Running: C:\Program Files\Python312\python.exe main.py --config configs/default_config.json --block1-mode lsa --block2-retrieval ngram --block3-ranking tfidf
+======================================================================
+
+[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\srksr\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+
+============================================================
+Running Merging Pipeline
+============================================================
+Block 1 (Query): expansion_mode=lsa, reduce=False
+Block 2 (Retrieval): ngram
+Block 3 (Ranking): tfidf
+============================================================
+
+2026-04-28 23:05:05,561 - MergingPipeline - INFO - Pipeline initialized with config from <in-memory-config>
+2026-04-28 23:05:05,561 - MergingPipeline - INFO - Block 1 (Query): mode=lsa, reduce=False
+2026-04-28 23:05:05,561 - MergingPipeline - INFO - Block 2 (Retrieval): ngram
+2026-04-28 23:05:05,562 - MergingPipeline - INFO - Block 3 (Ranking): tfidf
+2026-04-28 23:05:05,562 - MergingPipeline - INFO - Loading dataset...
+2026-04-28 23:05:05,576 - MergingPipeline - INFO - Dataset loaded: 225 queries, 1400 documents
+2026-04-28 23:05:05,577 - MergingPipeline - INFO - Preprocessing documents...
+2026-04-28 23:05:05,592 - MergingPipeline - INFO - Building retrieval index...
+2026-04-28 23:05:06,048 - MergingPipeline - INFO - Processing queries...
+2026-04-28 23:05:06,150 - MergingPipeline - INFO - Applying Block 1 processing (expansion=lsa, reduce=False)...
+2026-04-28 23:05:06,846 - MergingPipeline - INFO - Ranking with Block 2/3 (retrieval=ngram, ranking=tfidf)...
+Traceback (most recent call last):
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 271, in <module>
+    main()
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 260, in main
+    results, metrics = pipeline.run()
+                       ^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 79, in run
+    ranked_results = self.retrieval_ranking.rank(processed_queries)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 228, in rank
+    return self.rank_tfidf(query_vectors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 140, in rank_tfidf
+    similarities = cosine_similarity(query_vectors_sparse, self.doc_vectors)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\utils\_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 1679, in cosine_similarity
+    X, Y = check_pairwise_arrays(X, Y)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 214, in check_pairwise_arrays
+    raise ValueError(
+ValueError: Incompatible dimension for X and Y matrices: X.shape[1] == 4599 while Y.shape[1] == 1262
+✗ FAILED
+
+[14/36] 
+======================================================================
+Running: C:\Program Files\Python312\python.exe main.py --config configs/default_config.json --block1-mode lsa --block2-retrieval ngram --block3-ranking lsa
+======================================================================
+
+[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\srksr\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+
+============================================================
+Running Merging Pipeline
+============================================================
+Block 1 (Query): expansion_mode=lsa, reduce=False
+Block 2 (Retrieval): ngram
+Block 3 (Ranking): lsa
+============================================================
+
+2026-04-28 23:05:09,457 - MergingPipeline - INFO - Pipeline initialized with config from <in-memory-config>
+2026-04-28 23:05:09,458 - MergingPipeline - INFO - Block 1 (Query): mode=lsa, reduce=False
+2026-04-28 23:05:09,458 - MergingPipeline - INFO - Block 2 (Retrieval): ngram
+2026-04-28 23:05:09,458 - MergingPipeline - INFO - Block 3 (Ranking): lsa
+2026-04-28 23:05:09,458 - MergingPipeline - INFO - Loading dataset...
+2026-04-28 23:05:09,469 - MergingPipeline - INFO - Dataset loaded: 225 queries, 1400 documents
+2026-04-28 23:05:09,470 - MergingPipeline - INFO - Preprocessing documents...
+2026-04-28 23:05:09,484 - MergingPipeline - INFO - Building retrieval index...
+2026-04-28 23:05:09,896 - MergingPipeline - INFO - Processing queries...
+2026-04-28 23:05:10,004 - MergingPipeline - INFO - Applying Block 1 processing (expansion=lsa, reduce=False)...
+2026-04-28 23:05:11,352 - MergingPipeline - INFO - Ranking with Block 2/3 (retrieval=ngram, ranking=lsa)...
+Traceback (most recent call last):
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 271, in <module>
+    main()
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 260, in main
+    results, metrics = pipeline.run()
+                       ^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 79, in run
+    ranked_results = self.retrieval_ranking.rank(processed_queries)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 230, in rank
+    return self.rank_lsa(query_vectors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 174, in rank_lsa
+    query_latent = self.ranking_model.transform(query_vectors)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\utils\_set_output.py", line 313, in wrapped
+    data_to_wrap = f(self, X, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\decomposition\_truncated_svd.py", line 294, in transform
+    X = self._validate_data(X, accept_sparse=["csr", "csc"], reset=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\base.py", line 654, in _validate_data
+    self._check_n_features(X, reset=reset)
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\base.py", line 443, in _check_n_features
+    raise ValueError(
+ValueError: X has 4599 features, but TruncatedSVD is expecting 1262 features as input.
+✗ FAILED
+
+[15/36] 
+======================================================================
+Running: C:\Program Files\Python312\python.exe main.py --config configs/default_config.json --block1-mode lsa --block2-retrieval ngram --block3-ranking esa
+======================================================================
+
+[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\srksr\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+
+============================================================
+Running Merging Pipeline
+============================================================
+Block 1 (Query): expansion_mode=lsa, reduce=False
+Block 2 (Retrieval): ngram
+Block 3 (Ranking): esa
+============================================================
+
+2026-04-28 23:05:14,324 - MergingPipeline - INFO - Pipeline initialized with config from <in-memory-config>
+2026-04-28 23:05:14,325 - MergingPipeline - INFO - Block 1 (Query): mode=lsa, reduce=False
+2026-04-28 23:05:14,325 - MergingPipeline - INFO - Block 2 (Retrieval): ngram
+2026-04-28 23:05:14,325 - MergingPipeline - INFO - Block 3 (Ranking): esa
+2026-04-28 23:05:14,326 - MergingPipeline - INFO - Loading dataset...
+2026-04-28 23:05:14,342 - MergingPipeline - INFO - Dataset loaded: 225 queries, 1400 documents
+2026-04-28 23:05:14,343 - MergingPipeline - INFO - Preprocessing documents...
+2026-04-28 23:05:14,359 - MergingPipeline - INFO - Building retrieval index...
+2026-04-28 23:05:14,824 - MergingPipeline - INFO - Processing queries...
+2026-04-28 23:05:14,959 - MergingPipeline - INFO - Applying Block 1 processing (expansion=lsa, reduce=False)...
+2026-04-28 23:05:18,794 - MergingPipeline - INFO - Ranking with Block 2/3 (retrieval=ngram, ranking=esa)...
+Traceback (most recent call last):
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 271, in <module>
+    main()
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 260, in main
+    results, metrics = pipeline.run()
+                       ^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\main.py", line 79, in run
+    ranked_results = self.retrieval_ranking.rank(processed_queries)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 232, in rank
+    return self.rank_esa(query_vectors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\NLP\NLP_project\NLP_ASSIGNMENT2\project\merging\blocks23_retrieval_ranking.py", line 211, in rank_esa
+    query_concept_similarity = cosine_similarity(query_vectors, doc_dense)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\utils\_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 1679, in cosine_similarity
+    X, Y = check_pairwise_arrays(X, Y)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srksr\AppData\Roaming\Python\Python312\site-packages\sklearn\metrics\pairwise.py", line 214, in check_pairwise_arrays
+    raise ValueError(
+ValueError: Incompatible dimension for X and Y matrices: X.shape[1] == 4599 while Y.shape[1] == 1262
+✗ FAILED
+also something seems to be failing 
