@@ -71,7 +71,8 @@ class QueryProcessor:
             self._lsa_model.fit(doc_matrix)
         
         query_latent = self._lsa_model.transform([query_vector])[0]
-        return np.concatenate([query_vector, query_latent])
+        self.last_query_latent = query_latent
+        return query_vector
     
     def expand_query_wordnet(self, query_tokens):
         """Expand query using WordNet synonyms"""

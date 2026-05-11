@@ -9,12 +9,17 @@ class DataLoader:
     
     def __init__(self, config):
         self.config = config
-        self.dataset_path = Path(config.get("dataset", {}).get("path", "./cranfield"))
+        self.base_dir = Path(config.get("_config_dir", Path.cwd())).resolve()
+        self.dataset_path = self._resolve_path(config.get("dataset", {}).get("path", "./cranfield"))
         self.queries = None
         self.docs = None
         self.qrels = None
         self.queries_json = None
         self.docs_json = None
+
+    def _resolve_path(self, path_value):
+        path = Path(path_value)
+        return path if path.is_absolute() else (self.base_dir / path).resolve()
     
     def load_dataset(self):
         """Load queries, documents, and relevance judgments"""

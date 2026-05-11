@@ -1,7 +1,7 @@
 {
   "block1_query_processing": {
     "expansion_mode": "tfidf",
-    "reduction_enabled": false,
+    "reduction_enabled": true,
     "segmenter": "punkt",
     "tokenizer": "ptb",
     "stemmer": true,
@@ -86,26 +86,36 @@
     }
   },
   "dataset": {
-    "path": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\cranfield",
+    "path": "../../cranfield",
     "queries_file": "cran_queries.json",
     "docs_file": "cran_docs.json",
     "qrels_file": "cran_qrels.json"
   },
   "output": {
-    "output_dir": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\project\\merging\\output",
+    "output_dir": "./output",
     "save_plots": true,
     "save_rankings": true,
     "save_metrics": true
   },
+  "evaluation": {
+    "cutoffs": [
+      1,
+      3,
+      5,
+      10
+    ]
+  },
   "logging": {
-    "use_wandb": false,
-    "wandb_project": "nlp-merging",
-    "wandb_entity": "your_entity",
+    "use_wandb": true,
+    "wandb_project": "merges_0",
+    "wandb_entity": "NLP_project_ByteStorm",
+    "wandb_api_key": "",
     "log_level": "INFO",
     "log_file": true
   },
   "batch_processing": {
     "enabled": true,
     "batch_size": 32
-  }
+  },
+  "_config_dir": "/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging"
 }

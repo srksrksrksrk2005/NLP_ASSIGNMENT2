@@ -11,8 +11,15 @@ from itertools import product
 from datetime import datetime
 
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+
 def _load_run_metrics(config_path):
     """Load metrics from the latest pipeline results file."""
+    config_path = Path(config_path)
+    if not config_path.is_absolute():
+        config_path = SCRIPT_DIR / config_path
+
     with open(config_path, "r") as f:
         config = json.load(f)
 
@@ -103,8 +110,12 @@ def plot_grid_search_results(results_summary, interactive=True):
 def run_experiment(block1_mode, block1_reduce, block2_retrieval, block3_ranking, 
                    use_wandb=False, config_path="configs/default_config.json"):
     """Run a single experiment with given parameters"""
-    
-    cmd = [sys.executable, "main.py", "--config", config_path]
+
+    config_path = Path(config_path)
+    if not config_path.is_absolute():
+        config_path = SCRIPT_DIR / config_path
+
+    cmd = [sys.executable, "main.py", "--config", str(config_path)]
     
     cmd.extend(["--block1-mode", block1_mode])
     if block1_reduce:
@@ -119,7 +130,7 @@ def run_experiment(block1_mode, block1_reduce, block2_retrieval, block3_ranking,
     print(f"Running: {' '.join(cmd)}")
     print(f"{'='*70}\n")
     
-    result = subprocess.run(cmd, capture_output=False)
+    result = subprocess.run(cmd, capture_output=False, cwd=SCRIPT_DIR)
     success = result.returncode == 0
     metrics = _load_run_metrics(config_path) if success else None
 
@@ -208,7 +219,7 @@ def run_grid_search(block1_modes=None, block2_retrievals=None, block3_rankings=N
     print(f"{'='*70}\n")
     
     # Save results
-    output_dir = Path("output")
+    output_dir = SCRIPT_DIR / "output"
     output_dir.mkdir(exist_ok=True)
     summary_file = output_dir / f"grid_search_summary_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
     with open(summary_file, 'w') as f:
