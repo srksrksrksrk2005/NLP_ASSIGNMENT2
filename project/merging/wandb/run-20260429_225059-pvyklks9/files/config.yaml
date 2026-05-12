@@ -1,0 +1,169 @@
+_wandb:
+    value:
+        cli_version: 0.25.1
+        e:
+            hyusm44mxfeal2ki9pkw7jkx9gwl6zft:
+                args:
+                    - --config
+                    - /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging/configs/default_config.json
+                    - --block1-mode
+                    - lsa
+                    - --block1-reduce
+                    - --block2-retrieval
+                    - local_bow
+                    - --block3-ranking
+                    - lsa
+                    - --wandb
+                codePath: project/merging/main.py
+                codePathLocal: main.py
+                cpu_count: 10
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "417130971136"
+                        used: "249929953280"
+                email: ee23b055@smail.iitm.ac.in
+                executable: /home/crimson/miniconda3/bin/python3
+                git:
+                    commit: 59553e9f9173bf49c8296e9df7cab98dc4074f41
+                    remote: https://github.com/NikhilSwaroop-P/NLP_ASSIGNMENT2
+                gpu: NVIDIA GeForce RTX 4070 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ada
+                      cudaCores: 4608
+                      memoryTotal: "8585740288"
+                      name: NVIDIA GeForce RTX 4070 Laptop GPU
+                      uuid: GPU-5c05e52e-8994-2b47-c482-3f63c81be700
+                host: tuxedo-os
+                memory:
+                    total: "16454328320"
+                os: Linux-6.17.0-111019-tuxedo-x86_64-with-glibc2.39
+                program: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging/main.py
+                python: CPython 3.13.11
+                root: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging
+                startedAt: "2026-04-29T17:20:59.763404Z"
+                writerId: hyusm44mxfeal2ki9pkw7jkx9gwl6zft
+        m:
+            - "1": k
+              "6":
+                - 3
+              "7": []
+            - "2": '*'
+              "5": 1
+              "6":
+                - 1
+              "7": []
+        python_version: 3.13.11
+        t:
+            "1":
+                - 5
+                - 53
+                - 105
+            "2":
+                - 5
+                - 53
+                - 105
+            "3":
+                - 2
+                - 7
+                - 13
+                - 16
+                - 61
+            "4": 3.13.11
+            "5": 0.25.1
+            "8":
+                - 2
+            "12": 0.25.1
+            "13": linux-x86_64
+block1:
+    value:
+        expansion_mode: lsa
+        expansion_params:
+            esa:
+                concept_source: cranfield
+                top_concepts: 25
+            lsa:
+                n_components: 100
+                random_state: 42
+            tfidf:
+                max_df: 0.95
+                max_features: 5000
+                min_df: 2
+            word2vec:
+                model_path: path/to/word2vec/model
+                vector_size: 100
+                window: 5
+            wordnet:
+                pos_filter: null
+                synset_limit: 3
+        reduction_enabled: true
+        reduction_params:
+            algorithm: tfidf
+            method: keyword_extraction
+            top_k: 10
+        segmenter: punkt
+        stemmer: true
+        stopword_removal: true
+        tokenizer: ptb
+block2:
+    value:
+        retrieval_params:
+            local_bow:
+                overlap: 2
+                window_size: 5
+            ngram:
+                analyzer: char
+                ngram_range:
+                    - 1
+                    - 2
+            tfidf:
+                max_df: 0.95
+                max_features: 5000
+                min_df: 2
+                norm: l2
+                sublinear_tf: true
+        retrieval_type: local_bow
+block3:
+    value:
+        ranking_params:
+            esa:
+                concept_source: cranfield
+                max_df: 0.9
+                min_df: 1
+                min_similarity: 0
+                top_concepts: 25
+            lsa:
+                max_df: 0.95
+                min_df: 2
+                n_components: 250
+                norm: l2
+                random_state: 42
+                sublinear_tf: true
+            tfidf:
+                max_df: 0.95
+                max_features: 5000
+                min_df: 2
+                norm: l2
+        ranking_type: lsa
+dataset:
+    value:
+        docs_file: cran_docs.json
+        path: ../../cranfield
+        qrels_file: cran_qrels.json
+        queries_file: cran_queries.json
+logging:
+    value:
+        log_file: true
+        log_level: INFO
+        use_wandb: true
+        wandb_api_key: ""
+        wandb_entity: NLP_project_ByteStorm
+        wandb_project: merges_0
+output:
+    value:
+        output_dir: ./output
+        save_metrics: true
+        save_plots: true
+        save_rankings: true

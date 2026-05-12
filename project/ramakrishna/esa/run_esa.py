@@ -33,6 +33,23 @@ def build_parser():
     parser.add_argument("-tfidf_weight", type=float, default=0.2)
     parser.add_argument("-esa_top_concepts", type=int, default=25)
     parser.add_argument("-esa_min_similarity", type=float, default=0.0)
+    parser.add_argument(
+        "-concept_source",
+        default="cranfield",
+        choices=["cranfield", "20news-technical"],
+        help="Concept corpus used for ESA",
+    )
+    parser.add_argument(
+        "-concept_limit",
+        type=int,
+        default=0,
+        help="Optional cap on external concepts; 0 means use all available concepts",
+    )
+    parser.add_argument(
+        "-prebuilt_index_path",
+        default="",
+        help="Path to a joblib bundle containing a prebuilt ESA matrix and metadata",
+    )
     parser.add_argument("-random_state", type=int, default=42)
 
     parser.add_argument("-max_df", type=float, default=0.9)
@@ -59,7 +76,18 @@ def main():
         processed_docs = experiment.preprocess_texts(docs)
         query = input("Enter query below\n")
         processed_query = experiment.preprocess_texts([query])
-        ranked_docs, _ = experiment.rank_esa(processed_docs, doc_ids, processed_query)
+        concept_docs = concept_ids = concept_source = None
+        if not args.prebuilt_index_path:
+            concept_docs, concept_ids, concept_source = experiment.load_concept_corpus()
+        ranked_docs, _ = experiment.rank_esa(
+            processed_docs,
+            doc_ids,
+            processed_query,
+            concept_docs=concept_docs,
+            concept_ids=concept_ids,
+            concept_source=concept_source,
+            prebuilt_index_path=args.prebuilt_index_path or None,
+        )
         ranked_docs = ranked_docs[0]
 
         print("\nTop five document IDs:")

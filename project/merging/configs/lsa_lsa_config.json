@@ -1,0 +1,73 @@
+{
+  "name": "LSA + LSA Configuration",
+  "description": "LSA-based query expansion with LSA ranking",
+  "block1_query_processing": {
+    "expansion_mode": "lsa",
+    "reduction_enabled": false,
+    "segmenter": "punkt",
+    "tokenizer": "ptb",
+    "stemmer": true,
+    "stopword_removal": true,
+    "expansion_params": {
+      "lsa": {
+        "n_components": 100,
+        "random_state": 42,
+        "max_features": 5000,
+        "max_df": 0.95,
+        "min_df": 2
+      }
+    },
+    "reduction_params": {
+      "method": "keyword_extraction",
+      "top_k": 10
+    }
+  },
+  "block2_retrieval_mode": {
+    "retrieval_type": "tfidf",
+    "retrieval_params": {
+      "tfidf": {
+        "max_features": 5000,
+        "max_df": 0.95,
+        "min_df": 2,
+        "norm": "l2",
+        "sublinear_tf": true
+      }
+    }
+  },
+  "block3_ranking_mode": {
+    "ranking_type": "lsa",
+    "ranking_params": {
+      "lsa": {
+        "n_components": 250,
+        "random_state": 42,
+        "sublinear_tf": true,
+        "max_df": 0.95,
+        "min_df": 2,
+        "norm": "l2"
+      }
+    }
+  },
+  "dataset": {
+    "path": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\cranfield",
+    "queries_file": "cran_queries.json",
+    "docs_file": "cran_docs.json",
+    "qrels_file": "cran_qrels.json"
+  },
+  "output": {
+    "output_dir": "c:\\Users\\srksr\\NLP\\NLP_project\\NLP_ASSIGNMENT2\\project\\merging\\output",
+    "save_plots": true,
+    "save_rankings": true,
+    "save_metrics": true
+  },
+  "logging": {
+    "use_wandb": false,
+    "wandb_project": "nlp-merging",
+    "wandb_entity": null,
+    "log_level": "INFO",
+    "log_file": true
+  },
+  "batch_processing": {
+    "enabled": true,
+    "batch_size": 32
+  }
+}

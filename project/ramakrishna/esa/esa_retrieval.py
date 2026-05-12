@@ -1,4 +1,5 @@
 import numpy as np
+import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -32,9 +33,43 @@ class ESARetrieval:
         self.actual_concepts = None
         self.avg_active_concepts = None
         self.concept_density = None
+        self.concept_source = None
+        self.concept_ids = None
+        self.concept_tfidf_matrix = None
+
+    def _load_prebuilt_index(self, prebuilt_index_path):
+        bundle = joblib.load(prebuilt_index_path)
+        required_keys = [
+            "vectorizer",
+            "doc_ids",
+            "concept_ids",
+            "doc_tfidf_matrix",
+            "concept_tfidf_matrix",
+            "doc_concept_matrix",
+        ]
+        missing = [key for key in required_keys if key not in bundle]
+        if missing:
+            raise ValueError(
+                "Prebuilt ESA bundle is missing required keys: " + ", ".join(missing)
+            )
+
+        self.vectorizer = bundle["vectorizer"]
+        self.doc_ids = list(bundle["doc_ids"])
+        self.concept_ids = list(bundle["concept_ids"])
+        self.doc_tfidf_matrix = bundle["doc_tfidf_matrix"]
+        self.concept_tfidf_matrix = bundle["concept_tfidf_matrix"]
+        self.doc_concept_matrix = bundle["doc_concept_matrix"]
+        self.vocab_size = int(bundle.get("vocab_size", self.doc_tfidf_matrix.shape[1]))
+        self.actual_concepts = int(bundle.get("actual_concepts", min(self.top_concepts, len(self.concept_ids))))
+        self.avg_active_concepts = float(bundle.get("avg_active_concepts", 0.0))
+        self.concept_density = float(bundle.get("concept_density", 0.0))
+        self.concept_source = bundle.get("concept_source", "prebuilt")
+        return self
 
     @staticmethod
     def _flatten_document(document):
+        if isinstance(document, str):
+            return document
         return " ".join(token for sentence in document for token in sentence)
 
     @staticmethod
@@ -79,8 +114,22 @@ class ESARetrieval:
         self.concept_density = float(np.count_nonzero(pruned)) / float(pruned.size)
         return self._normalize_rows(pruned)
 
-    def build_index(self, docs, doc_ids):
+    def build_index(
+        self,
+        docs,
+        doc_ids,
+        concept_docs=None,
+        concept_ids=None,
+        concept_source=None,
+        prebuilt_index_path=None,
+    ):
+        if prebuilt_index_path:
+            return self._load_prebuilt_index(prebuilt_index_path)
+
         doc_texts = [self._flatten_document(doc) for doc in docs]
+        concept_docs = docs if concept_docs is None else concept_docs
+        concept_ids = doc_ids if concept_ids is None else concept_ids
+        concept_texts = [self._flatten_document(concept) for concept in concept_docs]
 
         self.vectorizer = TfidfVectorizer(
             tokenizer=str.split,
@@ -95,19 +144,26 @@ class ESARetrieval:
             ngram_range=self.ngram_range,
         )
 
-        self.doc_tfidf_matrix = self.vectorizer.fit_transform(doc_texts)
+        fit_texts = doc_texts if concept_docs is docs else doc_texts + concept_texts
+        self.vectorizer.fit(fit_texts)
+
+        self.doc_tfidf_matrix = self.vectorizer.transform(doc_texts)
+        self.concept_tfidf_matrix = self.vectorizer.transform(concept_texts)
         self.vocab_size = int(self.doc_tfidf_matrix.shape[1])
 
         doc_similarity = cosine_similarity(
             self.doc_tfidf_matrix,
-            self.doc_tfidf_matrix,
+            self.concept_tfidf_matrix,
             dense_output=True,
         ).astype(np.float32)
-        np.fill_diagonal(doc_similarity, 1.0)
+        if doc_similarity.shape[0] == doc_similarity.shape[1] and concept_docs is docs:
+            np.fill_diagonal(doc_similarity, 1.0)
 
         self.doc_concept_matrix = self._prune_and_normalize(doc_similarity)
         self.doc_ids = list(doc_ids)
-        self.actual_concepts = min(self.top_concepts, len(self.doc_ids))
+        self.concept_ids = list(concept_ids)
+        self.actual_concepts = min(self.top_concepts, len(self.concept_ids))
+        self.concept_source = concept_source
 
     def rank(self, queries, return_scores=False):
         if self.vectorizer is None or self.doc_tfidf_matrix is None:
@@ -118,7 +174,7 @@ class ESARetrieval:
 
         query_similarity = cosine_similarity(
             query_tfidf_matrix,
-            self.doc_tfidf_matrix,
+            self.concept_tfidf_matrix,
             dense_output=True,
         ).astype(np.float32)
         query_concept_matrix = self._prune_and_normalize(query_similarity)

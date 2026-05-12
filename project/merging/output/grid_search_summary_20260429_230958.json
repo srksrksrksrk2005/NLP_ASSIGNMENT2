@@ -1,0 +1,578 @@
+[
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "none",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "lsa",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "wordnet",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": false,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "tfidf",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "ngram",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "tfidf",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "lsa",
+    "success": true,
+    "metrics": null
+  },
+  {
+    "block1_mode": "tfidf",
+    "reduction": true,
+    "block2_retrieval": "local_bow",
+    "block3_ranking": "esa",
+    "success": true,
+    "metrics": null
+  }
+]
