@@ -1,0 +1,232 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.05,
+    "method_ap_at_10": 0.05,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 5,
+    "baseline_top5": [
+      102,
+      623,
+      5,
+      378,
+      21
+    ],
+    "method_top5": [
+      102,
+      623,
+      5,
+      378,
+      21
+    ],
+    "relevant_hits_in_method_top5": [
+      21
+    ]
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1355,
+    "method_ap_at_10": 0.1355,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      536,
+      1205,
+      293,
+      1391,
+      37
+    ],
+    "method_top5": [
+      536,
+      1205,
+      293,
+      1391,
+      37
+    ],
+    "relevant_hits_in_method_top5": [
+      536
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      544,
+      428,
+      719,
+      844,
+      52
+    ],
+    "method_top5": [
+      544,
+      428,
+      719,
+      844,
+      52
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      795,
+      714,
+      598,
+      755,
+      594
+    ],
+    "method_top5": [
+      795,
+      714,
+      598,
+      755,
+      594
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0857,
+    "method_ap_at_10": 0.0857,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      291,
+      187,
+      455,
+      1228,
+      487
+    ],
+    "method_top5": [
+      291,
+      187,
+      455,
+      1228,
+      487
+    ],
+    "relevant_hits_in_method_top5": [
+      291
+    ]
+  },
+  {
+    "query_id": 225,
+    "query": "what design factors can be used to control lift-drag ratios at mach numbers above 5 .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0314,
+    "method_ap_at_10": 0.0314,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      1341,
+      1188,
+      780,
+      748,
+      1338
+    ],
+    "method_top5": [
+      1341,
+      1188,
+      780,
+      748,
+      1338
+    ],
+    "relevant_hits_in_method_top5": [
+      1188
+    ]
+  },
+  {
+    "query_id": 224,
+    "query": "in practice, how close to reality are the assumptions that the flow in a hypersonic shock tube using nitrogen is non-viscous and in thermodynamic equilibrium .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1111,
+    "method_ap_at_10": 0.1111,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      656,
+      110,
+      236,
+      317,
+      1315
+    ],
+    "method_top5": [
+      656,
+      110,
+      236,
+      317,
+      1315
+    ],
+    "relevant_hits_in_method_top5": [
+      656
+    ]
+  },
+  {
+    "query_id": 223,
+    "query": "papers on shear buckling of unstiffened rectangular plates under shear .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.4722,
+    "method_ap_at_10": 0.4722,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      1400,
+      1396,
+      1387,
+      400,
+      1399
+    ],
+    "method_top5": [
+      1400,
+      1396,
+      1387,
+      400,
+      1399
+    ],
+    "relevant_hits_in_method_top5": [
+      1396,
+      1387,
+      400
+    ]
+  }
+]

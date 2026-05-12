@@ -1,0 +1,244 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      398,
+      763,
+      5
+    ],
+    "method_top5": [
+      102,
+      398,
+      983,
+      5,
+      559
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.094,
+    "method_ap_at_10": 0.05,
+    "delta_ap_at_10": -0.044,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 4,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      1205,
+      1158
+    ],
+    "method_top5": [
+      113,
+      37,
+      1205,
+      536,
+      272
+    ],
+    "relevant_hits_in_method_top5": [
+      536,
+      272
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.4167,
+    "method_ap_at_10": 0.2167,
+    "delta_ap_at_10": -0.2,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 4,
+    "baseline_top5": [
+      390,
+      52,
+      719,
+      914,
+      1107
+    ],
+    "method_top5": [
+      1053,
+      52,
+      15,
+      390,
+      391
+    ],
+    "relevant_hits_in_method_top5": [
+      390,
+      391
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.5,
+    "method_ap_at_10": 0.4206,
+    "delta_ap_at_10": -0.0794,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      714,
+      799,
+      652,
+      672,
+      203
+    ],
+    "method_top5": [
+      714,
+      42,
+      672,
+      799,
+      203
+    ],
+    "relevant_hits_in_method_top5": [
+      672,
+      799
+    ]
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.119,
+    "method_ap_at_10": 0.1389,
+    "delta_ap_at_10": 0.0198,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      1187,
+      311,
+      415,
+      1239
+    ],
+    "method_top5": [
+      265,
+      1187,
+      1239,
+      311,
+      1228
+    ],
+    "relevant_hits_in_method_top5": [
+      1187,
+      311
+    ]
+  },
+  {
+    "query_id": 20,
+    "query": "has anyone formally determined the influence of joule heating,  produced by the induced current,  in magnetohydrodynamic free convection flows under general conditions .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.3298,
+    "method_ap_at_10": 0.6367,
+    "delta_ap_at_10": 0.3069,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      450,
+      408,
+      407,
+      270,
+      584
+    ],
+    "method_top5": [
+      408,
+      267,
+      270,
+      407,
+      104
+    ],
+    "relevant_hits_in_method_top5": [
+      408,
+      267,
+      270,
+      407,
+      104
+    ]
+  },
+  {
+    "query_id": 95,
+    "query": "what is the theoretical heat transfer distribution around a hemisphere .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1667,
+    "method_ap_at_10": 0.4286,
+    "delta_ap_at_10": 0.2619,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      553,
+      662,
+      535,
+      628,
+      1104
+    ],
+    "method_top5": [
+      662,
+      628,
+      553,
+      1104,
+      559
+    ],
+    "relevant_hits_in_method_top5": [
+      662
+    ]
+  },
+  {
+    "query_id": 129,
+    "query": "has anyone derived simplified pump design equation from the fundamental three-dimensional equations for incompressible nonviscous flow .",
+    "baseline_hits_at_5": 4,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.6042,
+    "method_ap_at_10": 0.8375,
+    "delta_ap_at_10": 0.2333,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      945,
+      988,
+      989,
+      987,
+      36
+    ],
+    "method_top5": [
+      988,
+      989,
+      945,
+      987,
+      985
+    ],
+    "relevant_hits_in_method_top5": [
+      988,
+      989,
+      945,
+      987,
+      985
+    ]
+  }
+]

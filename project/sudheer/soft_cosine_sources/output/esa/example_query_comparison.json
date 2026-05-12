@@ -1,0 +1,246 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      398,
+      763,
+      5
+    ],
+    "method_top5": [
+      102,
+      398,
+      5,
+      846,
+      763
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.094,
+    "method_ap_at_10": 0.0897,
+    "delta_ap_at_10": -0.0043,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      1205,
+      1158
+    ],
+    "method_top5": [
+      113,
+      1205,
+      536,
+      272,
+      37
+    ],
+    "relevant_hits_in_method_top5": [
+      536,
+      272
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.4167,
+    "method_ap_at_10": 0.6333,
+    "delta_ap_at_10": 0.2167,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      390,
+      52,
+      719,
+      914,
+      1107
+    ],
+    "method_top5": [
+      390,
+      52,
+      1053,
+      489,
+      627
+    ],
+    "relevant_hits_in_method_top5": [
+      390,
+      627
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.5,
+    "method_ap_at_10": 0.3778,
+    "delta_ap_at_10": -0.1222,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      714,
+      799,
+      652,
+      672,
+      203
+    ],
+    "method_top5": [
+      42,
+      714,
+      799,
+      672,
+      78
+    ],
+    "relevant_hits_in_method_top5": [
+      799,
+      672
+    ]
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.119,
+    "method_ap_at_10": 0.119,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      1187,
+      311,
+      415,
+      1239
+    ],
+    "method_top5": [
+      265,
+      1187,
+      311,
+      1239,
+      358
+    ],
+    "relevant_hits_in_method_top5": [
+      1187,
+      311
+    ]
+  },
+  {
+    "query_id": 129,
+    "query": "has anyone derived simplified pump design equation from the fundamental three-dimensional equations for incompressible nonviscous flow .",
+    "baseline_hits_at_5": 4,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.6042,
+    "method_ap_at_10": 1.0,
+    "delta_ap_at_10": 0.3958,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      945,
+      988,
+      989,
+      987,
+      36
+    ],
+    "method_top5": [
+      988,
+      989,
+      945,
+      990,
+      984
+    ],
+    "relevant_hits_in_method_top5": [
+      988,
+      989,
+      945,
+      990,
+      984
+    ]
+  },
+  {
+    "query_id": 208,
+    "query": "what is the effect of the shape of the drag polar of a lifting spacecraft on the amount of reduction in maximum deceleration obtainable by continuously varying the aerodynamic coefficients during re-entry .",
+    "baseline_hits_at_5": 4,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.5429,
+    "method_ap_at_10": 0.8129,
+    "delta_ap_at_10": 0.2701,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      1291,
+      1344,
+      163,
+      566,
+      1345
+    ],
+    "method_top5": [
+      1291,
+      1344,
+      1346,
+      1347,
+      275
+    ],
+    "relevant_hits_in_method_top5": [
+      1291,
+      1344,
+      1346,
+      1347
+    ]
+  },
+  {
+    "query_id": 20,
+    "query": "has anyone formally determined the influence of joule heating,  produced by the induced current,  in magnetohydrodynamic free convection flows under general conditions .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.3298,
+    "method_ap_at_10": 0.5578,
+    "delta_ap_at_10": 0.228,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      450,
+      408,
+      407,
+      270,
+      584
+    ],
+    "method_top5": [
+      408,
+      450,
+      267,
+      407,
+      104
+    ],
+    "relevant_hits_in_method_top5": [
+      408,
+      267,
+      407,
+      104
+    ]
+  }
+]
