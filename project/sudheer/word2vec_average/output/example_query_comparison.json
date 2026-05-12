@@ -1,0 +1,234 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.05,
+    "delta_ap_at_10": 0.05,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 5,
+    "baseline_top5": [
+      102,
+      45,
+      846,
+      763,
+      398
+    ],
+    "method_top5": [
+      102,
+      623,
+      5,
+      378,
+      21
+    ],
+    "relevant_hits_in_method_top5": [
+      21
+    ]
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1538,
+    "method_ap_at_10": 0.1355,
+    "delta_ap_at_10": -0.0183,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      272,
+      295
+    ],
+    "method_top5": [
+      536,
+      1205,
+      293,
+      1391,
+      37
+    ],
+    "relevant_hits_in_method_top5": [
+      536
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.2619,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": -0.2619,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      52,
+      390,
+      878,
+      593,
+      834
+    ],
+    "method_top5": [
+      544,
+      428,
+      719,
+      844,
+      52
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.2869,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": -0.2869,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      249,
+      206,
+      652,
+      714,
+      799
+    ],
+    "method_top5": [
+      795,
+      714,
+      598,
+      755,
+      594
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1048,
+    "method_ap_at_10": 0.0857,
+    "delta_ap_at_10": -0.019,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      265,
+      311,
+      1187,
+      187,
+      996
+    ],
+    "method_top5": [
+      291,
+      187,
+      455,
+      1228,
+      487
+    ],
+    "relevant_hits_in_method_top5": [
+      291
+    ]
+  },
+  {
+    "query_id": 167,
+    "query": "exact solution methods for calculating the ablative mass loss of a material ablating at high temperatures in a hypersonic flight environment .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.0333,
+    "method_ap_at_10": 0.5556,
+    "delta_ap_at_10": 0.5222,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 10,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      553,
+      1099,
+      1279,
+      1097,
+      1100
+    ],
+    "method_top5": [
+      274,
+      553,
+      82,
+      1279,
+      981
+    ],
+    "relevant_hits_in_method_top5": [
+      274,
+      82
+    ]
+  },
+  {
+    "query_id": 184,
+    "query": "work on small-oscillation re-entry motions .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.0982,
+    "method_ap_at_10": 0.5792,
+    "delta_ap_at_10": 0.481,
+    "delta_hits_at_5": 3,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      554,
+      716,
+      1217,
+      1219,
+      978
+    ],
+    "method_top5": [
+      716,
+      639,
+      67,
+      718,
+      1379
+    ],
+    "relevant_hits_in_method_top5": [
+      716,
+      639,
+      67,
+      1379
+    ]
+  },
+  {
+    "query_id": 14,
+    "query": "papers on shock-sound wave interaction .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0556,
+    "method_ap_at_10": 0.4444,
+    "delta_ap_at_10": 0.3889,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 6,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      170,
+      1364,
+      256,
+      798,
+      345
+    ],
+    "method_top5": [
+      64,
+      402,
+      132,
+      345,
+      190
+    ],
+    "relevant_hits_in_method_top5": [
+      64
+    ]
+  }
+]

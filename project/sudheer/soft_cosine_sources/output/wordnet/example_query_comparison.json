@@ -1,0 +1,233 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      398,
+      763,
+      5
+    ],
+    "method_top5": [
+      102,
+      270,
+      45,
+      524,
+      405
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.094,
+    "method_ap_at_10": 0.0769,
+    "delta_ap_at_10": -0.0171,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      1205,
+      1158
+    ],
+    "method_top5": [
+      536,
+      83,
+      655,
+      154,
+      1264
+    ],
+    "relevant_hits_in_method_top5": [
+      536
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.4167,
+    "method_ap_at_10": 0.0476,
+    "delta_ap_at_10": -0.369,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 7,
+    "baseline_top5": [
+      390,
+      52,
+      719,
+      914,
+      1107
+    ],
+    "method_top5": [
+      109,
+      345,
+      52,
+      1292,
+      531
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.5,
+    "method_ap_at_10": 0.1944,
+    "delta_ap_at_10": -0.3056,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      714,
+      799,
+      652,
+      672,
+      203
+    ],
+    "method_top5": [
+      1163,
+      526,
+      631,
+      440,
+      358
+    ],
+    "relevant_hits_in_method_top5": [
+      631
+    ]
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.119,
+    "method_ap_at_10": 0.1048,
+    "delta_ap_at_10": -0.0143,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      1187,
+      311,
+      415,
+      1239
+    ],
+    "method_top5": [
+      265,
+      1187,
+      311,
+      3,
+      1171
+    ],
+    "relevant_hits_in_method_top5": [
+      1187,
+      311
+    ]
+  },
+  {
+    "query_id": 216,
+    "query": "what investigations have been made of the wave system created by a static pressure distribution over a liquid surface .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.5833,
+    "delta_ap_at_10": 0.5833,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      407,
+      1225,
+      958,
+      1269,
+      974
+    ],
+    "method_top5": [
+      1206,
+      506,
+      156,
+      153,
+      398
+    ],
+    "relevant_hits_in_method_top5": [
+      506,
+      156
+    ]
+  },
+  {
+    "query_id": 139,
+    "query": "has the effect of the change of initial pressure due to deformation,  on the frequencies of vibration of circular cylindrical shells been investigated .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0667,
+    "method_ap_at_10": 0.2,
+    "delta_ap_at_10": 0.1333,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 3,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      847,
+      897,
+      953,
+      848,
+      844
+    ],
+    "method_top5": [
+      953,
+      847,
+      841,
+      897,
+      826
+    ],
+    "relevant_hits_in_method_top5": [
+      953
+    ]
+  },
+  {
+    "query_id": 124,
+    "query": "in what areas, other than low density wind tunnel flows, is viscous compressible flow in slender channels a problem . what analytical investigations have been made of the stability of conical shells . how do the results compare with experiment .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.2,
+    "method_ap_at_10": 0.3333,
+    "delta_ap_at_10": 0.1333,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      941,
+      898,
+      1070,
+      938,
+      1222
+    ],
+    "method_top5": [
+      941,
+      1222,
+      967,
+      112,
+      607
+    ],
+    "relevant_hits_in_method_top5": [
+      941,
+      967
+    ]
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      398,
+      763,
+      5
+    ],
+    "method_top5": [
+      102,
+      398,
+      983,
+      559,
+      1161
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.094,
+    "method_ap_at_10": 0.1859,
+    "delta_ap_at_10": 0.0919,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      1205,
+      1158
+    ],
+    "method_top5": [
+      558,
+      1205,
+      536,
+      272,
+      79
+    ],
+    "relevant_hits_in_method_top5": [
+      558,
+      536,
+      272
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.4167,
+    "method_ap_at_10": 0.4074,
+    "delta_ap_at_10": -0.0093,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      390,
+      52,
+      719,
+      914,
+      1107
+    ],
+    "method_top5": [
+      390,
+      688,
+      1053,
+      1234,
+      52
+    ],
+    "relevant_hits_in_method_top5": [
+      390
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.5,
+    "method_ap_at_10": 0.1508,
+    "delta_ap_at_10": -0.3492,
+    "delta_hits_at_5": -2,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 6,
+    "baseline_top5": [
+      714,
+      799,
+      652,
+      672,
+      203
+    ],
+    "method_top5": [
+      42,
+      652,
+      78,
+      714,
+      100
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.119,
+    "method_ap_at_10": 0.2174,
+    "delta_ap_at_10": 0.0984,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      1187,
+      311,
+      415,
+      1239
+    ],
+    "method_top5": [
+      265,
+      1187,
+      291,
+      797,
+      487
+    ],
+    "relevant_hits_in_method_top5": [
+      1187,
+      291,
+      797
+    ]
+  },
+  {
+    "query_id": 95,
+    "query": "what is the theoretical heat transfer distribution around a hemisphere .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.1667,
+    "method_ap_at_10": 0.6667,
+    "delta_ap_at_10": 0.5,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      553,
+      662,
+      535,
+      628,
+      1104
+    ],
+    "method_top5": [
+      662,
+      283,
+      1161,
+      689,
+      559
+    ],
+    "relevant_hits_in_method_top5": [
+      662,
+      283
+    ]
+  },
+  {
+    "query_id": 34,
+    "query": "have wind tunnel interference effects been investigated on a systematic basis .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.1905,
+    "method_ap_at_10": 0.6321,
+    "delta_ap_at_10": 0.4417,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 3,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      795,
+      1153,
+      516,
+      431,
+      280
+    ],
+    "method_top5": [
+      516,
+      672,
+      714,
+      594,
+      431
+    ],
+    "relevant_hits_in_method_top5": [
+      516,
+      672,
+      714,
+      431
+    ]
+  },
+  {
+    "query_id": 129,
+    "query": "has anyone derived simplified pump design equation from the fundamental three-dimensional equations for incompressible nonviscous flow .",
+    "baseline_hits_at_5": 4,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.6042,
+    "method_ap_at_10": 1.0,
+    "delta_ap_at_10": 0.3958,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      945,
+      988,
+      989,
+      987,
+      36
+    ],
+    "method_top5": [
+      989,
+      988,
+      945,
+      984,
+      985
+    ],
+    "relevant_hits_in_method_top5": [
+      989,
+      988,
+      945,
+      984,
+      985
+    ]
+  }
+]

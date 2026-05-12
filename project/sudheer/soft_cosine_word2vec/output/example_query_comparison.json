@@ -1,0 +1,245 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.25,
+    "delta_ap_at_10": 0.25,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      102,
+      45,
+      846,
+      763,
+      398
+    ],
+    "method_top5": [
+      21,
+      152,
+      102,
+      142,
+      496
+    ],
+    "relevant_hits_in_method_top5": [
+      21
+    ]
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1538,
+    "method_ap_at_10": 0.0256,
+    "delta_ap_at_10": -0.1282,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      272,
+      295
+    ],
+    "method_top5": [
+      113,
+      37,
+      536,
+      1141,
+      1196
+    ],
+    "relevant_hits_in_method_top5": [
+      536
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.2619,
+    "method_ap_at_10": 0.2619,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      52,
+      390,
+      878,
+      593,
+      834
+    ],
+    "method_top5": [
+      834,
+      390,
+      1006,
+      52,
+      1008
+    ],
+    "relevant_hits_in_method_top5": [
+      390
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.2869,
+    "method_ap_at_10": 0.131,
+    "delta_ap_at_10": -0.156,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 7,
+    "baseline_top5": [
+      249,
+      206,
+      652,
+      714,
+      799
+    ],
+    "method_top5": [
+      652,
+      714,
+      445,
+      206,
+      249
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.1048,
+    "method_ap_at_10": 0.1024,
+    "delta_ap_at_10": -0.0024,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      265,
+      311,
+      1187,
+      187,
+      996
+    ],
+    "method_top5": [
+      265,
+      316,
+      311,
+      1187,
+      798
+    ],
+    "relevant_hits_in_method_top5": [
+      311,
+      1187,
+      798
+    ]
+  },
+  {
+    "query_id": 208,
+    "query": "what is the effect of the shape of the drag polar of a lifting spacecraft on the amount of reduction in maximum deceleration obtainable by continuously varying the aerodynamic coefficients during re-entry .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.4881,
+    "method_ap_at_10": 0.9821,
+    "delta_ap_at_10": 0.494,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      1291,
+      1344,
+      566,
+      1345,
+      1124
+    ],
+    "method_top5": [
+      1291,
+      1344,
+      163,
+      1346,
+      1347
+    ],
+    "relevant_hits_in_method_top5": [
+      1291,
+      1344,
+      163,
+      1346,
+      1347
+    ]
+  },
+  {
+    "query_id": 78,
+    "query": "has anyone explained the kink in the surge line of a multi-stage axial compressor .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.575,
+    "method_ap_at_10": 1.0,
+    "delta_ap_at_10": 0.425,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      589,
+      543,
+      216,
+      237,
+      578
+    ],
+    "method_top5": [
+      543,
+      589,
+      588,
+      590,
+      216
+    ],
+    "relevant_hits_in_method_top5": [
+      543,
+      589,
+      588,
+      590
+    ]
+  },
+  {
+    "query_id": 129,
+    "query": "has anyone derived simplified pump design equation from the fundamental three-dimensional equations for incompressible nonviscous flow .",
+    "baseline_hits_at_5": 4,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.5625,
+    "method_ap_at_10": 0.9861,
+    "delta_ap_at_10": 0.4236,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      945,
+      988,
+      989,
+      987,
+      1281
+    ],
+    "method_top5": [
+      988,
+      945,
+      987,
+      984,
+      985
+    ],
+    "relevant_hits_in_method_top5": [
+      988,
+      945,
+      987,
+      984,
+      985
+    ]
+  }
+]

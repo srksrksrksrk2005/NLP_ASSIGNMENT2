@@ -1,0 +1,236 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0417,
+    "delta_ap_at_10": 0.0417,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 6,
+    "baseline_top5": [
+      102,
+      45,
+      846,
+      763,
+      398
+    ],
+    "method_top5": [
+      102,
+      623,
+      378,
+      509,
+      1279
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.1538,
+    "method_ap_at_10": 0.0769,
+    "delta_ap_at_10": -0.0769,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      272,
+      295
+    ],
+    "method_top5": [
+      1205,
+      536,
+      1196,
+      272,
+      126
+    ],
+    "relevant_hits_in_method_top5": [
+      536,
+      272
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.2619,
+    "method_ap_at_10": 0.1786,
+    "delta_ap_at_10": -0.0833,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 4,
+    "baseline_top5": [
+      52,
+      390,
+      878,
+      593,
+      834
+    ],
+    "method_top5": [
+      719,
+      52,
+      14,
+      390,
+      425
+    ],
+    "relevant_hits_in_method_top5": [
+      390
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.2869,
+    "method_ap_at_10": 0.0417,
+    "delta_ap_at_10": -0.2452,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 8,
+    "baseline_top5": [
+      249,
+      206,
+      652,
+      714,
+      799
+    ],
+    "method_top5": [
+      795,
+      714,
+      598,
+      755,
+      594
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1048,
+    "method_ap_at_10": 0.0952,
+    "delta_ap_at_10": -0.0095,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      265,
+      311,
+      1187,
+      187,
+      996
+    ],
+    "method_top5": [
+      291,
+      187,
+      1228,
+      316,
+      487
+    ],
+    "relevant_hits_in_method_top5": [
+      291
+    ]
+  },
+  {
+    "query_id": 119,
+    "query": "what is the effect of initial axisymmetric deviations from circularity on the non linear (large-deflection) load-deflection response of cylinders under hydrostatic pressure .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1944,
+    "method_ap_at_10": 0.6667,
+    "delta_ap_at_10": 0.4722,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 6,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      928,
+      781,
+      1116,
+      938,
+      1331
+    ],
+    "method_top5": [
+      897,
+      1132,
+      1116,
+      1068,
+      928
+    ],
+    "relevant_hits_in_method_top5": [
+      897
+    ]
+  },
+  {
+    "query_id": 12,
+    "query": "how can the aerodynamic performance of channel flow ground effect machines be calculated .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.0167,
+    "method_ap_at_10": 0.4167,
+    "delta_ap_at_10": 0.4,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 10,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      941,
+      1221,
+      270,
+      1223,
+      966
+    ],
+    "method_top5": [
+      624,
+      650,
+      453,
+      253,
+      33
+    ],
+    "relevant_hits_in_method_top5": [
+      624,
+      650
+    ]
+  },
+  {
+    "query_id": 180,
+    "query": "how does scale height vary with altitude in an atmosphere .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 5,
+    "baseline_ap_at_10": 0.4152,
+    "method_ap_at_10": 0.7958,
+    "delta_ap_at_10": 0.3807,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      548,
+      622,
+      314,
+      616,
+      218
+    ],
+    "method_top5": [
+      622,
+      616,
+      548,
+      621,
+      617
+    ],
+    "relevant_hits_in_method_top5": [
+      622,
+      616,
+      548,
+      621,
+      617
+    ]
+  }
+]
