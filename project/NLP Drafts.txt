@@ -1,0 +1,450 @@
+﻿Chandan
+Project Implementation: Retrieval Methods on the Cranfield Dataset
+This implementation explores four main retrieval ideas on the Cranfield dataset: Query Reduction, Unordered Local-Context Bag-of-Words, Word Mover’s Distance (WMD) reranking, and SIF-based dense embeddings.
+An important detail is that the Query Reduction module contains four experimental variants: idf_topk_legacy, idf_topk_extended, prf_term_pruning_legacy, and prf_term_pruning_extended. All methods are evaluated against a unigram TF-IDF baseline using cosine similarity on stopword-removed and normalized documents and queries.
+________________
+
+
+2. Query Reduction
+Query reduction assumes that not every query term contributes equally to relevance. The goal is to prune less useful terms (generic, ambiguous, or weakly helpful) before retrieval so ranking focuses on the most discriminative parts of the query. There are two underlying strategies spanning four implemented versions.
+2.1 IDF Top-k Reduction
+This method keeps only the top "k" query terms with the highest IDF values, following the intuition that rare terms are more informative. For a query term "t", the score is:
+* score_idf(t) = idf(t)
+The top "k" highest-scoring terms are retained, and the reduced query is ranked using the baseline model.
+* Best Parameter: k = 20 (Average reduced query length: 10.22)
+Insight: Both versions effectively matched the baseline. On Cranfield, simple IDF-based pruning is not strong enough to improve retrieval because the queries are already short and technically precise.
+2.2 Pseudo-Relevance-Feedback (PRF) Term Pruning
+This method uses a first-pass retrieval step. Each original query term is rescored based on how strongly it is supported in the top-retrieved documents (D_m).
+* support(t) = ( 1 / |D_m| ) * Σ [ tf(t,d) * idf(t) ]
+This is combined with the original IDF score to find the final score, preserving the top "k" terms:
+* final_score(t) = α * idf(t) + (1 - α) * support(t)
+Insight: While the extended version was the best reduction variant, gains over the baseline were marginal (ΔMAP@10 = +0.0006). Pruning technical vocabulary often removes signal instead of noise.
+________________
+
+
+3. Unordered Local-Context Bag-of-Words
+This method extends TF-IDF by adding local context features. It examines nearby-word windows (up to radius "n" left and right) around each token. Unique tokens inside the window generate unordered combinations (pairs/triples) which become binary context features.
+* S(q,d) = S_base(q,d) + α * S_ctx(q,d)
+________________
+
+
+4. Word Mover’s Distance (WMD) Reranking
+WMD is a semantic distance method based on GloVe 50d word embeddings. It measures the "movement" required to transform the query word distribution into the document word distribution.
+* WMD(q,d) = min_T Σ [ T_ij * ||x_i - y_j||_2 ]
+Because WMD is computationally expensive, the system retrieves a candidate set using TF-IDF and reranks those candidates by WMD.
+________________
+
+
+5. SIF Embeddings
+Smooth Inverse Frequency (SIF) builds dense embeddings for documents and queries by averaging GloVe 50d word vectors with frequency-based downweighting (rare words contribute more).
+* v_s = ( 1 / |s| ) * Σ [ (a / (a + p(w))) * e_w ]
+To reduce common-direction noise, the top principal component is removed:
+* v'_s = v_s - UU^T v_s
+________________
+
+
+6. Overall Comparative Interpretation
+The experiments show that on Cranfield, the best improvements come from carefully enriching lexical retrieval with contextual structure rather than replacing it with dense semantic methods.
+Overall Ranking of Methods:
+1. Unordered Local-Context BoW: Best overall; clearly above baseline.
+2. PRF Term Pruning (Extended): Best query-reduction variant; marginally above baseline.
+3. Baseline TF-IDF / IDF Top-k: Essentially tied; forms the performance floor for effective lexical matching.
+4. Pure WMD: Weaker than baseline; struggles with technical exactness.
+5. Pure SIF: Weakest on this dataset; smooths away critical specialized vocabulary.
+Conclusion: For technical information retrieval, hybrid lexical-context methods are vastly more effective than pure semantic methods. Simple query pruning is only beneficial when the original query contains genuine noise.
+
+
+
+
+Nikhil
+Query Expansion:
+Methods used:
+1. Tfidf based
+2. Lsa
+3. Esa
+4. Wordnet 
+5. word2vec
+Made a word2word similarity matrix for each method.
+Used the matrix applied normalizations and scaling on the query matrices to expand it to the data. 
+In theory there will not be much use of expanding using lsa if we are already using lsa for the ranking. But using TFidf with Tfidf expansion will have benefits as in it could capture higher order relations. 
+Theoritically using wordnet or word2vec(externally trained or internal one) or ESA(external) would provide the best performance
+
+
+Targeted Limitations:
+1. Lack of semantic understanding
+2. Out of Vocabulary issue(main cannot tested on the direct dataset. *only Wordnet based or word2vec(external) or ESA(external will actually help for this task)
+3. Synonymy
+Regarding the pipeline for query expansion, we represent queries as term-frequency vectors rather than through IDF weighting. For every source term, candidate neighbors are gathered based on similarity scores. We then implement a two-stage thresholding process: first, a method-level floor is established using the maximum of a base minimum or a global quantile across all neighbor scores. Second, we filter neighbors for each query term using a threshold derived from the method floor, mean scores, and local quantiles. Following this, min-max scaling is applied to the remaining neighbors. These values are then converted into L1-normalized weights; notably, this avoids softmax since exponentials are not utilized. During the formation of the expanded query, the original mass remains constant while the expansion mass is distributed among neighbors. Consequently, the original word count does not diminish during expansion, as self-matches are excluded. Any shift in relative importance occurs only during retrieval when IDF multiplication and L2 normalization are applied for final cosine scoring.
+
+
+  
+
+RK
+Latent Semantic Analysis (LSA)
+Implementation Pipeline
+Stage 1: TF-IDF Vectorization
+LSA uses relatively conservative TF-IDF configuration to maximize SVD stability:
+Parameter
+	Value
+	Rationale
+	sublinear_tf
+	 True
+	Reduce high-frequency term dominance: tf=1+log⁡(raw_tf)
+	max_df
+	0.95
+	Filter ubiquitous terms appearing in >95% of documents
+	norm
+	'l2'
+	L2 normalization ensuring comparable similarity scores across document lengths
+	Stage 2: SVD Decomposition
+Truncated SVD is applied to sparse TF-IDF matrix:
+M_d×v=U_d×kΣ_k×k(V_v×k)T
+Key implementation details:
+* Handles sparse matrices efficiently without full dense materialization
+* Auto-adjusts components if fewer than requested
+* Applied to training documents; queries projected afterward
+Stage 3: L2 Normalization of Latent Vectors
+Both document and query latent representations normalized to unit length:
+normalized(x) = x/(∣∣x∣∣^2+ϵ)
+Stage 4: Ranking
+For each query, similarity matrix computed:
+similarities=Qlatent⋅DlatentT​
+Documents ranked by similarity scores in descending order.
+Key Observations:
+1. MAP Shows Largest Gain (+22.4%): LSA's strength lies in ranking relevant documents higher on average, not just improving top-1 precision. This reflects semantic projection's ability to reorder documents by conceptual proximity.
+2. nDCG Improvement (+13.5%): Position-weighted gain confirms LSA places more relevant documents in higher positions, critical for practical search applications.
+LSA excels when:
+1. Weak lexical overlap: Relevant documents use different terminology for same concept
+2. Compound concepts: Query seeks intersection of multiple sub-topics
+3. Domain specificity: Specialized terms cluster semantically
+4. Technical terminology variation: Different levels of formality describe equivalent phenomena
+LSA struggles when:
+1. Sparse semantic signal from insufficient term co-occurrence
+2. Completely disjoint concepts with no latent semantic connection
+3. Query specificity exceeds 250-dimensional latent space capacity
+Explicit Semantic Analysis (ESA)
+Implementation Pipeline
+Stage 1: TF-IDF Vectorization with Bigram Support
+ESA uses richer feature representation including bigrams, capturing multi-word technical concepts:
+Parameter
+	LSA
+	ESA
+	  Rationale
+	
+
+	sublinear_tf
+	True
+	True
+	TF scaling for both
+	
+
+	max_df
+	0.95
+	0.90
+	ESA uses stricter filtering
+	
+
+	norm
+	'l2'
+	'l2'
+	L2 normalization
+	
+
+	ngram_range
+	(1,1)
+	(1,2)
+	ESA includes bigrams
+	
+
+	Key Difference: Bigrams capture multi-word technical phrases as atomic units, improving discriminative power for domain-specific terminology.
+Stage 2: Concept-Document Similarity Matrix
+Core ESA data structure: 
+C=M⋅M^T  (both L2-normalized) produces a sparse matrix where 
+Cij= cosine similarity between documents 
+Stage 3: Query Projection via Concept Activation
+Query's TF-IDF vector dotted with all concept vectors:
+activations=qtfidf⋅CT
+Stage 4: Pruning via argpartition
+Efficient concept selection using argpartition
+Stage 5: Document Ranking via Concept Overlap
+Final ranking via sparse matrix multiplication:
+doc_scores=C⋅aactive/∣∣aactive∣∣^2
+Bigrams are critical for ESA because:
+1. Technical multi-word concepts ("heat transfer," "shell buckling") are preserved as atomic units
+2. Bigrams reduce polysemy ("shell" as container vs. structural element)
+3. Aeronautics domain benefits from multi-word phrase recognition
+ESA excels when:
+1. Explicit semantic clusters: Relevant documents form coherent concept regions
+2. Multi-word terminology: Bigrams capture diagnostic technical phrases
+3. Narrow query focus: Well-defined concept region in document space
+4. Vocabulary sparsity: Query-document term overlap is minimal but conceptual proximity high
+ESA struggles when:
+1. Limited concept coverage: Document collection lacks sufficient concepts for rare topics
+2. Multi-domain queries: Spanning multiple sub-domains requires learned latent flexibility
+3. Concept space sparsity: 92% zeros in concept matrix limit ranking expressiveness
+4. Disjoint concept interactions: Few potential connections between query-activated concepts
+________________
+
+
+Comparative Analysis
+Key Findings:
+1. LSA >> ESA on overall performance (MAP: 0.3703 vs 0.3431)
+2. Hybrid best on MAP and nDCG, combining LSA strength with TF-IDF robustness
+3. LSA strengths: Maximum gains across most metrics
+4. ESA strengths: Occasional dramatic wins on specialized queries; interpretability advantage
+ Architectural Comparison
+Aspect
+	LSA
+	ESA
+	Semantic Paradigm
+	Latent topics (learned factorization)
+	Explicit concepts (document-concept)
+	Dimensionality
+	250 learned factors
+	1398 explicit documents as concepts
+	Feature Space
+	3,406 unigrams
+	81,756 unigrams + bigrams
+	Concept Selection
+	Automatic via SVD
+	Top-k pruning from 1398
+	Query Projection
+	q⋅Vk⋅Σk−1
+​
+	Similarity to 1398 concepts
+	Ranking
+	Latent similarity dot product
+	Concept overlap aggregation
+	Matrix Density
+	TF-IDF sparsity (~95%)
+	Document-concept 92% sparse
+	Interpretability
+	Low (abstract factors)
+	High (explicit concepts)
+	
+
+When to Use LSA:
+1. General-purpose semantic retrieval across diverse queries
+2. Need for computational efficiency (2× faster per query)
+3. Consistent performance required (wins on 63% of queries)
+4. Smaller memory footprint important
+5. Multi-faceted queries spanning multiple domains
+6. Best overall MAP performance (22.4% improvement) sought
+When to Use ESA:
+1. Explicit semantic interpretability required
+2. Specialized, narrowly-defined queries expected
+3. Domain-specific terminology heavy
+4. Multi-word phrases are diagnostic
+5. Occasional dramatic performance gains acceptable
+6. External semantic resources available (Wikipedia, domain corpora)
+________________
+
+
+Integration
+Hybrid System Architecture
+The best-performing configuration combines LSA with baseline TF-IDF:
+hybrid_score(q,d)=0.2⋅tfidf_score(q,d)+0.8⋅lsa_score(q,d)
+Rationale:
+* TF-IDF component (20%): Captures exact term matching, proper nouns, specific phrases
+* LSA component (80%): Captures semantic relationships and conceptual proximity
+* Balance: TF-IDF acts as "anchor" preventing pure semantic drift while LSA provides semantic power
+Performance:
+* Hybrid essentially matches LSA while providing additional robustness
+Known Limitations
+LSA Limitations:
+1. Static vocabulary: No out-of-vocabulary handling for new terms
+2. Linear assumptions: SVD assumes linear topic-term relationships
+3. Fixed dimensionality: 250 dimensions may insufficient for extremely fine-grained distinctions
+4. No ranking diversity: Returns semantically similar but redundant documents
+ESA Limitations:
+1. Concept space sparsity: 92% zero entries limit ranking expressiveness
+2. Concept adequacy: Performance bounded by document collection coverage
+3. Explicit representation: Cannot discover abstract relationships beyond document similarities
+4. Scalability: Full concept similarity computation doesn't scale to millions of documents
+Part VI: Conclusion
+We have implemented and comprehensively analyzed two complementary semantic retrieval paradigms for the Cranfield benchmark collection:
+Key Insights:
+1. Latent > Explicit: LSA's learned 250-dimensional topic space outperforms ESA's explicit 1398-document concept space, indicating that learned dimensionality reduction captures semantic structure more effectively than explicit document similarity.
+2. Query Type Matters: LSA dominates on broad, multi-faceted queries; ESA occasionally excels on narrow, terminology-specific queries.
+3. Feature Richness Trade-off: ESA's 24× larger feature set (81k vs 3.4k) provides occasional gains but adds computational cost without overall improvement.
+4. Hybrid Robustness: Combining LSA's semantic power with TF-IDF's lexical precision achieves best-in-class performance while remaining robust to diverse query characteristics.
+5. Domain Specificity: The aeronautics domain benefits significantly from semantic retrieval; 63% of queries improve with LSA, indicating strong latent semantic structure in technical literature.
+This comprehensive analysis provides a foundation for:
+* Understanding when latent vs. explicit semantic methods are appropriate
+* Selecting optimal methods for specific retrieval scenarios
+* Implementing production-grade semantic retrieval systems
+* Guiding future research in semantic information retrieval
+The detailed tuning methodology, systematic hyperparameter evaluation, and extensive query-level case studies enable practitioners to replicate and extend these results across other document collections and domains.
+
+
+
+
+
+
+sudheer
+Sudheer Methods: Word2Vec-based Semantic Retrieval
+Goal
+* Improve baseline TF-IDF + cosine similarity
+* Target limitation: exact keyword matching
+* Try to handle semantically related words, synonyms, and wording mismatch between query and document
+Methods used
+1. word2vec_average
+2. word2vec_idf_weighted
+3. soft_cosine_word2vec
+1. Word2Vec Average
+* Train Word2Vec on Cranfield documents
+* Represent each document and query by averaging all word embeddings
+* Rank using cosine similarity between dense vectors
+What it tries to solve
+* Reduces dependence on exact word overlap
+* Can retrieve semantically similar content even if wording changes
+Limitations
+* Entire query/document becomes one vector
+* Important rare terms may get diluted
+* No phrase order or local context
+Pros
+* Simple method
+* Easy to explain
+* Basic semantic retrieval baseline
+Cons
+* Weakest among the three methods
+* Loses detailed term information
+* Performs below TF-IDF baseline
+2. Word2Vec IDF-Weighted
+* Train Word2Vec on Cranfield documents
+* Weight each word vector using TF-IDF importance before averaging
+* Rank using cosine similarity
+What it tries to solve
+* Gives more importance to rare and meaningful technical terms
+* Improves over plain averaging
+Limitations
+* Still compresses everything into one vector
+* Still loses phrase structure and token order
+Pros
+* Better than plain Word2Vec Average
+* Preserves important terms better
+* Stronger dense retrieval method
+Cons
+* Still below TF-IDF baseline
+* Semantic gain is limited by single-vector representation
+* Allows semantic term matching
+* Best balance of lexical and semantic retrieval
+3. Soft Cosine with Word2Vec
+What this does
+* Keeps the normal TF-IDF representation for queries and documents
+* Uses Word2Vec to measure similarity between terms
+* Uses soft cosine so related words can partially match, not only exact same words
+Formula
+* Baseline cosine: cos(q,d) = (q.d) / (|q||d|)
+* Soft cosine: soft(q,d) = (q^T S d) / sqrt((q^T S q)(d^T S d))
+* Here S is the term similarity matrix built using Word2Vec
+What this tries to solve
+* Reduces exact keyword matching problem in TF-IDF
+* Helps when query and document use different but related words
+* Adds semantic matching without removing TF-IDF structure
+Limitations addressed
+* Lack of semantic understanding in plain TF-IDF
+* Poor handling of synonyms or related technical terms
+* Failure of exact-match retrieval when wording changes
+Why it is the best among these three
+* word2vec_average and word2vec_idf_weighted convert the whole text into one dense vector
+* That can lose important term-level details
+* Soft cosine keeps term-level TF-IDF information and adds semantic similarity
+* So it gives the best balance between lexical and semantic retrieval
+Pros
+* Best method among Sudheer’s three methods
+* Keeps TF-IDF interpretability
+* Allows partial matching of related words
+* Better balance of lexical and semantic retrieval
+Cons
+* Higher runtime
+* Needs tuning of neighbor count and similarity threshold
+* Too many neighbors can add noisy matches
+* Still slightly below baseline TF-IDF overall
+Short conclusion
+* Best semantic method in Sudheer’s folder
+* Most practical hybrid method among the three
+* Good improvement over strict exact-match retrieval
+—-------------------------------------------------------------------------------------------------------------------------------
+Results at k = 10
+* word2vec_average
+   * P@10 = 0.2298
+   * R@10 = 0.3333
+   * MAP@10 = 0.2230
+   * nDCG@10 = 0.3649
+   * MRR@10 = 0.6127
+   * Runtime = 98.69 s
+* word2vec_idf_weighted
+   * P@10 = 0.2484
+   * R@10 = 0.3715
+   * MAP@10 = 0.2624
+   * nDCG@10 = 0.4084
+   * MRR@10 = 0.6723
+   * Runtime = 93.08 s
+* soft_cosine_word2vec
+   * P@10 = 0.2756
+   * R@10 = 0.3990
+   * MAP@10 = 0.2917
+   * nDCG@10 = 0.4372
+   * MRR@10 = 0.7018
+   * Runtime = 211.45 s
+* baseline_tfidf
+   * P@10 = 0.2831
+   * R@10 = 0.4094
+   * MAP@10 = 0.3061
+   * nDCG@10 = 0.4611
+   * MRR@10 = 0.7461
+Final comparison
+1. Best among Sudheer methods: soft_cosine_word2vec
+2. Next: word2vec_idf_weighted
+3. Last: word2vec_average
+4. Overall best: baseline_tfidf
+Final conclusion
+* Word2Vec methods improved semantic understanding
+* word2vec_idf_weighted improved over plain averaging
+* soft_cosine_word2vec gave the best semantic performance
+* But baseline TF-IDF still performed best overall on Cranfield because exact technical term matching is very important here
+
+
+Hypothesis Query Analysis
+Checked 90-119 queries
+
+
+Query 153 and oov_c8 are not good queries
+
+
+To check oov , oov_c5,oov_c6,oov_c7 are good
+
+
+Lack of semantic understanding:
+1. 155, 156 are not good (direct key word matches to the relevant docs)
+
+
+High dimensionality:
+1. This task queries just need to have high no of words and unique token usage, so that it can measure the computational cost effectively, based on memory and time.
+
+
+
+
+The incorrect entries are 46, 55, and scale_c7 for the following reasons:
+* Queries 46 and 55: These are not effective computational cost queries because they remain too focused. They lack the large volume of words and unique terms required to genuinely test memory usage and processing limits.
+* Query scale_c7: This is a weak example of poor scalability because it is too narrow. It does not span a large enough relevant document set to clearly demonstrate a scalability problem.
+
+
+
+
+Remove these queries:
+* 153
+Not a strong OOV query. It is a normal technical query and does not clearly show an out-of-vocabulary limitation.
+* 209
+Not a strong ambiguity query. The meaning is already fairly clear from the full query.
+* oov_c8
+Weak OOV custom query. It is not a very natural or strong refined query for demonstrating the OOV limitation.
+Optional remove if needed:
+   * 154
+Borderline case. It is specialized, but not a very strong OOV example.
+
+
+
+
+Tab 6
