@@ -1,0 +1,163 @@
+\section*{Project Report Draft: Improving Cranfield IR with Lexical and Semantic Retrieval}
+
+% --------------------------------------------------
+% Abstract
+% --------------------------------------------------
+\begin{abstract}
+This project investigates whether semantic and context-aware retrieval methods can improve a baseline Cranfield information retrieval system. We evaluate a family of lexical, latent, explicit, and embedding-based methods, including TF--IDF, BM25, n-gram retrieval, unordered local-context bag-of-words, query reduction, LSA, ESA, WordNet-based expansion, and Word2Vec-based similarity. The experiments show that the strongest gains come from context-aware lexical enrichment, while purely semantic models help in selected queries but do not consistently surpass the best lexical baseline. In particular, unordered local-context bag-of-words improves over unigram TF--IDF on MAP@10, nDCG@10, and MRR@10, whereas aggressive query reduction and dense semantic projection can sometimes remove useful technical signal. Overall, the results suggest that on Cranfield, retrieval quality is governed more by precise technical term matching than by semantic abstraction alone.
+\end{abstract}
+
+% --------------------------------------------------
+% 1. Introduction
+% --------------------------------------------------
+\section{Introduction}
+The Cranfield collection is a compact but technically demanding benchmark for information retrieval. Queries are short, domain-specific, and often rely on exact terminology, phrase structure, and local context. This makes the dataset useful for testing whether semantic retrieval methods actually improve ranking quality or merely shift scores without improving relevance.
+
+The core question addressed in this project is the following: \emph{given a lexical baseline, which extensions genuinely improve retrieval on Cranfield, and under what assumptions do they help?} We evaluate this question through a series of controlled experiments that compare lexical, latent, explicit, and embedding-based methods under the same evaluation protocol.
+
+\subsection{Research Hypothesis}
+We hypothesize that a method A improves over a method B when A better preserves technical term specificity while still recovering semantically related documents. In this setting, we expect context-aware lexical methods and carefully weighted hybrids to outperform purely dense semantic compression.
+
+% --------------------------------------------------
+% 2. Dataset and Experimental Setting
+% --------------------------------------------------
+\section{Dataset and Experimental Setting}
+We use the Cranfield collection for evaluation. The corpus contains 1,400 aeronautics documents and 225 queries with graded relevance labels. All methods are evaluated using the same query set and relevance judgments.
+
+\subsection{Preprocessing}
+All methods share a common preprocessing pipeline: lowercasing, tokenization, stopword removal, and normalization. Where applicable, we also apply lemmatization and n-gram extraction. This ensures that performance differences are attributable to the retrieval model rather than inconsistent preprocessing.
+
+\subsection{Evaluation Protocol}
+We report Precision@10, Recall@10, F0.5@10, MAP@10, nDCG@10, and MRR@10. The project also tracks runtime to compare the computational cost of different retrieval families. For query-level analysis, we inspect where a method improves or fails on individual Cranfield queries.
+
+% --------------------------------------------------
+% 3. Baseline System
+% --------------------------------------------------
+\section{Baseline System}
+The baseline is unigram TF--IDF with cosine similarity. This system is attractive because it is simple, interpretable, and efficient. However, its main limitation is that it treats terms as independent dimensions and does not model local context or semantic proximity.
+
+In our experiments, the baseline remains a strong performance floor. This is an important finding: on Cranfield, exact technical vocabulary is often highly predictive of relevance, so a strong lexical baseline is difficult to beat.
+
+% --------------------------------------------------
+% 4. Proposed Methods
+% --------------------------------------------------
+\section{Proposed Methods}
+We organize the project into four stages: lexical backbones, semantic backbones, query-side enrichment, and hybrid retrieval.
+
+\subsection{4.1 Lexical Backbones: TF--IDF, n-grams, and BM25}
+We first extend the baseline with n-gram features and BM25.
+
+\paragraph{n-gram retrieval.}
+Word n-grams capture phrases that unigram TF--IDF cannot represent directly. This is useful when relevance depends on technical expressions such as multi-word compounds. The hypothesis is that n-grams improve over unigram TF--IDF when phrase integrity matters.
+
+\paragraph{BM25.}
+BM25 is a stronger lexical ranking function than plain TF--IDF because it uses saturation and length normalization more explicitly. In our setting, BM25 is treated as the strongest classical lexical baseline.
+
+\subsection{4.2 Context-Aware Lexical Retrieval}
+We implement unordered local-context bag-of-words. This method augments the baseline representation with nearby-word co-occurrence features, while ignoring exact order inside the local window.
+
+The central assumption is that relevant documents often place diagnostic words near each other, even when the global bag of words is similar across many documents. This method is especially valuable for ambiguous technical queries, where surrounding context can disambiguate a term.
+
+\subsection{4.3 Query Reduction}
+We also test query reduction, including IDF top-k and PRF-based pruning. The idea is to remove less informative query terms before retrieval.
+
+Our results show that query reduction is useful only when the original query contains genuine noise. On Cranfield, many seemingly weak terms are actually domain-specific clues, so aggressive pruning can remove signal along with noise.
+
+\subsection{4.4 Latent and Explicit Semantic Retrieval}
+We evaluate LSA and ESA as alternative semantic backbones.
+
+\paragraph{LSA.}
+LSA projects TF--IDF vectors into a low-dimensional latent space using truncated SVD. This can reduce sparsity and recover broad semantic similarity.
+
+\paragraph{ESA.}
+ESA represents a query in an explicit concept space built from document-level similarities. This representation is more interpretable than LSA, but it can be sparse and limited by concept coverage.
+
+\subsection{4.5 WordNet and Word2Vec Based Expansion}
+We use WordNet-based and Word2Vec-based query expansion to address synonymy and vocabulary mismatch. The common idea is to expand a query only when the additional neighbors are sufficiently reliable, so expansion does not overpower the original query terms.
+
+\subsection{4.6 Soft Cosine and Word2Vec Retrieval}
+We also test Word2Vec-based document/query similarity, including average embeddings, IDF-weighted embeddings, and soft-cosine-style matching. The motivation is to allow related terms to partially match rather than requiring exact overlap.
+
+\subsection{4.7 Hybrid Retrieval}
+Finally, we combine lexical and semantic scores. The main hybrid principle is that lexical matching preserves technical specificity, while semantic components reduce brittleness when wording differs.
+
+% --------------------------------------------------
+% 5. Results and Comparative Analysis
+% --------------------------------------------------
+\section{Results and Comparative Analysis}
+The experiments support a clear ranking of methods.
+
+\subsection{4.1 Context-aware lexical methods outperform the plain baseline}
+Among the lexical extensions, unordered local-context bag-of-words is the strongest overall method. It improves over unigram TF--IDF on all major metrics at $k=10$, including Precision, Recall, MAP, nDCG, and MRR. This indicates that local proximity information is valuable for Cranfield, especially when documents contain the right terms but not the right nearby context.
+
+\subsection{4.2 Query reduction is only marginally helpful}
+The best query-reduction variant slightly improves over the baseline on MAP@10, nDCG@10, and MRR@10, but the gains are very small. This suggests that in technical retrieval, query terms that appear redundant may still encode important distinctions. In other words, the assumption that shorter queries are always cleaner is not valid for Cranfield.
+
+\subsection{4.3 LSA helps, but does not dominate the lexical baseline}
+LSA improves semantic smoothness, but its gains are modest. The best LSA configuration is competitive, yet it does not consistently beat the baseline across all metrics. This indicates that latent abstraction helps when lexical overlap is weak, but it may also blur the fine-grained distinctions that technical queries require.
+
+\subsection{4.4 ESA is interpretable but sparse}
+ESA offers explicit concept matching and better interpretability, but its sparse concept space limits ranking expressiveness. In our experiments, ESA is useful on selected queries, but the overall gains are not enough to surpass the stronger lexical methods.
+
+\subsection{4.5 Word2Vec improves semantic matching, but not enough to overtake TF--IDF}
+Among the Word2Vec-based approaches, IDF-weighted averaging performs better than plain averaging, and soft cosine performs best among the Word2Vec variants. However, baseline TF--IDF still remains superior overall. This means that semantic similarity helps, but exact matching remains crucial in Cranfield's technical domain.
+
+\subsection{4.6 BM25 and n-grams provide the strongest lexical story}
+BM25 and n-gram retrieval are natural upgrades because they preserve the lexical evidence that matters in Cranfield while making the scoring function or representation more robust. In the final interpretation, the best overall systems are not the most abstract ones; they are the ones that preserve exact technical content while adding just enough context to avoid brittle matches.
+
+% --------------------------------------------------
+% 6. Discussion in Research Style
+% --------------------------------------------------
+\section{Discussion}
+The main experimental pattern can be stated in the form expected by the project brief:
+
+\begin{quote}
+On the Cranfield dataset, context-aware lexical retrieval outperforms pure query pruning and pure dense semantic compression with respect to MAP@10, nDCG@10, and MRR@10, under the assumption that technical relevance is primarily encoded through local term co-occurrence and exact phrase structure.
+\end{quote}
+
+A second finding is that semantic methods are not useless; rather, they are best interpreted as complementary to lexical retrieval. LSA and Word2Vec help when query wording differs from document wording, but they can underperform when the query depends on exact technical terminology. ESA provides interpretability, but its sparse explicit concept representation can limit performance. Query reduction is beneficial only when noisy terms truly exist, which is not always the case in Cranfield.
+
+The strongest overall conclusion is therefore not that one semantic method universally dominates the others, but that the best retrieval system is a controlled hybrid: preserve lexical precision, add local context, and use semantic expansion only when it improves recall without diluting domain-specific meaning.
+
+% --------------------------------------------------
+% 7. Conclusion
+% --------------------------------------------------
+\section{Conclusion}
+This project shows that Cranfield retrieval is dominated by a lexical-semantic trade-off. Pure lexical TF--IDF is strong, but it misses context. Pure semantic compression captures broad similarity, but it can blur technical distinctions. The best performance comes from methods that preserve lexical evidence while adding context-aware enrichment.
+
+In summary, unordered local-context bag-of-words is the strongest method among the tested extensions, query reduction offers only marginal improvement, and dense semantic methods such as LSA, ESA, and Word2Vec are useful but not sufficient to outperform the best lexical baseline on this dataset. This supports the final claim that, in Cranfield, algorithm A outperforms algorithm B only when A improves contextual matching without sacrificing technical specificity.
+
+% --------------------------------------------------
+% 8. Suggested Table Placeholder
+% --------------------------------------------------
+\section*{Suggested Results Table Placeholder}
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccccc}
+\hline
+Method & P@10 & R@10 & F@10 & MAP@10 & nDCG@10 & MRR@10 \
+\hline
+TF--IDF baseline & -- & -- & -- & -- & -- & -- \
+BM25 & -- & -- & -- & -- & -- & -- \
+n-gram & -- & -- & -- & -- & -- & -- \
+Unordered local-context BoW & -- & -- & -- & -- & -- & -- \
+Query reduction & -- & -- & -- & -- & -- & -- \
+LSA & -- & -- & -- & -- & -- & -- \
+ESA & -- & -- & -- & -- & -- & -- \
+Word2Vec soft cosine & -- & -- & -- & -- & -- & -- \
+Hybrid final system & -- & -- & -- & -- & -- & -- \
+\hline
+\end{tabular}
+\caption{Main k=10 results for the project report.}
+\end{table}
+
+% --------------------------------------------------
+% 9. Suggested phrasing for report prose
+% --------------------------------------------------
+\section*{Suggested phrasing for claims}
+\begin{itemize}
+\item `Method A outperforms Method B on MAP@10, indicating better ranking of relevant documents beyond the top result.''
+    \item `Method A improves nDCG@10, showing that it places relevant documents higher in the ranked list.''
+\item `Method A is more robust than Method B under query paraphrase, but weaker when exact technical terminology is absent.''
+    \item `The hybrid method combines the precision of lexical matching with the recall benefits of semantic expansion.''
+\end{itemize}
