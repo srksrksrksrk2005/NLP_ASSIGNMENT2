@@ -346,3 +346,704 @@ This gives you one clean narrative:
 - `WMD`: Kusner et al., "From Word Embeddings to Document Distances" (ICML 2015)
 - `BM25`: Robertson and Zaragoza, "The Probabilistic Relevance Framework: BM25 and Beyond" (2009)
 - `Soft Cosine`: Sidorov et al., "Soft Similarity and Soft Cosine Measure" (2014)
+
+
+
+# Query Expansion Experiment Report
+
+## What Was Fixed
+
+1. Added a true non-expanded TF-IDF baseline (`baseline_tfidf`) for correct comparison.
+2. Kept retrieval model fixed to base TF-IDF document index; expansion is applied only to queries.
+3. Added distribution-aware, method-specific min similarity floors derived from each method's score distribution.
+4. Added adaptive similarity thresholding using mean and quantile filtering on top of the method-specific floor.
+5. Added normalized neighbor mass allocation so expansion does not overpower original query terms.
+6. Added method-vs-baseline plots and full overlay plots.
+7. Added explicit example-case comparisons for the report query set.
+8. Added persistent WordNet graph caching on disk for faster reruns.
+
+## Run Configuration
+
+- Dataset: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/cranfield
+- Methods: baseline_tfidf, embedding_lsa
+- top_k_neighbors: 15
+- base_min_similarity_floor: 0.03
+- method_threshold_quantile: 0.45
+- self_weight: 1.0
+- expansion_weight: 0.25
+- replacement_weight: 0.9
+- replacement_expansion_weight: 0.2
+- adaptive_mean_similarity_threshold: True
+- mean_similarity_factor: 0.85
+- normalize_neighbor_mass: True
+- similarity_power: 1.15
+
+## LSA Dimension Sweep
+
+The LSA-only sweep kept the same tuned expansion settings and varied only `lsa_components` across 32, 64, 96, 128, and 160.
+
+| Components | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 32 | 0.2791 | 0.3957 | 0.3033 | 0.3026 | 0.4522 | 0.7441 |
+| 64 | 0.2756 | 0.3927 | 0.3001 | 0.2986 | 0.4482 | 0.7384 |
+| 96 | 0.2796 | 0.3993 | 0.3048 | 0.3022 | 0.4514 | 0.7375 |
+| 128 | 0.2787 | 0.3982 | 0.3040 | 0.3015 | 0.4507 | 0.7365 |
+| 160 | 0.2764 | 0.3959 | 0.3020 | 0.3012 | 0.4489 | 0.7305 |
+
+32 components was the best LSA setting on MAP@10 and MRR@10, while 96 components was the best on precision, recall, and F-score. The strongest LSA MAP@10 only slightly beat the non-expanded baseline, so the sweep confirmed that LSA helps, but not enough to overtake the better baseline result across the board.
+
+## Dynamic Min Similarity by Method
+
+| Method | Base Floor | Derived Floor | Score Count | Mean | Std | Median | Q45 | Max |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| embedding_lsa | 0.0300 | 0.6646 | 119760 | 0.7169 | 0.1933 | 0.6922 | 0.6646 | 1.0000 |
+
+## k=10 Scores
+
+| Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_tfidf | 0.2813 | 0.4005 | 0.3059 | 0.3024 | 0.4546 | 0.7379 |
+| embedding_lsa | 0.2764 | 0.3959 | 0.3020 | 0.3012 | 0.4489 | 0.7305 |
+
+## Delta vs Baseline (k=10)
+
+| Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| embedding_lsa | -0.0049 | -0.0046 | -0.0039 | -0.0012 | -0.0057 | -0.0074 |
+
+## Best Method Per Metric at k=10
+
+- precision: baseline_tfidf (0.2813)
+- recall: baseline_tfidf (0.4005)
+- fscore: baseline_tfidf (0.3059)
+- map: baseline_tfidf (0.3024)
+- ndcg: baseline_tfidf (0.4546)
+- mrr: baseline_tfidf (0.7379)
+
+## Example Cases Summary
+
+### Dataset Query Cases
+
+| Query ID | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |
+| --- | ---: | --- | ---: | ---: |
+| 9 | 1 | baseline_tfidf | 1 | +0 |
+| 39 | 2 | baseline_tfidf | 2 | +0 |
+| 40 | 2 | baseline_tfidf | 2 | +0 |
+| 51 | 4 | baseline_tfidf | 4 | +0 |
+| 64 | 2 | baseline_tfidf | 2 | +0 |
+| 81 | 1 | baseline_tfidf | 1 | +0 |
+| 90 | 2 | embedding_lsa | 3 | +1 |
+
+### Custom Query Cases
+
+| Case | Mapped Query | Baseline Hits@5 | Best Method | Best Hits@5 | Delta |
+| --- | --- | ---: | --- | ---: | ---: |
+| slip-flow heat transfer in internal channels | 9 | 1 | baseline_tfidf | 1 | +0 |
+| transition detection in hypersonic wakes behind slender bodies | 40 | 2 | baseline_tfidf | 2 | +0 |
+| replace vibrational shapes with static deflection shapes for flutter prediction | 64 | 1 | baseline_tfidf | 1 | +0 |
+| shock-induced boundary-layer separation | 90 | 2 | embedding_lsa | 3 | +1 |
+| what corrections are needed for a liftbody in a propwash flowfield inside a test duct | 81 | 0 | baseline_tfidf | 0 | +0 |
+
+## Limitation-Solving Score Table (updated)
+
+| Method | Semantic | Dim/Cost | Scale | Ambiguity | OOV | Context | Sparse |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_tfidf | 2/10 | 6/10 | 6/10 | 2/10 | 1/10 | 2/10 | 2/10 |
+| wordnet | 8/10 | 3/10 | 3/10 | 7/10 | 8/10 | 5/10 | 3/10 |
+| embedding_tfidf | 4/10 | 6/10 | 6/10 | 3/10 | 2/10 | 3/10 | 3/10 |
+| embedding_lsa | 5/10 | 5/10 | 5/10 | 4/10 | 2/10 | 4/10 | 7/10 |
+| embedding_esa | 6/10 | 4/10 | 5/10 | 4/10 | 3/10 | 4/10 | 7/10 |
+| embedding_word2vec | 7/10 | 5/10 | 5/10 | 5/10 | 4/10 | 5/10 | 5/10 |
+
+## Output Files
+
+- Summary JSON: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/summary.json
+- Summary CSV: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/summary_k10.csv
+- Overlay plot: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/eval_overlay.png
+- Example comparison markdown: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/example_query_comparison.md
+- Example comparison json: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/example_query_comparison.json
+
+
+
+# Merging Pipeline - Implementation Summary
+
+## Project Structure
+
+```
+merging/
+├── Main Scripts
+│   ├── main.py                          # Main orchestration (links all blocks)
+│   ├── block1_query_processing.py       # Block 1: Query expansion & reduction
+│   ├── blocks23_retrieval_ranking.py    # Blocks 2 & 3: Retrieval & ranking
+│   ├── run_experiments.py               # Experiment runner with grid search
+│   ├── validate.py                      # Validation/testing script
+│   └── quickstart.bat                   # Quick-start menu (Windows)
+│
+├── Utilities (utils/)
+│   ├── __init__.py
+│   ├── logger.py                        # WandB-compatible logging
+│   ├── data_loader.py                   # Dataset loading and management
+│   └── preprocessing.py                 # Text preprocessing utilities
+│
+├── Configuration (configs/)
+│   ├── default_config.json              # Default configuration template
+│   ├── lsa_lsa_config.json              # LSA expansion + LSA ranking preset
+│   └── wordnet_esa_config.json          # WordNet expansion + ESA ranking preset
+│
+├── Output (output/)
+│   └── [Generated during runs]
+│       ├── results.json                 # Complete results with metrics
+│       ├── metrics_plot.png             # Metrics visualization
+│       ├── config.json                  # Saved config for reproducibility
+│       ├── pipeline_*.log               # Execution logs
+│       └── grid_search_summary_*.json   # Grid search results
+│
+├── Dependencies & Docs
+│   ├── README.md                        # Full documentation
+│   ├── requirements.txt                 # Python package requirements
+│   └── IMPLEMENTATION_SUMMARY.md        # This file
+```
+
+## What Was Implemented
+
+### Block 1: Query Processing (block1_query_processing.py)
+
+**Functionality:**
+- Query expansion modes: none, LSA, ESA, WordNet, Word2Vec, TF-IDF
+- Query reduction: enabled/disabled with configurable parameters
+- IDF-weighted query vectorization
+- Batch processing support
+- Outputs: numpy arrays (IDF-weighted vectors) or token lists
+
+**Key Classes:**
+- `QueryProcessor`: Main class handling all query processing operations
+
+**Features:**
+- Lazy loading of models (LSA, TF-IDF, etc.)
+- Flexible preprocessing pipeline
+- Configurable keyword extraction for reduction
+- Supports both single queries and batch processing
+
+**Usage:**
+```python
+processor = QueryProcessor(config)
+query_vector = processor.process_query("information retrieval")
+batch_vectors = processor.process_batch(queries, docs_tokens)
+```
+
+### Blocks 2 & 3: Retrieval & Ranking (blocks23_retrieval_ranking.py)
+
+**Functionality:**
+- Block 2 Retrieval types: TF-IDF, N-gram, Local Bag-of-Words
+- Block 3 Ranking types: TF-IDF, LSA, ESA
+- Integrated single pipeline for efficiency
+- Document indexing and ranking with scores
+
+**Key Classes:**
+- `RetrievalRankingPipeline`: Combined retrieval and ranking
+
+**Features:**
+- Modular design: easily switch between retrieval and ranking methods
+- Sparse and dense matrix handling
+- Concept-based (ESA) and latent (LSA) ranking methods
+- Returns ranked documents with similarity scores
+
+**Usage:**
+```python
+pipeline = RetrievalRankingPipeline(config)
+pipeline.build_retrieval_index(docs, doc_ids)
+rankings = pipeline.rank(query_vectors)
+```
+
+### Main Orchestration Script (main.py)
+
+**Functionality:**
+- Ties all three blocks together
+- Handles data loading and preprocessing
+- Performs IR evaluation (Precision, Recall, MAP, NDCG, MRR)
+- Generates visualizations
+- Integrates with WandB for experiment tracking
+
+**Key Features:**
+- Complete end-to-end pipeline
+- Automatic metric calculation
+- Plot generation with matplotlib
+- JSON output for reproducibility
+- Command-line interface for easy parameter tuning
+
+**Evaluation Metrics:**
+- Precision@10, Recall@10, F-score@10
+- MAP@10 (Mean Average Precision)
+- NDCG@10 (Normalized Discounted Cumulative Gain)
+- MRR@10 (Mean Reciprocal Rank)
+
+### Utilities Module (utils/)
+
+**Logger (logger.py):**
+- PipelineLogger class with WandB integration
+- Structured logging to file and console
+- Metrics tracking and artifact logging
+- Compatible with WandB dashboards
+
+**Data Loader (data_loader.py):**
+- DataLoader class for managing datasets
+- JSON-based data loading
+- Results saving/loading functionality
+- Handles Cranfield dataset format
+
+**Preprocessing (preprocessing.py):**
+- TextPreprocessor for standardized text processing
+- Supports: tokenization, lowercasing, stopword removal, stemming, lemmatization
+- Batch processing capabilities
+- NLTK-based implementation
+
+### Experiment Runner (run_experiments.py)
+
+**Functionality:**
+- Single experiment runner
+- Grid search over multiple combinations
+- Systematic testing of all block combinations
+- Results aggregation and summary generation
+
+**Features:**
+- Easy parameter specification
+- Automatic execution of multiple configurations
+- Success/failure tracking
+- Summary statistics with success rates
+- JSON export of results
+
+### Validation Script (validate.py)
+
+**Tests:**
+1. Import testing (all required packages)
+2. Utility modules loading
+3. Block 1 functionality
+4. Blocks 2 & 3 functionality
+5. Configuration validation
+6. Data loading (if available)
+
+**Purpose:** Verify the entire pipeline is correctly installed and functional
+
+## Configuration System
+
+### Config Structure
+
+Each config file contains:
+
+```json
+{
+  "block1_query_processing": {
+    "expansion_mode": "none|lsa|esa|wordnet|word2vec|tfidf",
+    "reduction_enabled": true|false,
+    "expansion_params": { /* mode-specific params */ }
+  },
+  "block2_retrieval_mode": {
+    "retrieval_type": "tfidf|ngram|local_bow",
+    "retrieval_params": { /* retrieval-specific params */ }
+  },
+  "block3_ranking_mode": {
+    "ranking_type": "tfidf|lsa|esa",
+    "ranking_params": { /* ranking-specific params */ }
+  },
+  "dataset": { /* dataset paths */ },
+  "output": { /* output directory and options */ },
+  "logging": { /* logging and WandB settings */ }
+}
+```
+
+### Pre-configured Presets
+
+1. **default_config.json**: Basic configuration template
+2. **lsa_lsa_config.json**: LSA expansion + LSA ranking
+3. **wordnet_esa_config.json**: WordNet expansion + ESA ranking
+
+## WandB Integration
+
+### Features
+- Automatic configuration logging
+- Metrics tracking and visualization
+- Artifact saving (results, plots)
+- Experiment comparison dashboard
+
+### Enabling WandB
+```bash
+# Command line
+python main.py --wandb
+
+# Or in config:
+# "logging": { "use_wandb": true, "wandb_project": "nlp-merging" }
+```
+
+## Usage Examples
+
+### Quick Start
+```bash
+# Using the quick-start menu (Windows)
+quickstart.bat
+
+# Or directly with Python
+python main.py
+```
+
+### Command Line Examples
+```bash
+# Baseline (TF-IDF for all blocks)
+python main.py --block1-mode none --block2-retrieval tfidf --block3-ranking tfidf
+
+# LSA-based pipeline
+python main.py --block1-mode lsa --block3-ranking lsa
+
+# WordNet expansion + ESA ranking
+python main.py --block1-mode wordnet --block3-ranking esa
+
+# With query reduction
+python main.py --block1-reduce --block3-ranking lsa
+
+# Custom config file
+python main.py --config configs/lsa_lsa_config.json
+
+# With WandB logging
+python main.py --wandb
+```
+
+### Grid Search Examples
+```bash
+# Grid search with all defaults
+python run_experiments.py --mode grid
+
+# Grid search with specific blocks
+python run_experiments.py --mode grid \
+  --grid-block1 none lsa wordnet \
+  --grid-block2 tfidf ngram \
+  --grid-block3 lsa esa
+
+# Include reduction in grid search
+python run_experiments.py --mode grid --grid-reduce
+```
+
+### Testing & Validation
+```bash
+# Validate entire installation
+python validate.py
+
+# Run single Block 1 query
+python block1_query_processing.py --query "your query" --mode lsa
+```
+
+## Supported Method Combinations
+
+### Query Expansion Modes
+- **none**: Basic tokenization only
+- **lsa**: Latent Semantic Analysis-based expansion
+- **esa**: Explicit Semantic Analysis (document similarity-based)
+- **wordnet**: WordNet synonym expansion
+- **word2vec**: Word embeddings (framework provided)
+- **tfidf**: TF-IDF weighted term expansion
+
+### Retrieval Methods (Block 2)
+- **tfidf**: Standard TF-IDF with cosine similarity
+- **ngram**: Character/word n-gram based retrieval
+- **local_bow**: Windowed bag-of-words representation
+
+### Ranking Methods (Block 3)
+- **tfidf**: TF-IDF cosine similarity ranking
+- **lsa**: Latent Semantic Analysis ranking
+- **esa**: Explicit Semantic Analysis ranking
+
+### Total Combinations
+- 6 query expansion modes × 2 retrieval methods × 3 ranking methods = **36 combinations**
+- With optional query reduction: **72 total configurations**
+
+## Output Files
+
+All outputs are saved in the configured `output_dir`:
+
+### results.json
+```json
+{
+  "config": { /* full configuration used */ },
+  "metrics": {
+    "precision@10": 0.45,
+    "recall@10": 0.32,
+    "map@10": 0.38,
+    "ndcg@10": 0.42,
+    "mrr@10": 0.65
+  },
+  "rankings": {
+    "query_id": ["doc1", "doc2", ...],
+    ...
+  },
+  "timestamp": "2024-01-15T10:30:45"
+}
+```
+
+### Visualization Files
+- `metrics_plot.png`: Bar chart of IR metrics
+- `config.json`: Saved configuration for reproducibility
+
+### Log Files
+- `pipeline_YYYYMMDD_HHMMSS.log`: Detailed execution log
+
+### Grid Search Results
+- `grid_search_summary_YYYYMMDD_HHMMSS.json`: Summary of all grid search runs
+
+## Key Features
+
+✓ **Modular Design**: Easily switch between different methods in each block
+✓ **Batch Processing**: Process multiple queries efficiently
+✓ **Comprehensive Evaluation**: Standard IR metrics (P@10, R@10, MAP, NDCG, MRR)
+✓ **WandB Integration**: Track experiments and compare results
+✓ **Configuration-Based**: All settings in JSON config files
+✓ **Reproducibility**: Save configs and results for easy reproduction
+✓ **Grid Search**: Automatically test multiple configurations
+✓ **Extensible**: Easy to add new query expansion, retrieval, or ranking methods
+✓ **Logging**: Detailed logging with file and console output
+✓ **Visualization**: Automatic plot generation
+
+## Performance Characteristics
+
+- **TF-IDF**: Fastest (~seconds for full pipeline)
+- **N-gram**: Slower than TF-IDF (~seconds)
+- **LSA**: Slower than TF-IDF, captures latent semantics (~seconds)
+- **ESA**: Slowest, concept-based ranking (~seconds for moderate corpus)
+- **WordNet expansion**: Memory-intensive for large vocabularies
+- **Query reduction**: Minimal overhead (~milliseconds)
+
+## Extensibility Points
+
+To add new methods:
+
+1. **New Query Expansion Mode**: Add method to `QueryProcessor` class
+2. **New Retrieval Type**: Add method to `RetrievalRankingPipeline` class
+3. **New Ranking Type**: Add ranking method to `RetrievalRankingPipeline` class
+4. **Custom Evaluation**: Extend `evaluate_rankings` in `main.py`
+5. **New Preprocessing**: Extend `TextPreprocessor` in `utils/preprocessing.py`
+
+## System Requirements
+
+- Python 3.7+
+- scikit-learn >= 0.24.0
+- numpy >= 1.20.0
+- nltk >= 3.6.0
+- matplotlib >= 3.4.0
+- scipy >= 1.7.0
+- wandb >= 0.12.0 (optional)
+
+## Installation
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Download NLTK data
+python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+
+# Validate installation
+python validate.py
+```
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| Config not found | Check path with `--config` flag |
+| Dataset not found | Update dataset path in config |
+| ImportError | Run `pip install -r requirements.txt` |
+| NLTK data missing | Run NLTK download commands |
+| WandB issues | Install with `pip install wandb` or set `use_wandb: false` |
+
+## Next Steps
+
+1. **Run validation**: `python validate.py`
+2. **Try quickstart**: `python main.py` or `quickstart.bat`
+3. **Explore configs**: Check `configs/` for different presets
+4. **Run experiments**: `python run_experiments.py --mode grid`
+5. **Check results**: Look in `output/` directory
+
+## File Checksums
+
+| File | Purpose | Lines |
+|------|---------|-------|
+| block1_query_processing.py | Query processing | ~300 |
+| blocks23_retrieval_ranking.py | Retrieval & ranking | ~350 |
+| main.py | Main orchestration | ~250 |
+| utils/logger.py | Logging utilities | ~100 |
+| utils/data_loader.py | Data management | ~70 |
+| utils/preprocessing.py | Text preprocessing | ~120 |
+| run_experiments.py | Experiment runner | ~200 |
+| validate.py | Validation tests | ~200 |
+
+**Total: ~1500 lines of code**
+
+---
+
+## Support & Documentation
+
+- **Main README**: See `README.md` for detailed usage guide
+- **Config Templates**: Check `configs/` directory
+- **Validation**: Run `python validate.py` to verify setup
+- **Examples**: Use `quickstart.bat` for interactive menu
+
+---
+
+Created: 2024
+Part of: NLP Assignment 2 - Information Retrieval Method Merging
+# Query Reduction Experiment Report
+
+## Method Summary
+
+Query reduction removes noisy or overly broad terms before ranking. This is a lightweight, non-deep-learning way to lower query-time cost and sometimes reduce ambiguity by keeping only the most informative parts of the query.
+
+## Implemented Methods
+
+- `idf_topk`: keep the top-k highest-IDF query terms.
+- `prf_term_pruning`: run baseline retrieval once, score original query terms by how strongly they are supported in the top retrieved documents, then keep only the strongest original terms.
+
+## Best Query Reduction Method
+
+- `method = prf_term_pruning_extended`
+- `best_parameter = {'top_docs': 15, 'keep_k': 12, 'alpha': 0.2}`
+- `result = best query-reduction variant is above baseline on MAP@10`
+
+## k=10 Comparison
+
+| Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_tfidf | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 |
+| unordered_local_context_bow | 0.2938 | 0.4251 | 0.3215 | 0.3297 | 0.4883 | 0.7779 |
+| idf_topk_legacy | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 |
+| idf_topk_extended | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 |
+| prf_term_pruning_legacy | 0.2751 | 0.3923 | 0.2993 | 0.2943 | 0.4436 | 0.7254 |
+| prf_term_pruning_extended | 0.2840 | 0.4098 | 0.3107 | 0.3066 | 0.4617 | 0.7466 |
+
+## Best-Method Delta vs Baseline at k=10
+
+- `dMAP@10 = +0.0006`
+- `dnDCG@10 = +0.0005`
+- `dMRR@10 = +0.0005`
+
+The query-reduction variants reduce some noisy cases, but in Cranfield many long query terms are actually useful technical clues rather than filler. So aggressive pruning tends to remove signal along with noise, which hurts the final ranking. In the current `chandan` results, `unordered_local_context_bow` remains the strongest method overall.
+
+## Example Query Comparison
+
+| Query ID | Baseline Hits@5 | Method Hits@5 | Baseline AP@10 | Method AP@10 | Delta AP@10 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 40 | 2 | 2 | 0.1538 | 0.1538 | 0.0000 |
+| 64 | 1 | 1 | 0.2619 | 0.2778 | 0.0159 |
+| 81 | 1 | 1 | 0.2869 | 0.2869 | 0.0000 |
+| 90 | 2 | 2 | 0.1048 | 0.1048 | 0.0000 |
+| 190 | 1 | 1 | 0.1532 | 0.2472 | 0.0940 |
+| 169 | 2 | 2 | 0.2800 | 0.3400 | 0.0600 |
+| 92 | 4 | 4 | 0.4459 | 0.5030 | 0.0571 |
+| 208 | 3 | 4 | 0.4881 | 0.5429 | 0.0548 |
+
+## Unified Overlay
+
+The unified overlay compares the baseline, the earlier unordered local-context method, and all query-reduction methods in one figure.
+
+## Output Files
+
+- Summary JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/output/summary.json`
+- Summary CSV: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/output/summary_k10.csv`
+- Unified overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/output/unified_eval_overlay.png`
+- IDF top-k all-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/idf_topk/output/all_tuned_combinations_overlay.png`
+- IDF top-k extended all-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/idf_topk_extended/output/all_tuned_combinations_overlay.png`
+- PRF pruning all-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/prf_term_pruning/output/all_tuned_combinations_overlay.png`
+- PRF pruning extended all-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/prf_term_pruning_extended/output/all_tuned_combinations_overlay.png`
+- Comparison summary: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/output/comparison_summary.json`
+- Example comparison markdown: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/query_reduction/output/example_query_comparison.md`
+
+# Unordered Local-Context Bag-of-Words Experiment Report
+
+## Method Summary
+
+The baseline system uses unigram TF-IDF with cosine similarity. The proposed method adds unordered local-context features extracted from nearby-word windows. Inside each local window, only token presence matters and word order is ignored, so a phrase such as `heat transfer` and the same two words appearing in swapped order still activate the same context feature.
+
+## Hypothesis
+
+A local unordered context signal should help when the baseline retrieves documents with the right words but the wrong nearby context. This is especially relevant for ambiguous technical terms and for queries whose important words should appear close together in relevant documents.
+
+## What n Means
+
+Here, `n` is the local context radius. For each token position, we inspect up to `n` neighboring words on the left and `n` neighboring words on the right, then build unordered context features from the unique tokens in that local window. So `n = 1` means a maximum window of 3 tokens, `n = 2` means up to 5 tokens, and so on.
+
+## Baseline Limitations Addressed
+
+- The assignment report highlights that the baseline VSM lacks contextual representation and ignores local proximity information.
+- The project brief explicitly asks us to fix factual retrieval failures observed in the baseline; local context is a direct response to those failures.
+- For ambiguous terms, plain TF-IDF gives the same credit to a shared token even when its nearby words indicate a different sense.
+
+## Best Configuration
+
+- `n = 4`
+- `context_orders = [2]`
+- `min_context_df = 3`
+- `context_weight_alpha = 0.8`
+- `context_feature_vocab_size = 45535`
+
+## Local Context Size Sweep
+
+| n | Best orders | Best min_df | Best alpha | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | [2] | 3 | 0.50 | 0.2978 | 0.4303 | 0.3258 | 0.3255 | 0.4843 | 0.7655 |
+| 2 | [2] | 3 | 0.80 | 0.2947 | 0.4253 | 0.3224 | 0.3261 | 0.4840 | 0.7709 |
+| 3 | [2, 3] | 3 | 0.80 | 0.2960 | 0.4279 | 0.3238 | 0.3277 | 0.4889 | 0.7758 |
+| 4 | [2] | 3 | 0.80 | 0.2938 | 0.4251 | 0.3215 | 0.3297 | 0.4883 | 0.7779 |
+| 5 | [2] | 3 | 0.80 | 0.2911 | 0.4224 | 0.3188 | 0.3258 | 0.4827 | 0.7711 |
+| 6 | [2] | 3 | 0.80 | 0.2933 | 0.4255 | 0.3212 | 0.3274 | 0.4856 | 0.7720 |
+
+The sweep shows a trade-off rather than a single monotonic pattern. `n = 1` is strongest on precision, recall, F-score, and tied nDCG, while `n = 4` gives the best MAP@10 and MRR@10. In this dataset, a moderately larger window captures useful technical co-occurrence without drifting too far from the local topic.
+
+## k=10 Results
+
+| Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 | Runtime (s) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_tfidf | 0.2831 | 0.4094 | 0.3099 | 0.3061 | 0.4611 | 0.7461 | 0.20 |
+| unordered_local_context_bow | 0.2938 | 0.4251 | 0.3215 | 0.3297 | 0.4883 | 0.7779 | 379.85 |
+
+## Delta vs Baseline at k=10
+
+- `dP@10 = +0.0107`
+- `dR@10 = +0.0158`
+- `dF@10 = +0.0116`
+- `dMAP@10 = +0.0236`
+- `dnDCG@10 = +0.0272`
+- `dMRR@10 = +0.0318`
+
+## Significance Checks
+
+Approximate randomization over per-query scores:
+
+- `AP@10 p-value = 0.0000`
+- `nDCG@10 p-value = 0.0000`
+
+## Interpretation
+
+The local-context method helps when relevance depends on nearby co-occurrence instead of isolated term overlap. Because the context features are unordered, the model gains proximity-sensitive evidence without committing to exact word order, which is useful for technical queries where terminology may appear in slightly different surface forms.
+
+At the same time, the method is still limited by lexical overlap: if the right concept uses entirely different vocabulary, unordered context alone cannot fix that. It is better viewed as a context-aware extension of TF-IDF, not a full semantic model.
+
+## Example Query Comparison
+
+| Query ID | Baseline Hits@5 | Method Hits@5 | Baseline AP@10 | Method AP@10 | Delta AP@10 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 9 | 0 | 0 | 0.0000 | 0.0000 | 0.0000 |
+| 40 | 2 | 2 | 0.1538 | 0.1538 | 0.0000 |
+| 64 | 1 | 2 | 0.2619 | 0.3333 | 0.0714 |
+| 81 | 1 | 1 | 0.2869 | 0.3869 | 0.1000 |
+| 90 | 2 | 2 | 0.1048 | 0.1071 | 0.0024 |
+| 119 | 0 | 2 | 0.1944 | 0.8333 | 0.6389 |
+| 142 | 1 | 1 | 0.2500 | 0.6250 | 0.3750 |
+| 61 | 3 | 3 | 0.4611 | 0.7153 | 0.2542 |
+
+## Output Files
+
+- Summary JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary.json`
+- Summary CSV: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/summary_k10.csv`
+- Overlay plot: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/eval_overlay.png`
+- All-combinations overlay: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/all_tuned_combinations_overlay.png`
+- n-sweep JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.json`
+- n-sweep CSV: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.csv`
+- n-sweep plot: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/n_sweep_best_by_radius.png`
+- Example comparison markdown: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/example_query_comparison.md`
+- Config sweep JSON: `/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/chandan/unordered_local_context_bow/output/config_sweep.json`
