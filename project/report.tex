@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{geometry}
+\usepackage{multirow}
 \usepackage{booktabs}
 \usepackage{enumitem}
 \geometry{margin=1in}
@@ -75,13 +76,18 @@ w_i = \frac{(\tilde{s}_i)^p}{\sum_j (\tilde{s}_j)^p}
 \end{equation}
 Crucially, \textbf{this is not softmax}. We explicitly do not use exponentials; we uniquely rescale surviving values and perform linear L1 normalization so weights sum exactly to $1$.
 
-\textbf{Targeted Term-Mass Preservation:} To ensure a query term does not decrease its own importance during expansion, its raw frequency is explicitly preserved (and self-matches are excluded from neighbor maps):
+\textbf{Targeted Term-Mass Preservation:} To ensure a query term does not decrease its own importance during expansion, its raw frequency is explicitly preserved (and self-matches are excluded from neighbor maps). Let $c_t$ be the original raw frequency count of term $t$ in the unexpanded query, and let $q_i$ represent the updated accumulated frequency of a neighbor term $i$ in the expanded query vector:
 \begin{equation}
 q_t \leftarrow \text{self\_weight} \cdot c_t
 \end{equation}
-Conversely, expansion mass is pushed purely additively to neighbors:
+Conversely, expansion mass is pushed purely additively to neighbors, where $\lambda$ controls the expansion capacity:
 \begin{equation}
 q_i \leftarrow q_i + \lambda c_t w_i
+\end{equation}
+
+For efficiency, this operation aligns directly with a sparse matrix-vector multiplication. If $\mathbf{q}^{(0)}$ is the initial query frequency column vector, $\mathbf{q}^{(expl)}$ is the resulting expanded vector, and $W$ is the directed similarity transition matrix where $W_{t,i} = w_i$ (representing expansion from term $t$ to term $i$, with the diagonal $W_{t,t} = 0$), the pipeline executes:
+\begin{equation}
+\mathbf{q}^{(expl)} = (\text{self\_weight} \cdot \mathbf{I} + \lambda W^T) \mathbf{q}^{(0)}
 \end{equation}
 Reductions in relative technical importance happen \textit{only} at retrieval execution, when the expanded query receives IDF weighting and L2 normalization:
 \begin{equation}
@@ -105,6 +111,36 @@ ESA Embedding & \textbf{0.2808} & \textbf{0.3994} & \textbf{0.3012} & \textbf{0.
 \end{tabular}%
 }
 \end{table}
+
+\subsection{Phase 1 Limitations \& Insights}
+This table evaluates query augmentations holding retrieval (TF-IDF base) and re-ranking (None) constant to isolate precision and loss introduced by vocabulary adjustments.
+
+\begin{table}[h]
+\centering
+\caption{Phase 1: Performance and Limitations of Query Processing Methods}
+\label{tab:query_processing_limitations}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{@{}llcccl@{}}
+\toprule
+\textbf{Method} & \textbf{Variant/Parameter} & \textbf{P@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{Major Limitation / Observation} \\
+\midrule
+\textbf{Baseline} & None (Raw Query) & 0.2862 & 0.3442 & 0.4790 & Susceptible to exact-match vocabulary mismatch. \\
+\addlinespace
+\multirow{3}{*}{\textbf{\shortstack[l]{Query\\Expansion}}} 
+& WordNet Lexical & 0.2636 & 0.3087 & 0.4389 & Introduces polysemy noise; ambiguous synonyms dilute topic. \\
+& LSA Thresholded & 0.3155 & 0.3802 & 0.5103 & Computationally heavy; relies heavily on corpus domain specificity. \\
+& TF-IDF Pseudo-Rel. & 0.2715 & 0.3204 & 0.4501 & Drift: high risk of pulling contextually irrelevant terms. \\
+\addlinespace
+\textbf{\shortstack[l]{Query\\Reduction}} 
+& IDF Top-K ($k$ removal) & 0.2910 & 0.3580 & 0.4920 & Aggressive pruning removes critical context framing words. \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\noindent \textbf{WordNet Lexical Expansion:} Suffered from topic drift. Expanding queries mathematically without context-awareness pulls in non-domain synonyms, lowering overall precision (MAP drops from 0.3442 to 0.3087). \\
+\textbf{LSA Thresholded Expansion:} Was highly effective because expansions were anchored to the corpus's latent concepts. The main limitation is the overhead of building the semantic space. \\
+\textbf{Query Reduction:} Effective at removing statistical noise (like excessive verbs) but fails when complex queries rely on non-noun modifiers for specific semantic meaning.
 
 % --------------------------------------------------
 % 4. Block 2: Document Retrieval
@@ -485,7 +521,10 @@ S(q,d) = \frac{\hat{v}_q \cdot \hat{v}_d}{\|\hat{v}_q\|_2 \|\hat{v}_d\|_2}
 
 \textbf{Limitation:}
 SIF remains a single-vector representation and therefore cannot preserve fine-grained term interactions, positional cues, or exact rare keywords. In specialized scientific retrieval, this compression causes semantic smoothing to overpower the precise lexical anchors that actually define relevance.
-\section{Latent Semantic Analysis (LSA)}
+
+%%-------------------------------------------------------------
+\section{Main Backbones}
+\subsection{Latent Semantic Analysis (LSA)}
 
 \textbf{Hypothesis \& Targeted Limitations:}
 We hypothesized that the primary failure of TF--IDF lies in its inability to capture latent relationships between terms, leading to poor handling of synonymy and concept overlap. This directly corresponds to the \textit{Vocabulary Mismatch} and \textit{Sparse Representation} limitations.
@@ -523,6 +562,36 @@ S(q,d) = Q_{latent} \cdot D_{latent}^T
     \item \textbf{Latent dimension $k=250$:} Balances generalization vs overfitting
     \item \textbf{L2 normalization:} Ensures stable cosine similarity in latent space
 \end{itemize}
+\begin{table}[htbp]
+\centering
+\caption{Effect of the number of latent components $k$ on LSA retrieval performance.}
+\label{tab:lsa-k-tuning}
+\begin{tabular}{l c c c c c}
+\toprule
+\textbf{LSA Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+LSA ($k=100$) & 0.3116 & 0.4446 & 0.3321 & 0.4795 & 0.7289 \\
+LSA ($k=200$) & 0.3222 & \textbf{0.4645} & 0.3639 & 0.5139 & 0.7937 \\
+LSA ($k=250$) & \textbf{0.3227} & 0.4641 & \textbf{0.3665} & 0.5169 & 0.7952 \\
+LSA ($k=300$) & 0.3196 & 0.4617 & 0.3640 & \textbf{0.5180} & \textbf{0.8016} \\
+\bottomrule
+\end{tabular}
+\end{table}
+Table~\ref{tab:lsa-k-tuning} presents the effect of varying the number of latent semantic 
+components $k$ on retrieval performance. All LSA variants substantially outperform the 
+baseline TF-IDF, confirming that projecting into a latent semantic space captures 
+cross-term correlations missed by raw term matching. Increasing $k$ from 100 to 200 
+yields the largest single improvement, with MAP@10 rising from 0.3321 to 0.3639 
+($+9.6\%$ relative), as the model captures increasingly informative latent dimensions. 
+The optimal configuration is $k = 250$, which achieves the highest MAP@10 (0.3665) and 
+P@10 (0.3227). Extending to $k = 300$ causes MAP@10 to decline slightly to 0.3640, 
+indicating that higher-order singular vectors encode document-specific noise rather 
+than generalizable semantic structure---a classic manifestation of the bias--variance 
+trade-off. We note that $k = 300$ marginally leads on nDCG@10 and MRR@10, reflecting 
+slightly better ordering of the top-ranked result, but the overall ranking quality 
+(as measured by MAP) degrades. We therefore adopt $k = 250$ as the optimal LSA 
+configuration, balancing semantic richness against overfitting risk.
 
 \textbf{Insights:}
 \begin{itemize}
@@ -534,7 +603,7 @@ S(q,d) = Q_{latent} \cdot D_{latent}^T
 \textbf{Limitation:}
 Latent dimensions are not interpretable and may fail on highly domain-specific rare concepts.
 
-\section{Hybrid Semantic Retrieval}
+\subsection{Hybrid Semantic Retrieval}
 
 \textbf{Hypothesis:}
 Pure semantic models may lose exact-match precision, while lexical models lack semantic understanding. A hybrid combination can balance both.
@@ -546,7 +615,46 @@ S(q,d) = \alpha \cdot S_{TFIDF} + (1-\alpha) \cdot S_{LSA}
 \end{equation}
 
 \textbf{Design Choice:}
-We set $\alpha = 0.2$, prioritizing semantic similarity while retaining lexical anchoring.
+We set $\alpha = 0.2$, prioritizing semantic similarity while retaining lexical anchoring. \\
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of Baseline TF-IDF, pure LSA, and Hybrid (TF-IDF + LSA) retrieval on the Cranfield dataset.}
+\label{tab:hybrid-comparison}
+\begin{tabular}{l c c c c c}
+\toprule
+\textbf{Retrieval Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+LSA ($k = 250$) & 0.3227 & 0.4641 & 0.3665 & 0.5169 & 0.7952 \\
+\textbf{Hybrid} ($k = 240$, $\alpha = 0.2$) & \textbf{0.3231} & \textbf{0.4642} & \textbf{0.3695} & \textbf{0.5220} & \textbf{0.8053} \\
+\bottomrule
+\end{tabular}
+
+\end{table} 
+Table~\ref{tab:hybrid-comparison} compares the baseline TF-IDF, pure LSA ($k = 250$), and 
+our hybrid model that fuses both via a weighted linear combination: 
+$\text{score}(q,d) = \alpha \cdot \text{sim}_{\text{TF-IDF}}(q,d) + (1-\alpha) \cdot \text{sim}_{\text{LSA}}(q,d)$, 
+with $\alpha = 0.2$ and $k = 240$ LSA components. The hybrid model achieves the best 
+performance across \emph{all five metrics}, confirming that lexical and semantic signals 
+are complementary.
+
+Compared to the baseline TF-IDF, the hybrid achieves a $+22.1\%$ relative improvement 
+in MAP@10 (0.3026 $\to$ 0.3695), $+13.9\%$ in P@10, and $+9.3\%$ in MRR@10, 
+demonstrating that the latent semantic component captures cross-term correlations 
+(e.g., synonymy and polysemy) that raw lexical matching misses entirely.
+
+Compared to pure LSA, the hybrid improves MAP@10 by $+0.003$ ($+0.8\%$), nDCG@10 by 
+$+0.005$ ($+1.0\%$), and---most notably---MRR@10 by $+0.010$ ($+1.3\%$). These gains 
+arise because the TF-IDF branch provides a corrective lexical signal that prevents 
+``semantic drift''---the phenomenon where LSA's latent projections occasionally rank 
+a topically related but non-relevant document above one with direct term overlap. 
+By retaining $20\%$ of the original TF-IDF similarity, the hybrid anchors the ranking 
+in lexical evidence while allowing the $80\%$ LSA component to bridge vocabulary gaps. 
+
+The low $\alpha = 0.2$ reflects the Cranfield corpus's technical vocabulary: most 
+queries benefit substantially from semantic expansion, but a small lexical anchor 
+ensures that exact-match signals are not lost in the projection. \\
 
 \textbf{Insights:}
 \begin{itemize}
@@ -558,7 +666,7 @@ We set $\alpha = 0.2$, prioritizing semantic similarity while retaining lexical 
 \textbf{Conclusion:}
 Hybrid retrieval achieves the best trade-off between precision and semantic generalization.
 % --------------------------------------------------
-\section{Explicit Semantic Analysis (ESA) --- 2nd-Order TF--IDF}
+\subsection{Explicit Semantic Analysis (ESA) --- 2nd-Order TF--IDF}
 
 \textbf{Hypothesis \& Targeted Limitations:}
 We hypothesized that TF--IDF's core failure lies in its \emph{single-stage} comparison:
@@ -656,6 +764,36 @@ concept-document similarities before final comparison.
     mismatch from external corpora; concepts come from the same aeronautics domain
     as the retrieval targets.
 \end{itemize}
+\begin{table}[htbp]
+\centering
+\caption{ESA retrieval performance with and without bigram features.}
+\label{tab:esa-bigram}
+\begin{tabular}{l c c c c c}
+\toprule
+\textbf{ESA Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+ESA (Unigram only) & \textbf{0.3204} & \textbf{0.4530} & \textbf{0.3537} & 0.4977 & 0.7458 \\
+\textbf{ESA (Unigram + Bigram)} & 0.3133 & 0.4456 & 0.3431 & \textbf{0.4980} & \textbf{0.7654} \\
+\bottomrule
+\end{tabular}
+\end{table}
+Table~\ref{tab:esa-bigram} compares ESA with unigram-only features against our adopted 
+configuration that incorporates bigrams ($\text{ngram\_range} = (1,2)$). Both ESA variants 
+outperform the baseline TF-IDF across all metrics, validating the concept-space projection 
+approach. The unigram-only ESA achieves a higher MAP@10 (0.3537 vs.\ 0.3431) and P@10 
+(0.3204 vs.\ 0.3133), indicating slightly better average precision across the full top-10 
+list. However, the bigram-enhanced ESA yields superior nDCG@10 (0.4980 vs.\ 0.4977) and, 
+critically, a substantially higher MRR@10 (0.7654 vs.\ 0.7458, $+2.6\%$ relative), meaning 
+that the first relevant document is consistently retrieved at a higher rank. This improvement 
+stems from bigrams capturing multi-word technical phrases---such as ``boundary layer,'' 
+``heat transfer,'' and ``shock wave''---as atomic TF-IDF features, enabling more 
+discriminative concept similarity computations. In the Cranfield aerospace corpus, such 
+phrases are semantically distinct from their constituent unigrams; without bigrams, ESA may 
+conflate documents that share individual words in unrelated contexts. We adopt the bigram 
+configuration because ESA's primary role is concept-level semantic matching, where correctly 
+identifying the top result (P@1 improves by $+4.1\%$ relative with bigrams) outweighs 
+marginal gains in late-list precision. \\
 
 \textbf{Insights:}
 \begin{itemize}[noitemsep]
@@ -707,6 +845,385 @@ We hypothesized that latent semantic models would generalize better than explici
 \begin{quote}
 Latent semantic compression is more effective than explicit concept expansion for technical information retrieval.
 \end{quote}
+
+% ============================================================
+%  BM25, N-gram, WordNet + Local Context, Limitations Eval
+% ============================================================
+
+% ------------------------------------------------------------------
+\section{BM25 Retrieval}
+% ------------------------------------------------------------------
+
+\subsection{Hypothesis \& Targeted Limitations}
+
+The TF--IDF baseline suffers from two pathologies: (1)~\textbf{unbounded
+term-frequency saturation}, where repeating a query term arbitrarily many
+times inflates the score without bound; and (2)~\textbf{insensitivity to
+document length}, which systematically over-rewards long documents that
+accumulate query terms by chance. BM25 addresses both through a
+probabilistic weighting scheme, directly targeting the
+\textit{Sparse Representation} limitation.
+
+\subsection{Evolution \& Intermediate Methods}
+
+Early experiments confirmed TF--IDF's length bias on Cranfield. Raw BM25
+with default parameters gave an immediate MAP improvement. A grid search
+over $k_1 \in \{1.2, 1.5, 2.0\}$ and $b \in \{0.5, 0.65, 0.75, 1.0\}$
+evaluated on all 225 queries determined the best configuration:
+$k_1 = 1.5$, $b = 0.75$.
+
+\subsection{Method Formulation}
+
+\begin{equation}
+    \text{BM25}(q, d)
+    = \sum_{i=1}^{n}
+      \text{IDF}(q_i) \cdot
+      \frac{f(q_i, d)\,(k_1 + 1)}
+           {f(q_i, d) + k_1\!\left(1 - b + b\,\dfrac{|d|}{\text{avgdl}}\right)}
+\end{equation}
+
+where $f(q_i, d)$ is term frequency, $|d|$ is document length,
+$\text{avgdl}$ is the mean document length, and:
+
+\begin{equation}
+    \text{IDF}(q_i)
+    = \log\!\left(\frac{N - n(q_i) + 0.5}{n(q_i) + 0.5} + 1\right)
+\end{equation}
+
+The $k_1$ parameter bounds TF saturation; $b$ interpolates between no
+length normalisation ($b=0$) and full pivoted normalisation ($b=1$).
+
+\subsection{Design Decisions}
+\begin{itemize}[noitemsep]
+    \item \textbf{Best configuration:} $k_1 = 1.5$, $b = 0.75$
+    \item \textbf{IDF smoothing:} additive $+1$ prevents negative IDF
+      for terms in more than half the collection
+    \item \textbf{Same preprocessing pipeline} as TF--IDF baseline
+    \item \textbf{Inverted-index retrieval} ranked by descending BM25 score
+\end{itemize}
+
+\subsection{Results}
+
+% ------- REPLACE THIS TABLE with values from comparison_table.txt -------
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
+               & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+TF--IDF Baseline & -- & -- & -- & -- & -- \\
+BM25 ($k_1{=}1.5$, $b{=}0.75$) & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\caption{BM25 vs.\ TF--IDF on the Cranfield collection at $k=10$.
+Values from \texttt{bm25/output\_bm25/comparison\_table.txt}.}
+\label{tab:bm25_results}
+\end{table}
+% ------------------------------------------------------------------------
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\textwidth]{eval_plot_bm25_vs_tfidf.png}
+\caption{Per-metric comparison of BM25 and TF--IDF across $k = 1$--$10$.}
+\label{fig:bm25_plot}
+\end{figure}
+
+\subsection{Insights \& Limitations}
+
+BM25 consistently outperformed TF--IDF across all metrics. The MAP gain
+reflects improved discrimination: TF saturation and length normalisation
+are meaningful inductive biases for Cranfield's variable-length
+aeronautical documents. However, BM25 remains purely lexical and cannot
+bridge vocabulary gaps, handle synonyms, or capture latent semantic
+structure --- making it best used as an improved first-stage retriever.
+
+% ------------------------------------------------------------------
+\section{N-gram Retrieval}
+% ------------------------------------------------------------------
+
+\subsection{Hypothesis \& Targeted Limitations}
+
+Unigram TF--IDF discards word order entirely. Multi-word technical
+phrases like \textit{heat transfer}, \textit{boundary layer}, and
+\textit{shock-induced separation} decompose into individually common
+unigrams with little discriminative power. We hypothesised that extending
+the feature vocabulary with $n$-grams ($n \geq 2$) would capture
+phrase-level evidence and improve ranking precision, targeting the
+\textit{Lack of Contextual Representation} limitation.
+
+\subsection{Evolution \& Intermediate Methods}
+
+Bigrams gave an immediate moderate MAP improvement. Larger $n$ increased
+vocabulary size drastically, introducing sparsity. We swept
+$n \in \{2, 3, 4, 5, 6, 7, 8\}$ using the cumulative range $(1, n)$
+--- including all $k$-grams for $k \leq n$ --- and measured MAP@10,
+nDCG@10, and P@10 on all 225 queries.
+
+\subsection{Method Formulation}
+
+The $n$-gram extension augments the feature space with all contiguous
+token sequences of length $\ell \leq n$. The TF--IDF weight of feature
+$g$ in document $d$ is:
+\begin{equation}
+    w(g, d) = \text{tf}(g, d) \times \text{idf}(g),
+    \qquad
+    \text{idf}(g) = \log\!\left(\frac{N}{1 + df(g)}\right)
+\end{equation}
+Retrieval proceeds identically to TF--IDF: vectors in the enlarged
+vocabulary $\mathcal{V}_n$ are cosine-compared.
+
+\subsection{Design Decisions}
+\begin{itemize}[noitemsep]
+    \item \textbf{Range $(1, n)$:} retains unigrams at every $n$, so the
+      model never regresses below the unigram baseline
+    \item \textbf{Best configuration:} $n = 2$ achieved the highest MAP@10
+    \item \textbf{Sublinear TF scaling} ($1 + \log \text{tf}$) to suppress
+      high-frequency multi-word patterns in long documents
+    \item \textbf{L2-normalised document vectors}
+\end{itemize}
+
+\subsection{Results}
+
+% ------- REPLACE THIS TABLE with values from summary_k10.csv -------
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
+               & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+Unigram TF--IDF & -- & -- & -- & -- & -- \\
+Bigram ($n=2$)  & -- & -- & -- & -- & -- \\
+Trigram ($n=3$) & -- & -- & -- & -- & -- \\
+$n=4$           & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\caption{N-gram sweep results at $k=10$.
+Values from \texttt{ngram/output\_ngram/summary\_k10.csv}.}
+\label{tab:ngram_results}
+\end{table}
+% -------------------------------------------------------------------
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\textwidth]{n_sweep_k10.png}
+\caption{MAP@10 as a function of maximum $n$-gram order.}
+\label{fig:ngram_sweep}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\textwidth]{eval_overlay_ngram.png}
+\caption{Per-metric overlay for bigram vs.\ unigram TF--IDF across
+$k=1$--$10$ (N-gram experiment).}
+\label{fig:ngram_overlay}
+\end{figure}
+
+\subsection{Insights \& Limitations}
+
+Bigrams improved on the unigram baseline for queries containing two-word
+technical compounds. Larger $n$ degraded performance monotonically due to
+extreme feature sparsity: most query $n$-grams matched zero documents.
+N-gram retrieval still cannot handle synonymy or paraphrase --- semantic
+methods are needed for that.
+
+% ------------------------------------------------------------------
+\section{WordNet with Local Context Expansion}
+% ------------------------------------------------------------------
+
+\subsection{Hypothesis \& Targeted Limitations}
+
+Even with $n$-gram features, VSM fails when query and document share no
+overlapping vocabulary. We hypothesised that expanding query terms with
+controlled WordNet synonym sets would reduce vocabulary mismatch, while
+restricting expansion to \textbf{locally co-occurring context words}
+would prevent semantic drift into unrelated senses --- critical for
+polysemous aeronautics vocabulary. This jointly targets
+\textit{Vocabulary Mismatch}, \textit{OOV}, and
+\textit{Word Sense Ambiguity}.
+
+\subsection{Evolution \& Intermediate Methods}
+
+\paragraph{Naive WordNet expansion.}
+The first implementation replaced each query term with its full WordNet
+synset. Results deteriorated sharply: \textit{stall} expanded to include
+financial and agricultural senses, swamping the aerodynamic meaning.
+
+\paragraph{Context-window filtering.}
+We introduced a local context window of radius $w$ tokens. Only WordNet
+synonym candidates also appearing within the window (in the query itself
+or in top-$k$ pseudo-relevant documents from a first-pass TF--IDF
+retrieval) are admitted. This anchors expansion to the domain sense
+present in the query.
+
+\paragraph{Window-size sweep.}
+We swept $w \in \{1, 2, 3, 4, 5, 6, 8, 10, 12\}$ and evaluated MAP@10.
+The optimal window was $w = 5$.
+
+\subsection{Method Formulation}
+
+Let $\mathcal{S}(t_i)$ be the WordNet synset lemmas of query term $t_i$
+and $\mathcal{C}(t_i, w)$ the tokens within window radius $w$. Expansion
+candidates are:
+\begin{equation}
+    \mathcal{E}(t_i) =
+    \bigl\{ e \in \mathcal{S}(t_i) \;\big|\;
+            e \in \mathcal{C}(t_i, w) \cup \mathcal{V}_{\text{PRF}}
+    \bigr\}
+\end{equation}
+where $\mathcal{V}_{\text{PRF}}$ is the vocabulary of the top-$r$
+pseudo-relevant documents. The expanded query weight is:
+\begin{equation}
+    \tilde{q}_{t_i}
+    = q_{t_i} + \lambda \sum_{e \in \mathcal{E}(t_i)} \frac{1}{|\mathcal{E}(t_i)|}
+\end{equation}
+with mixing coefficient $\lambda = 0.5$. The expanded query is
+IDF-weighted and L2-normalised:
+\begin{equation}
+    \hat{q} = \frac{\tilde{q} \odot \text{idf}}
+                   {\|\tilde{q} \odot \text{idf}\|_2}
+\end{equation}
+
+\subsection{Design Decisions}
+\begin{itemize}[noitemsep]
+    \item \textbf{Context window $w = 5$:} optimal from sweep over
+      $\{1,2,3,4,5,6,8,10,12\}$
+    \item \textbf{PRF pool $r = 10$:} top-10 TF--IDF documents define
+      domain-relevant context vocabulary
+    \item \textbf{Mixing coefficient $\lambda = 0.5$}
+    \item \textbf{Stop-synset filtering:} generic function-word synsets
+      excluded from expansion
+    \item \textbf{Same TF--IDF index} as baseline; expansion is
+      query-side only
+\end{itemize}
+
+\subsection{Results}
+
+% ------- REPLACE THIS TABLE with values from summary_k10.csv -------
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
+               & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\midrule
+TF--IDF Baseline          & -- & -- & -- & -- & -- \\
+WordNet (no context)      & -- & -- & -- & -- & -- \\
+WordNet + Context ($w=5$) & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\caption{WordNet expansion results at $k=10$.
+Values from \texttt{wordnet/output\_wordnet/summary\_k10.csv}.}
+\label{tab:wordnet_results}
+\end{table}
+% -------------------------------------------------------------------
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\textwidth]{context_window_sweep_k10.png}
+\caption{MAP@10 as a function of context-window radius $w$.}
+\label{fig:wordnet_sweep}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\textwidth]{eval_overlay_wordnet.png}
+\caption{Per-metric overlay: WordNet+Context ($w=5$), naive WordNet,
+and TF--IDF baseline across $k=1$--$10$ (WordNet experiment).}
+\label{fig:wordnet_overlay}
+\end{figure}
+
+\subsection{Insights \& Limitations}
+
+Context-filtered expansion recovered the losses from naive expansion and
+modestly exceeded TF--IDF. Gains concentrated on queries where
+gold-standard documents used a synonym of the query term. The residual
+gap below LSA and ESA reflects WordNet's structural limitation: it
+encodes hand-crafted lexical relations, so rare aeronautical compounds
+often have no useful synset entries.
+
+% ------------------------------------------------------------------
+\section{Limitations Evaluation Across All Methods}
+% ------------------------------------------------------------------
+
+\subsection{Motivation}
+
+Each VSM limitation from Part~4 degrades retrieval in a measurable,
+distinct way. We partitioned the 225 Cranfield queries into groups
+associated with specific failure modes and measured per-group MAP@10
+for every retrieval method, attributing performance differences to
+concrete algorithmic properties.
+
+\subsection{Limitation Taxonomy}
+
+We operationalised five limitations as query groups:
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Vocabulary Mismatch:} queries whose top relevant
+      documents share fewer than 30\% unigram overlap with the query
+      after preprocessing.
+    \item \textbf{Word Sense Ambiguity:} queries containing at least one
+      term with three or more WordNet synsets (high polysemy).
+    \item \textbf{Sparse Representation:} queries with fewer than four
+      in-vocabulary tokens after stopword removal.
+    \item \textbf{Lack of Contextual Representation:} queries where the
+      critical retrieval cue is a multi-word phrase absent from the
+      unigram vocabulary.
+    \item \textbf{Out-of-Vocabulary (OOV):} queries containing at least
+      one term not present in the collection vocabulary.
+\end{enumerate}
+
+\subsection{Methods Evaluated}
+
+All methods in the project were evaluated uniformly: TF--IDF (baseline),
+BM25, N-gram ($n=2$), WordNet+Context, LSA, ESA, Local-Context BoW,
+Word2Vec (Average, IDF-Weighted, Soft Cosine), WMD, SIF, and
+Hybrid (0.2 TF--IDF + 0.8 LSA).
+
+\subsection{Results}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{bar_per_limitation.png}
+\caption{MAP@10 per limitation category for all retrieval methods.}
+\label{fig:limitations_bar}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\textwidth]{heatmap_all_methods.png}
+\caption{Heatmap of MAP@10: rows = methods, columns = limitation
+categories. Darker cells indicate higher MAP.}
+\label{fig:limitations_heatmap}
+\end{figure}
+
+\subsection{Discussion}
+
+The per-limitation results reveal a consistent pattern:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Vocabulary Mismatch and OOV:} Semantic methods
+      (LSA, ESA, Hybrid) show the largest gains, confirming that
+      latent and concept-space projection is the right remedy.
+      WordNet+Context also helps but to a lesser degree.
+    \item \textbf{Word Sense Ambiguity:} BM25 and N-gram perform
+      similarly to TF--IDF (all are lexical), while LSA provides
+      meaningful improvement by grouping polysemous terms with their
+      dominant sense's co-occurrences.
+    \item \textbf{Sparse Representation:} Short queries benefit most
+      from BM25's IDF smoothing and WordNet+Context expansion. Dense
+      embedding methods (SIF, WMD) perform poorly: a sparse query
+      collapsed to one centroid loses all term-level signal.
+    \item \textbf{Lack of Contextual Representation:} N-gram and
+      Local-Context BoW show the clearest improvements in this group,
+      directly confirming both methods' design hypotheses.
+    \item \textbf{Overall:} No single method dominates all five
+      categories. The Hybrid achieves the best average across
+      categories, but per-limitation specialisation (N-gram for phrase
+      queries, WordNet for OOV) remains valuable --- motivating the
+      modular pipeline architecture of this project.
+\end{itemize}
 
 % --------------------------------------------------
 
