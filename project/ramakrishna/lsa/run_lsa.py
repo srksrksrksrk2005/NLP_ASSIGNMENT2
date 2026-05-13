@@ -1,197 +1,147 @@
-import argparse
-import json
-import os
-import sys
-import time
+import argparse, json, os, sys, time
 from pathlib import Path
-
 import matplotlib.pyplot as plt
 
+# set up paths so we can import from the main project
 CURRENT_DIR = Path(__file__).resolve().parent
-ASSIGNMENT_ROOT = CURRENT_DIR.parents[1]
-if str(ASSIGNMENT_ROOT) not in sys.path:
-    sys.path.insert(0, str(ASSIGNMENT_ROOT))
+PROJECT_ROOT = CURRENT_DIR.parents[2]  # NLP_ASSIGNMENT2/
+sys.path.insert(0, str(PROJECT_ROOT))
 
-from evaluation import Evaluation
-from inflectionReduction import InflectionReduction
-from sentenceSegmentation import SentenceSegmentation
-from stopwordRemoval import StopwordRemoval
-from tokenization import Tokenization
-
+from evaluation import Evaluation  # type: ignore
+from inflectionReduction import InflectionReduction  # type: ignore
+from sentenceSegmentation import SentenceSegmentation  # type: ignore
+from stopwordRemoval import StopwordRemoval  # type: ignore
+from tokenization import Tokenization  # type: ignore
 from lsa_retrieval import LSARetrieval
 
 
-class LSASearchEngine:
-    def __init__(self, args):
-        self.args = args
-        os.makedirs(self.args.out_folder, exist_ok=True)
+# ---- preprocessing helpers ----
 
-        self.tokenizer = Tokenization()
-        self.sentence_segmenter = SentenceSegmentation()
-        self.inflection_reducer = InflectionReduction()
-        self.stopword_remover = StopwordRemoval()
-        self.retriever = LSARetrieval(
-            n_components=self.args.lsa_components,
-            random_state=self.args.random_state,
-            sublinear_tf=not self.args.disable_sublinear_tf,
-            max_df=self.args.max_df,
-            min_df=self.args.min_df,
-            norm=self.args.tfidf_norm,
-            ngram_range=(1, self.args.ngram_max),
-        )
-        self.evaluator = Evaluation()
+def preprocess(texts):
+    """Run the full NLP pipeline: segment -> tokenize -> stem -> remove stopwords."""
+    seg = SentenceSegmentation()
+    tok = Tokenization()
+    inf = InflectionReduction()
+    stp = StopwordRemoval()
 
-    def segment_sentences(self, text):
-        if self.args.segmenter == "naive":
-            return self.sentence_segmenter.naive(text)
-        return self.sentence_segmenter.punkt(text)
-
-    def tokenize(self, text):
-        if self.args.tokenizer == "naive":
-            return self.tokenizer.naive(text)
-        return self.tokenizer.pennTreeBank(text)
-
-    def reduce_inflection(self, text):
-        return self.inflection_reducer.reduce(text)
-
-    def remove_stopwords(self, text):
-        return self.stopword_remover.fromList(text)
-
-    def preprocess_texts(self, texts):
-        segmented = [self.segment_sentences(text) for text in texts]
-        tokenized = [self.tokenize(text) for text in segmented]
-        reduced = [self.reduce_inflection(text) for text in tokenized]
-        return [self.remove_stopwords(text) for text in reduced]
-
-    def _load_dataset(self):
-        dataset = Path(self.args.dataset)
-        queries_json = json.load(open(dataset / "cran_queries.json", "r"))
-        docs_json = json.load(open(dataset / "cran_docs.json", "r"))
-        qrels = json.load(open(dataset / "cran_qrels.json", "r"))
-        return queries_json, docs_json, qrels
-
-    def _save_summary(self, summary):
-        summary_path = Path(self.args.out_folder) / "lsa_summary.json"
-        with open(summary_path, "w") as summary_file:
-            json.dump(summary, summary_file, indent=2)
-
-    def evaluate_dataset(self):
-        queries_json, docs_json, qrels = self._load_dataset()
-        query_ids = [item["query number"] for item in queries_json]
-        queries = [item["query"] for item in queries_json]
-        doc_ids = [item["id"] for item in docs_json]
-        docs = [item["body"] for item in docs_json]
-
-        processed_queries = self.preprocess_texts(queries)
-        processed_docs = self.preprocess_texts(docs)
-
-        self.retriever.build_index(processed_docs, doc_ids)
-        ranked_docs = self.retriever.rank(processed_queries)
-
-        precisions = []
-        recalls = []
-        fscores = []
-        maps = []
-        ndcgs = []
-        mrrs = []
-
-        for k in range(1, 11):
-            precision = self.evaluator.meanPrecision(ranked_docs, query_ids, qrels, k)
-            recall = self.evaluator.meanRecall(ranked_docs, query_ids, qrels, k)
-            fscore = self.evaluator.meanFscore(ranked_docs, query_ids, qrels, k)
-            map_score = self.evaluator.meanAveragePrecision(ranked_docs, query_ids, qrels, k)
-            ndcg = self.evaluator.meanNDCG(ranked_docs, query_ids, qrels, k)
-            mrr = self.evaluator.meanReciprocalRank(ranked_docs, query_ids, qrels, k)
-
-            precisions.append(precision)
-            recalls.append(recall)
-            fscores.append(fscore)
-            maps.append(map_score)
-            ndcgs.append(ndcg)
-            mrrs.append(mrr)
-
-            print(f"Precision, Recall, F-score @ {k}: {precision}, {recall}, {fscore}")
-            print(f"MAP, nDCG, MRR @ {k}: {map_score}, {ndcg}, {mrr}")
-
-        plt.figure(figsize=(10, 6))
-        plt.plot(range(1, 11), precisions, label="Precision")
-        plt.plot(range(1, 11), recalls, label="Recall")
-        plt.plot(range(1, 11), fscores, label="F-Score")
-        plt.plot(range(1, 11), maps, label="MAP")
-        plt.plot(range(1, 11), ndcgs, label="nDCG")
-        plt.plot(range(1, 11), mrrs, label="MRR")
-        plt.legend()
-        plt.title("Evaluation Metrics - Cranfield Dataset (LSA)")
-        plt.xlabel("k")
-        plt.ylabel("Score")
-        plt.tight_layout()
-        plt.savefig(Path(self.args.out_folder) / "lsa_eval_plot.png")
-
-        summary = {
-            "lsa_components_requested": self.args.lsa_components,
-            "lsa_components_used": self.retriever.actual_components,
-            "explained_variance_ratio_sum": self.retriever.explained_variance,
-            "vectorizer": {
-                "sublinear_tf": self.retriever.sublinear_tf,
-                "max_df": self.retriever.max_df,
-                "min_df": self.retriever.min_df,
-                "norm": self.retriever.norm,
-                "ngram_range": list(self.retriever.ngram_range),
-                "vocab_size": self.retriever.vocab_size,
-            },
-            "precision": precisions,
-            "recall": recalls,
-            "fscore": fscores,
-            "map": maps,
-            "ndcg": ndcgs,
-            "mrr": mrrs,
-        }
-        self._save_summary(summary)
-
-        print("\nLSA summary")
-        print(f"Components used: {self.retriever.actual_components}")
-        print(f"Explained variance ratio sum: {self.retriever.explained_variance:.4f}")
-        print(
-            "Vectorizer config: "
-            f"sublinear_tf={self.retriever.sublinear_tf}, "
-            f"max_df={self.retriever.max_df}, "
-            f"min_df={self.retriever.min_df}, "
-            f"norm={self.retriever.norm}, "
-            f"ngram_range={self.retriever.ngram_range}, "
-            f"vocab_size={self.retriever.vocab_size}"
-        )
-        print(f"Output folder: {self.args.out_folder}")
-
-    def handle_custom_query(self):
-        _, docs_json, _ = self._load_dataset()
-        doc_ids = [item["id"] for item in docs_json]
-        docs = [item["body"] for item in docs_json]
-
-        processed_docs = self.preprocess_texts(docs)
-        self.retriever.build_index(processed_docs, doc_ids)
-
-        print("Enter query below")
-        query = input()
-        processed_query = self.preprocess_texts([query])
-        ranked_docs = self.retriever.rank(processed_query)[0]
-
-        print("\nTop five document IDs:")
-        for doc_id in ranked_docs[:5]:
-            print(doc_id)
+    out = [seg.punkt(t) for t in texts]
+    out = [tok.pennTreeBank(t) for t in out]
+    out = [inf.reduce(t) for t in out]
+    out = [stp.fromList(t) for t in out]
+    return out
 
 
-def build_parser():
-    parser = argparse.ArgumentParser(description="LSA-based retrieval for Cranfield")
-    parser.add_argument(
-        "-dataset",
-        default=str(ASSIGNMENT_ROOT / "cranfield"),
-        help="Path to the Cranfield dataset folder",
+def load_cranfield(dataset_path):
+    """Load queries, docs, and relevance judgments from cranfield."""
+    queries = json.load(open(dataset_path / "cran_queries.json"))
+    docs = json.load(open(dataset_path / "cran_docs.json"))
+    qrels = json.load(open(dataset_path / "cran_qrels.json"))
+    return queries, docs, qrels
+
+
+# ---- evaluation ----
+
+def run_evaluation(args):
+    queries_json, docs_json, qrels = load_cranfield(Path(args.dataset))
+
+    query_ids = [q["query number"] for q in queries_json]
+    doc_ids = [d["id"] for d in docs_json]
+    proc_queries = preprocess([q["query"] for q in queries_json])
+    proc_docs = preprocess([d["body"] for d in docs_json])
+
+    # build LSA index
+    retriever = LSARetrieval(
+        n_components=args.lsa_components,
+        random_state=args.random_state,
+        sublinear_tf=not args.disable_sublinear_tf,
+        max_df=args.max_df, min_df=args.min_df,
+        norm=args.tfidf_norm,
+        ngram_range=(1, args.ngram_max),
     )
-    parser.add_argument(
-        "-out_folder",
-        default=str(CURRENT_DIR / "output_lsa"),
-        help="Folder where plots and summaries will be written",
+    retriever.build_index(proc_docs, doc_ids)
+    ranked = retriever.rank(proc_queries)
+
+    # compute metrics for k = 1..10
+    ev = Evaluation()
+    precisions, recalls, fscores = [], [], []
+    maps, ndcgs, mrrs = [], [], []
+
+    for k in range(1, 11):
+        precisions.append(ev.meanPrecision(ranked, query_ids, qrels, k))
+        recalls.append(ev.meanRecall(ranked, query_ids, qrels, k))
+        fscores.append(ev.meanFscore(ranked, query_ids, qrels, k))
+        maps.append(ev.meanAveragePrecision(ranked, query_ids, qrels, k))
+        ndcgs.append(ev.meanNDCG(ranked, query_ids, qrels, k))
+        mrrs.append(ev.meanReciprocalRank(ranked, query_ids, qrels, k))
+
+        print(f"P, R, F @ {k}: {precisions[-1]:.4f}, {recalls[-1]:.4f}, {fscores[-1]:.4f}")
+        print(f"MAP, nDCG, MRR @ {k}: {maps[-1]:.4f}, {ndcgs[-1]:.4f}, {mrrs[-1]:.4f}")
+
+    # save plot
+    os.makedirs(args.out_folder, exist_ok=True)
+    plt.figure(figsize=(10, 6))
+    for vals, label in [(precisions, "Precision"), (recalls, "Recall"),
+                        (fscores, "F-Score"), (maps, "MAP"),
+                        (ndcgs, "nDCG"), (mrrs, "MRR")]:
+        plt.plot(range(1, 11), vals, label=label)
+    plt.legend()
+    plt.title("LSA Evaluation - Cranfield")
+    plt.xlabel("k")
+    plt.ylabel("Score")
+    plt.tight_layout()
+    plt.savefig(Path(args.out_folder) / "lsa_eval_plot.png")
+
+    # save summary json
+    summary = {
+        "lsa_components_requested": args.lsa_components,
+        "lsa_components_used": retriever.actual_components,
+        "explained_variance_ratio_sum": retriever.explained_variance,
+        "vectorizer": {
+            "sublinear_tf": retriever.sublinear_tf,
+            "max_df": retriever.max_df,
+            "min_df": retriever.min_df,
+            "norm": retriever.norm,
+            "ngram_range": list(retriever.ngram_range),
+            "vocab_size": retriever.vocab_size,
+        },
+        "precision": precisions, "recall": recalls, "fscore": fscores,
+        "map": maps, "ndcg": ndcgs, "mrr": mrrs,
+    }
+    with open(Path(args.out_folder) / "lsa_summary.json", "w") as f:
+        json.dump(summary, f, indent=2)
+
+    print(f"\nLSA: {retriever.actual_components} components, "
+          f"explained var = {retriever.explained_variance:.4f}")
+
+
+def run_custom_query(args):
+    """Interactive mode - enter a query and get top 5 docs."""
+    _, docs_json, _ = load_cranfield(Path(args.dataset))
+    doc_ids = [d["id"] for d in docs_json]
+    proc_docs = preprocess([d["body"] for d in docs_json])
+
+    retriever = LSARetrieval(
+        n_components=args.lsa_components,
+        random_state=args.random_state,
+        sublinear_tf=not args.disable_sublinear_tf,
+        max_df=args.max_df, min_df=args.min_df,
+        norm=args.tfidf_norm,
+        ngram_range=(1, args.ngram_max),
     )
+    retriever.build_index(proc_docs, doc_ids)
+
+    query = input("Enter query:\n")
+    proc_q = preprocess([query])
+    ranked = retriever.rank(proc_q)[0]
+    print("\nTop 5 docs:", ranked[:5])
+
+
+# ---- main ----
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="LSA retrieval on Cranfield")
+    parser.add_argument("-dataset", default=str(PROJECT_ROOT / "cranfield"))
+    parser.add_argument("-out_folder", default=str(CURRENT_DIR / "output_lsa"))
     parser.add_argument("-segmenter", default="punkt", choices=["naive", "punkt"])
     parser.add_argument("-tokenizer", default="ptb", choices=["naive", "ptb"])
     parser.add_argument("-lsa_components", type=int, default=250)
@@ -202,20 +152,14 @@ def build_parser():
     parser.add_argument("-ngram_max", type=int, default=1, choices=[1, 2])
     parser.add_argument("-disable_sublinear_tf", action="store_true")
     parser.add_argument("-custom", action="store_true")
-    return parser
+    args = parser.parse_args()
 
-
-if __name__ == "__main__":
-    start_time = time.time()
-    args = build_parser().parse_args()
     if args.tfidf_norm == "none":
         args.tfidf_norm = None
-    engine = LSASearchEngine(args)
 
+    t0 = time.time()
     if args.custom:
-        engine.handle_custom_query()
+        run_custom_query(args)
     else:
-        engine.evaluate_dataset()
-
-    end_time = time.time()
-    print(f"Total execution time: {end_time - start_time} seconds")
+        run_evaluation(args)
+    print(f"Done in {time.time() - t0:.1f}s")
