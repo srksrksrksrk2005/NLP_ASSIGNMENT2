@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.42
+        "weight": 0.3683333333333333
       },
       {
         "term": "obeying",
-        "weight": 0.3
+        "weight": 0.2833333333333333
       }
     ]
   },
@@ -109,22 +109,6 @@
       {
         "term": "structural",
         "weight": 1.0
-      },
-      {
-        "term": "craft",
-        "weight": 0.25
-      },
-      {
-        "term": "higher",
-        "weight": 0.25
-      },
-      {
-        "term": "trouble",
-        "weight": 0.25
-      },
-      {
-        "term": "upper",
-        "weight": 0.11626866708559469
       }
     ]
   },
@@ -167,26 +151,6 @@
       {
         "term": "solved",
         "weight": 1.0
-      },
-      {
-        "term": "block",
-        "weight": 0.25
-      },
-      {
-        "term": "complex",
-        "weight": 0.25
-      },
-      {
-        "term": "conductivity",
-        "weight": 0.25
-      },
-      {
-        "term": "farther",
-        "weight": 0.25
-      },
-      {
-        "term": "trouble",
-        "weight": 0.25
       }
     ]
   },
@@ -302,26 +266,6 @@
       {
         "term": "system",
         "weight": 1.0
-      },
-      {
-        "term": "flowing",
-        "weight": 0.25
-      },
-      {
-        "term": "trouble",
-        "weight": 0.25
-      },
-      {
-        "term": "arrangement",
-        "weight": 0.08333333333333333
-      },
-      {
-        "term": "organization",
-        "weight": 0.08333333333333333
-      },
-      {
-        "term": "scheme",
-        "weight": 0.08333333333333333
       }
     ]
   },
@@ -364,26 +308,6 @@
       {
         "term": "turbulent",
         "weight": 1.0
-      },
-      {
-        "term": "observational",
-        "weight": 0.25
-      },
-      {
-        "term": "theoretic",
-        "weight": 0.25
-      },
-      {
-        "term": "conduct",
-        "weight": 0.14772727272727273
-      },
-      {
-        "term": "behavior",
-        "weight": 0.125
-      },
-      {
-        "term": "run",
-        "weight": 0.05397727272727273
       }
     ]
   },
@@ -514,10 +438,6 @@
       {
         "term": "pressure",
         "weight": 1.0
-      },
-      {
-        "term": "flash",
-        "weight": 0.49490766076689346
       }
     ]
   }
