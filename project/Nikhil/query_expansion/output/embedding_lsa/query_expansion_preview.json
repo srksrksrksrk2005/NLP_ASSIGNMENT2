@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.3
+        "weight": 0.2833333333333333
       },
       {
         "term": "obeying",
-        "weight": 0.3
+        "weight": 0.2833333333333333
       }
     ]
   },
@@ -109,22 +109,6 @@
       {
         "term": "structural",
         "weight": 1.0
-      },
-      {
-        "term": "radiant",
-        "weight": 0.25
-      },
-      {
-        "term": "stol",
-        "weight": 0.14500417080284364
-      },
-      {
-        "term": "structure",
-        "weight": 0.14078188343247627
-      },
-      {
-        "term": "throw",
-        "weight": 0.10896863577496214
       }
     ]
   },
@@ -141,12 +125,8 @@
     },
     "expanded_top_terms": [
       {
-        "term": "slab",
-        "weight": 1.0764000533736615
-      },
-      {
         "term": "composite",
-        "weight": 1.0615411460765416
+        "weight": 1.0
       },
       {
         "term": "conduction",
@@ -165,28 +145,12 @@
         "weight": 1.0
       },
       {
-        "term": "solved",
+        "term": "slab",
         "weight": 1.0
       },
       {
-        "term": "transfer",
-        "weight": 0.25
-      },
-      {
-        "term": "shielded",
-        "weight": 0.08406940139709615
-      },
-      {
-        "term": "refractory",
-        "weight": 0.06259004776013286
-      },
-      {
-        "term": "two-layer",
-        "weight": 0.06182948865521501
-      },
-      {
-        "term": "forum",
-        "weight": 0.06010441103317528
+        "term": "solved",
+        "weight": 1.0
       }
     ]
   },
@@ -214,14 +178,6 @@
     },
     "expanded_top_terms": [
       {
-        "term": "mixture",
-        "weight": 1.5
-      },
-      {
-        "term": "chemically",
-        "weight": 1.25
-      },
-      {
         "term": "assumption",
         "weight": 1.0
       },
@@ -231,6 +187,10 @@
       },
       {
         "term": "chemical",
+        "weight": 1.0
+      },
+      {
+        "term": "chemically",
         "weight": 1.0
       },
       {
@@ -259,6 +219,10 @@
       },
       {
         "term": "instantaneous",
+        "weight": 1.0
+      },
+      {
+        "term": "local",
         "weight": 1.0
       }
     ]
@@ -302,26 +266,6 @@
       {
         "term": "system",
         "weight": 1.0
-      },
-      {
-        "term": "reaction",
-        "weight": 0.12891107242761554
-      },
-      {
-        "term": "specie",
-        "weight": 0.1150488164712551
-      },
-      {
-        "term": "companion",
-        "weight": 0.041666666666666664
-      },
-      {
-        "term": "control-system",
-        "weight": 0.041666666666666664
-      },
-      {
-        "term": "nonslationary",
-        "weight": 0.041666666666666664
       }
     ]
   },
@@ -364,26 +308,6 @@
       {
         "term": "turbulent",
         "weight": 1.0
-      },
-      {
-        "term": "result",
-        "weight": 0.25
-      },
-      {
-        "term": "electrically",
-        "weight": 0.2282710697552552
-      },
-      {
-        "term": "s-n",
-        "weight": 0.16520212131788145
-      },
-      {
-        "term": "demand",
-        "weight": 0.059496252566186014
-      },
-      {
-        "term": "life",
-        "weight": 0.025301626115932542
       }
     ]
   },
@@ -407,11 +331,11 @@
     "expanded_top_terms": [
       {
         "term": "angle",
-        "weight": 2.5
+        "weight": 2.0
       },
       {
         "term": "attack",
-        "weight": 2.5
+        "weight": 2.0
       },
       {
         "term": "forebody",
@@ -477,14 +401,14 @@
       },
       {
         "term": "angle",
-        "weight": 1.25
-      },
-      {
-        "term": "attack",
-        "weight": 1.25
+        "weight": 1.0
       },
       {
         "term": "approximate",
+        "weight": 1.0
+      },
+      {
+        "term": "attack",
         "weight": 1.0
       },
       {
@@ -514,10 +438,6 @@
       {
         "term": "pressure",
         "weight": 1.0
-      },
-      {
-        "term": "revolution",
-        "weight": 0.25
       }
     ]
   }

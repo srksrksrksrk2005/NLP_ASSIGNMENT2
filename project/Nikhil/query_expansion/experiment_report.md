@@ -14,51 +14,49 @@
 ## Run Configuration
 
 - Dataset: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/cranfield
-- Methods: baseline_tfidf, embedding_lsa
-- top_k_neighbors: 15
-- base_min_similarity_floor: 0.03
-- method_threshold_quantile: 0.45
+- Methods: baseline_tfidf, wordnet, embedding_tfidf, embedding_lsa, embedding_esa, embedding_word2vec
+- top_k_neighbors: 10
+- base_min_similarity_floor: 0.08
+- method_threshold_quantile: 0.6
 - self_weight: 1.0
-- expansion_weight: 0.25
-- replacement_weight: 0.9
-- replacement_expansion_weight: 0.2
+- expansion_weight: 0.0
+- replacement_weight: 0.85
+- replacement_expansion_weight: 0.15
 - adaptive_mean_similarity_threshold: True
-- mean_similarity_factor: 0.85
+- mean_similarity_factor: 1.0
 - normalize_neighbor_mass: True
-- similarity_power: 1.15
-
-## LSA Dimension Sweep
-
-The LSA-only sweep kept the same tuned expansion settings and varied only `lsa_components` across 32, 64, 96, 128, and 160.
-
-| Components | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 32 | 0.2791 | 0.3957 | 0.3033 | 0.3026 | 0.4522 | 0.7441 |
-| 64 | 0.2756 | 0.3927 | 0.3001 | 0.2986 | 0.4482 | 0.7384 |
-| 96 | 0.2796 | 0.3993 | 0.3048 | 0.3022 | 0.4514 | 0.7375 |
-| 128 | 0.2787 | 0.3982 | 0.3040 | 0.3015 | 0.4507 | 0.7365 |
-| 160 | 0.2764 | 0.3959 | 0.3020 | 0.3012 | 0.4489 | 0.7305 |
-
-32 components was the best LSA setting on MAP@10 and MRR@10, while 96 components was the best on precision, recall, and F-score. The strongest LSA MAP@10 only slightly beat the non-expanded baseline, so the sweep confirmed that LSA helps, but not enough to overtake the better baseline result across the board.
+- similarity_power: 1.0
 
 ## Dynamic Min Similarity by Method
 
-| Method | Base Floor | Derived Floor | Score Count | Mean | Std | Median | Q45 | Max |
+| Method | Base Floor | Derived Floor | Score Count | Mean | Std | Median | Q60 | Max |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| embedding_lsa | 0.0300 | 0.6646 | 119760 | 0.7169 | 0.1933 | 0.6922 | 0.6646 | 1.0000 |
+| wordnet | 0.0800 | 1.0000 | 29826 | 0.8969 | 0.1495 | 0.9412 | 1.0000 | 1.0000 |
+| embedding_tfidf | 0.0800 | 0.6882 | 79805 | 0.6021 | 0.2616 | 0.5774 | 0.6882 | 1.0000 |
+| embedding_lsa | 0.0800 | 0.8521 | 79840 | 0.7795 | 0.1775 | 0.7801 | 0.8521 | 1.0000 |
+| embedding_esa | 0.0800 | 0.6882 | 79810 | 0.6015 | 0.2622 | 0.5774 | 0.6882 | 1.0000 |
+| embedding_word2vec | 0.0800 | 0.8942 | 79840 | 0.8416 | 0.1040 | 0.8793 | 0.8942 | 0.9942 |
 
 ## k=10 Scores
 
 | Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | baseline_tfidf | 0.2813 | 0.4005 | 0.3059 | 0.3024 | 0.4546 | 0.7379 |
-| embedding_lsa | 0.2764 | 0.3959 | 0.3020 | 0.3012 | 0.4489 | 0.7305 |
+| wordnet | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
+| embedding_tfidf | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
+| embedding_lsa | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
+| embedding_esa | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
+| embedding_word2vec | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
 
 ## Delta vs Baseline (k=10)
 
 | Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| embedding_lsa | -0.0049 | -0.0046 | -0.0039 | -0.0012 | -0.0057 | -0.0074 |
+| wordnet | -0.0004 | -0.0006 | -0.0005 | -0.0005 | -0.0003 | +0.0000 |
+| embedding_tfidf | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
+| embedding_lsa | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
+| embedding_esa | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
+| embedding_word2vec | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
 
 ## Best Method Per Metric at k=10
 
@@ -81,7 +79,7 @@ The LSA-only sweep kept the same tuned expansion settings and varied only `lsa_c
 | 51 | 4 | baseline_tfidf | 4 | +0 |
 | 64 | 2 | baseline_tfidf | 2 | +0 |
 | 81 | 1 | baseline_tfidf | 1 | +0 |
-| 90 | 2 | embedding_lsa | 3 | +1 |
+| 90 | 2 | baseline_tfidf | 2 | +0 |
 
 ### Custom Query Cases
 
@@ -90,7 +88,7 @@ The LSA-only sweep kept the same tuned expansion settings and varied only `lsa_c
 | slip-flow heat transfer in internal channels | 9 | 1 | baseline_tfidf | 1 | +0 |
 | transition detection in hypersonic wakes behind slender bodies | 40 | 2 | baseline_tfidf | 2 | +0 |
 | replace vibrational shapes with static deflection shapes for flutter prediction | 64 | 1 | baseline_tfidf | 1 | +0 |
-| shock-induced boundary-layer separation | 90 | 2 | embedding_lsa | 3 | +1 |
+| shock-induced boundary-layer separation | 90 | 2 | baseline_tfidf | 2 | +0 |
 | what corrections are needed for a liftbody in a propwash flowfield inside a test duct | 81 | 0 | baseline_tfidf | 0 | +0 |
 
 ## Limitation-Solving Score Table (updated)
@@ -106,8 +104,8 @@ The LSA-only sweep kept the same tuned expansion settings and varied only `lsa_c
 
 ## Output Files
 
-- Summary JSON: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/summary.json
-- Summary CSV: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/summary_k10.csv
-- Overlay plot: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/eval_overlay.png
-- Example comparison markdown: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/example_query_comparison.md
-- Example comparison json: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/lsa_sweep_20260423/lsa_160/example_query_comparison.json
+- Summary JSON: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary.json
+- Summary CSV: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary_k10.csv
+- Overlay plot: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/eval_overlay.png
+- Example comparison markdown: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.md
+- Example comparison json: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.json

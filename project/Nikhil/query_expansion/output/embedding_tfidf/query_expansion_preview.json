@@ -57,11 +57,11 @@
       },
       {
         "term": "obey",
-        "weight": 0.3
+        "weight": 0.2833333333333333
       },
       {
         "term": "obeying",
-        "weight": 0.3
+        "weight": 0.2833333333333333
       }
     ]
   },
@@ -109,22 +109,6 @@
       {
         "term": "structural",
         "weight": 1.0
-      },
-      {
-        "term": "radiant",
-        "weight": 0.25
-      },
-      {
-        "term": "vtol",
-        "weight": 0.25
-      },
-      {
-        "term": "ackeret's",
-        "weight": 0.022727272727272728
-      },
-      {
-        "term": "aeroelastician",
-        "weight": 0.022727272727272728
       }
     ]
   },
@@ -142,11 +126,7 @@
     "expanded_top_terms": [
       {
         "term": "composite",
-        "weight": 1.157144485636938
-      },
-      {
-        "term": "slab",
-        "weight": 1.0907615393386372
+        "weight": 1.0
       },
       {
         "term": "conduction",
@@ -165,28 +145,12 @@
         "weight": 1.0
       },
       {
-        "term": "solved",
+        "term": "slab",
         "weight": 1.0
       },
       {
-        "term": "transfer",
-        "weight": 0.25
-      },
-      {
-        "term": "shielded",
-        "weight": 0.1592384606613629
-      },
-      {
-        "term": "two-layer",
-        "weight": 0.07751164783489854
-      },
-      {
-        "term": "distributes",
-        "weight": 0.0625
-      },
-      {
-        "term": "enhanced",
-        "weight": 0.0625
+        "term": "solved",
+        "weight": 1.0
       }
     ]
   },
@@ -214,10 +178,6 @@
     },
     "expanded_top_terms": [
       {
-        "term": "chemically",
-        "weight": 1.25
-      },
-      {
         "term": "assumption",
         "weight": 1.0
       },
@@ -227,6 +187,10 @@
       },
       {
         "term": "chemical",
+        "weight": 1.0
+      },
+      {
+        "term": "chemically",
         "weight": 1.0
       },
       {
@@ -302,10 +266,6 @@
       {
         "term": "system",
         "weight": 1.0
-      },
-      {
-        "term": "reaction",
-        "weight": 0.25
       }
     ]
   },
@@ -348,14 +308,6 @@
       {
         "term": "turbulent",
         "weight": 1.0
-      },
-      {
-        "term": "couette-type",
-        "weight": 0.25
-      },
-      {
-        "term": "layer",
-        "weight": 0.25
       }
     ]
   },
@@ -379,11 +331,11 @@
     "expanded_top_terms": [
       {
         "term": "angle",
-        "weight": 2.5
+        "weight": 2.0
       },
       {
         "term": "attack",
-        "weight": 2.5
+        "weight": 2.0
       },
       {
         "term": "forebody",
@@ -449,14 +401,14 @@
       },
       {
         "term": "angle",
-        "weight": 1.25
-      },
-      {
-        "term": "attack",
-        "weight": 1.25
+        "weight": 1.0
       },
       {
         "term": "approximate",
+        "weight": 1.0
+      },
+      {
+        "term": "attack",
         "weight": 1.0
       },
       {
@@ -486,10 +438,6 @@
       {
         "term": "pressure",
         "weight": 1.0
-      },
-      {
-        "term": "number",
-        "weight": 0.25
       }
     ]
   }

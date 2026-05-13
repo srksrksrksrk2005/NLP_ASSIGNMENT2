@@ -11,7 +11,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Add project paths
-BASE_DIR = Path("c:/Users/srksr/NLP/NLP_project/NLP_ASSIGNMENT2")
+BASE_DIR = Path("/home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2")
 sys.path.append(str(BASE_DIR))
 sys.path.append(str(BASE_DIR / "project/Nikhil/query_expansion"))
 sys.path.append(str(BASE_DIR / "project/ramakrishna/lsa"))
