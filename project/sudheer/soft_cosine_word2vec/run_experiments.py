@@ -10,14 +10,17 @@ soft matching through a sparse Word2Vec-derived term similarity matrix.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import sys
 import time
 from pathlib import Path
 
+from scipy import sparse
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 SUDHEER_DIR = SCRIPT_DIR.parent
 ASSIGNMENT_ROOT = SCRIPT_DIR.parents[2]
+PROJECT_DIR = SCRIPT_DIR.parents[1]
 if str(SUDHEER_DIR) not in sys.path:
     sys.path.insert(0, str(SUDHEER_DIR))
 
@@ -50,6 +53,23 @@ from common import (  # noqa: E402
 
 
 METHOD_KEY = "soft_cosine_word2vec"
+TFIDF_SOURCE_KEY = "soft_cosine_tfidf_source"
+
+
+def load_module_from_path(module_name: str, file_path: Path):
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Unable to load module {module_name} from {file_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+EMBEDDING_MATRICES = load_module_from_path(
+    "nikhil_embedding_matrices",
+    PROJECT_DIR / "Nikhil" / "query_expansion" / "expansion" / "embedding_matrices.py",
+)
+build_tfidf_neighbor_map = EMBEDDING_MATRICES.build_tfidf_neighbor_map
 
 
 def parse_int_list(value: str) -> list[int]:
@@ -62,6 +82,47 @@ def parse_float_list(value: str) -> list[float]:
 
 def sg_label(value: int) -> str:
     return "skipgram" if int(value) == 1 else "cbow"
+
+
+def neighbor_map_to_similarity_matrix(
+    vocab,
+    neighbor_map,
+    similarity_power: float = 1.0,
+):
+    term_to_idx = {term: index for index, term in enumerate(vocab)}
+    rows = list(range(len(vocab)))
+    cols = list(range(len(vocab)))
+    data = [1.0] * len(vocab)
+
+    pair_to_similarity = {}
+    for term, neighbors in neighbor_map.items():
+        src_index = term_to_idx.get(term)
+        if src_index is None:
+            continue
+        for neighbor, similarity in neighbors:
+            dst_index = term_to_idx.get(neighbor)
+            if dst_index is None or dst_index == src_index:
+                continue
+            value = float(max(0.0, similarity))
+            if similarity_power != 1.0:
+                value = value ** float(similarity_power)
+            pair = (src_index, dst_index) if src_index < dst_index else (dst_index, src_index)
+            pair_to_similarity[pair] = max(pair_to_similarity.get(pair, 0.0), value)
+
+    for (src_index, dst_index), similarity in pair_to_similarity.items():
+        rows.extend([src_index, dst_index])
+        cols.extend([dst_index, src_index])
+        data.extend([similarity, similarity])
+
+    matrix = sparse.coo_matrix((data, (rows, cols)), shape=(len(vocab), len(vocab)), dtype=float).tocsr()
+    matrix.sum_duplicates()
+    matrix.data = matrix.data.clip(0.0, 1.0)
+    return matrix, {
+        "represented_terms": len(vocab),
+        "representation_coverage": 1.0 if vocab else 0.0,
+        "retained_neighbor_edges": int(len(pair_to_similarity)),
+        "avg_neighbors_per_term": float((2 * len(pair_to_similarity)) / len(vocab)) if vocab else 0.0,
+    }
 
 
 def run_method(
@@ -102,6 +163,30 @@ def run_method(
     return artifacts, similarity_stats, rankings, score_vectors
 
 
+def run_tfidf_source_method(
+    query_tf,
+    baseline_index: TfidfIndex,
+    top_k_neighbors: int,
+    min_similarity: float,
+    similarity_power: float,
+):
+    neighbor_map = build_tfidf_neighbor_map(
+        baseline_index.doc_tfidf,
+        baseline_index.vocab,
+        top_k=top_k_neighbors,
+        min_similarity=min_similarity,
+        progress=False,
+    )
+    similarity_matrix, similarity_stats = neighbor_map_to_similarity_matrix(
+        baseline_index.vocab,
+        neighbor_map,
+        similarity_power=similarity_power,
+    )
+    model = SoftCosineModel.build(TFIDF_SOURCE_KEY, baseline_index, similarity_matrix)
+    rankings, score_vectors = model.rank_query_matrix(query_tf)
+    return similarity_stats, rankings, score_vectors
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run Word2Vec soft cosine experiments.")
     parser.add_argument("--dataset-dir", default=str(COMMON_ASSIGNMENT_ROOT / "cranfield"))
@@ -123,8 +208,10 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     baseline_dir = output_dir / "baseline_tfidf"
     method_dir = output_dir / METHOD_KEY
+    tfidf_source_dir = output_dir / TFIDF_SOURCE_KEY
     baseline_dir.mkdir(parents=True, exist_ok=True)
     method_dir.mkdir(parents=True, exist_ok=True)
+    tfidf_source_dir.mkdir(parents=True, exist_ok=True)
 
     docs_json = load_json(dataset_dir / "cran_docs.json")
     queries_json = load_json(dataset_dir / "cran_queries.json")
@@ -342,6 +429,67 @@ def main() -> None:
     }
     write_json(method_dir / "metrics.json", method_metrics_payload)
 
+    tfidf_source_results = []
+    for top_k_neighbors in top_k_values:
+        for min_similarity in min_similarity_values:
+            for similarity_power in similarity_power_values:
+                similarity_stats, rankings, _ = run_tfidf_source_method(
+                    query_tf=query_tf,
+                    baseline_index=baseline_index,
+                    top_k_neighbors=top_k_neighbors,
+                    min_similarity=min_similarity,
+                    similarity_power=similarity_power,
+                )
+                metrics_by_k = compute_metrics(evaluator, rankings, query_ids, qrels)
+                k10 = {metric: values[9] for metric, values in metrics_by_k.items()}
+                tfidf_source_results.append(
+                    {
+                        "top_k_neighbors": top_k_neighbors,
+                        "min_similarity": min_similarity,
+                        "similarity_power": similarity_power,
+                        "metrics_by_k": metrics_by_k,
+                        "precision_at_10": k10["precision"],
+                        "recall_at_10": k10["recall"],
+                        "fscore_at_10": k10["fscore"],
+                        "map_at_10": k10["map"],
+                        "ndcg_at_10": k10["ndcg"],
+                        "mrr_at_10": k10["mrr"],
+                        **similarity_stats,
+                    }
+                )
+
+    tfidf_source_results.sort(key=metric_sort_key, reverse=True)
+    best_tfidf_source = tfidf_source_results[0]
+    save_metric_plot(
+        tfidf_source_dir / "eval_plot.png",
+        best_tfidf_source["metrics_by_k"],
+        "TF-IDF Source Soft Cosine Metrics",
+    )
+    write_json(tfidf_source_dir / "sweep_results.json", tfidf_source_results)
+    write_json(
+        tfidf_source_dir / "metrics.json",
+        {
+            "best_config": {
+                "top_k_neighbors": best_tfidf_source["top_k_neighbors"],
+                "min_similarity": best_tfidf_source["min_similarity"],
+                "similarity_power": best_tfidf_source["similarity_power"],
+                "represented_terms": best_tfidf_source["represented_terms"],
+                "representation_coverage": best_tfidf_source["representation_coverage"],
+                "retained_neighbor_edges": best_tfidf_source["retained_neighbor_edges"],
+                "avg_neighbors_per_term": best_tfidf_source["avg_neighbors_per_term"],
+            },
+            "metrics_by_k": best_tfidf_source["metrics_by_k"],
+            "k10": {
+                "precision": best_tfidf_source["precision_at_10"],
+                "recall": best_tfidf_source["recall_at_10"],
+                "fscore": best_tfidf_source["fscore_at_10"],
+                "map": best_tfidf_source["map_at_10"],
+                "ndcg": best_tfidf_source["ndcg_at_10"],
+                "mrr": best_tfidf_source["mrr_at_10"],
+            },
+        },
+    )
+
     rows = []
     summary_methods = {}
     for method_name, metrics_payload in [
@@ -365,6 +513,32 @@ def main() -> None:
             "metrics_by_k": metrics_payload["metrics_by_k"],
             "runtime_seconds": metrics_payload["runtime_seconds"],
         }
+
+    tfidf_source_k10 = {
+        "precision": best_tfidf_source["precision_at_10"],
+        "recall": best_tfidf_source["recall_at_10"],
+        "fscore": best_tfidf_source["fscore_at_10"],
+        "map": best_tfidf_source["map_at_10"],
+        "ndcg": best_tfidf_source["ndcg_at_10"],
+        "mrr": best_tfidf_source["mrr_at_10"],
+    }
+    rows.append(
+        {
+            "method": TFIDF_SOURCE_KEY,
+            "precision@10": tfidf_source_k10["precision"],
+            "recall@10": tfidf_source_k10["recall"],
+            "fscore@10": tfidf_source_k10["fscore"],
+            "map@10": tfidf_source_k10["map"],
+            "ndcg@10": tfidf_source_k10["ndcg"],
+            "mrr@10": tfidf_source_k10["mrr"],
+            "runtime_seconds": 0.0,
+        }
+    )
+    summary_methods[TFIDF_SOURCE_KEY] = {
+        "k10": tfidf_source_k10,
+        "metrics_by_k": best_tfidf_source["metrics_by_k"],
+        "runtime_seconds": 0.0,
+    }
 
     write_summary_csv(output_dir / "summary_k10.csv", rows)
 
@@ -400,6 +574,18 @@ def main() -> None:
             for metric in ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
         },
         "significance": significance,
+        "tfidf_source_comparison": {
+            "best_config": {
+                "top_k_neighbors": best_tfidf_source["top_k_neighbors"],
+                "min_similarity": best_tfidf_source["min_similarity"],
+                "similarity_power": best_tfidf_source["similarity_power"],
+            },
+            "k10": tfidf_source_k10,
+            "delta_vs_word2vec_soft_cosine_at_10": {
+                metric: tfidf_source_k10[metric] - summary_methods[METHOD_KEY]["k10"][metric]
+                for metric in ["precision", "recall", "fscore", "map", "ndcg", "mrr"]
+            },
+        },
         "paths": {
             "summary_json": str(output_dir / "summary.json"),
             "summary_csv": str(output_dir / "summary_k10.csv"),
@@ -410,6 +596,8 @@ def main() -> None:
             "neighbor_sweep_plot": str(output_dir / "neighbor_sweep_best.png"),
             "example_markdown": str(output_dir / "example_query_comparison.md"),
             "config_sweep_json": str(output_dir / "config_sweep.json"),
+            "tfidf_source_metrics_json": str(tfidf_source_dir / "metrics.json"),
+            "tfidf_source_sweep_json": str(tfidf_source_dir / "sweep_results.json"),
         },
     }
     write_json(output_dir / "summary.json", summary)
@@ -419,6 +607,7 @@ def main() -> None:
             "config": {
                 "best_config": best_config,
                 "neighbor_sweep_best": best_by_top_k,
+                "best_tfidf_source": summary["tfidf_source_comparison"]["best_config"],
             },
             "k10": {
                 method_name: method_payload["k10"]
@@ -494,9 +683,25 @@ def main() -> None:
         ],
     )
 
+    report_path = SCRIPT_DIR / "experiment_report.md"
+    report_text = report_path.read_text(encoding="utf-8")
+    comparison_section = (
+        "\n\n## TF-IDF Source Comparison\n\n"
+        "We also ran soft cosine with the same TF-IDF query/document vectors but built the term-similarity matrix "
+        "from TF-IDF term neighborhoods instead of Word2Vec neighbors.\n\n"
+        f"- `soft_cosine_word2vec MAP@10 = {summary_methods[METHOD_KEY]['k10']['map']:.4f}`\n"
+        f"- `soft_cosine_tfidf_source MAP@10 = {tfidf_source_k10['map']:.4f}`\n"
+        f"- `soft_cosine_word2vec nDCG@10 = {summary_methods[METHOD_KEY]['k10']['ndcg']:.4f}`\n"
+        f"- `soft_cosine_tfidf_source nDCG@10 = {tfidf_source_k10['ndcg']:.4f}`\n\n"
+        "This confirms that the soft-cosine scoring idea itself is useful, but on Cranfield the TF-IDF-derived "
+        "similarity source remains slightly stronger than the Word2Vec-derived similarity source.\n"
+    )
+    report_path.write_text(report_text + comparison_section, encoding="utf-8")
+
     print("Best configuration:", best_config)
     print("Baseline MAP@10:", f"{summary_methods['baseline_tfidf']['k10']['map']:.4f}")
     print("Method MAP@10:", f"{summary_methods[METHOD_KEY]['k10']['map']:.4f}")
+    print("TF-IDF source MAP@10:", f"{tfidf_source_k10['map']:.4f}")
     print("Summary written to:", output_dir / "summary.json")
 
 
