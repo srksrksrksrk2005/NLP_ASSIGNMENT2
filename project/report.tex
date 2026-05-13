@@ -94,6 +94,21 @@ Reductions in relative technical importance happen \textit{only} at retrieval ex
 \hat{q} = \frac{q \odot \text{idf}}{\|q \odot \text{idf}\|_2}
 \end{equation}
 
+\textbf{Design Decisions:}
+\begin{itemize}[noitemsep]
+    \item \textbf{Dynamic tripartite thresholding:} Uses base floor, mean similarity, and local quantile to filter noisy neighbors.
+    \item \textbf{Linear L1 normalization:} Rescales and normalizes surviving values without using softmax exponentials.
+    \item \textbf{Explicit term-mass preservation:} Original raw frequency is scaled by a \textit{self\_weight} parameter to prevent dilution of initial query terms.
+    \item \textbf{Sparse matrix multiplication:} Allows highly efficient vector expansion natively.
+\end{itemize}
+
+\textbf{Insights:}
+\begin{itemize}[noitemsep]
+    \item Aggressive thresholding is mandatory; without it, low-confidence noisy neighbors overpower actual query terms, leading to semantic drift.
+    \item Applying L1 thresholds improves performance across almost all embeddings (e.g., LSA Embedding MAP@10 improved from 0.3008 to 0.3061).
+    \item While matrix-based expansion effectively addresses Out of Vocabulary issues, careful calibration of the expansion capacity $\lambda$ is required to maintain precision.
+\end{itemize}
+
 \begin{table}[h]
 \centering
 \caption{Impact of Disabling Dynamic Thresholds in Query Expansion ($k=10$)}
@@ -523,338 +538,573 @@ S(q,d) = \frac{\hat{v}_q \cdot \hat{v}_d}{\|\hat{v}_q\|_2 \|\hat{v}_d\|_2}
 SIF remains a single-vector representation and therefore cannot preserve fine-grained term interactions, positional cues, or exact rare keywords. In specialized scientific retrieval, this compression causes semantic smoothing to overpower the precise lexical anchors that actually define relevance.
 
 %%-------------------------------------------------------------
-\section{Main Backbones}
+\section{Main Retrieval Backbones}
+
+% ==========================================================
 \subsection{Latent Semantic Analysis (LSA)}
 
-\textbf{Hypothesis \& Targeted Limitations:}
-We hypothesized that the primary failure of TF--IDF lies in its inability to capture latent relationships between terms, leading to poor handling of synonymy and concept overlap. This directly corresponds to the \textit{Vocabulary Mismatch} and \textit{Sparse Representation} limitations.
+\textbf{Hypothesis and Targeted Limitations:}
 
-\textbf{Evolution \& Intermediate Methods:}
-Initial attempts relied on raw TF--IDF cosine similarity, which strictly enforces lexical overlap. We observed that even minor terminology variations (e.g., ``heat exchanger'' vs ``thermal device'') caused complete retrieval failure.
+We hypothesized that the primary weakness of TF--IDF retrieval lies in its inability to
+capture latent semantic relationships between terms. Because TF--IDF relies strictly on
+surface-level lexical overlap, semantically related documents may remain disconnected if
+they use different vocabulary. This limitation manifests as:
 
-We then explored dimensionality reduction through Truncated SVD also known as LSA, projecting the sparse TF--IDF matrix into a dense latent semantic space. Early experiments with small dimensions ($k < 100$) resulted in severe information loss, while overly large dimensions ($k > 400$) reintroduced sparsity effects. This led to selecting an optimal balance at $k = 250$.
+\begin{itemize}[noitemsep]
+    \item \textbf{Vocabulary mismatch} (e.g., ``heat exchanger'' vs.\ ``thermal device'')
+    \item \textbf{Sparse representation} in high-dimensional term space
+    \item \textbf{Failure to model conceptual similarity}
+\end{itemize}
 
+LSA addresses these issues by projecting documents into a lower-dimensional latent semantic
+space where correlated terms and concepts become aligned.
+
+% ----------------------------------------------------------
+\textbf{Evolution and Intermediate Experiments:}
+
+Our initial retrieval system used standard TF--IDF cosine similarity. Although effective
+for exact lexical matching, it failed whenever relevant documents used alternate terminology
+or paraphrased technical concepts.
+
+To overcome this limitation, we introduced dimensionality reduction through
+\textit{Truncated Singular Value Decomposition (SVD)}, commonly referred to as
+\textbf{Latent Semantic Analysis (LSA)}. The TF--IDF matrix was decomposed into a compact
+latent representation that captures global term co-occurrence structure.
+
+During experimentation, we observed a clear trade-off in the number of retained latent
+dimensions:
+
+\begin{itemize}[noitemsep]
+    \item Small latent spaces ($k < 100$) caused excessive information loss
+    \item Very large latent spaces ($k > 400$) reintroduced sparsity and noise
+    \item Intermediate dimensions produced the most stable semantic retrieval
+\end{itemize}
+
+Systematic tuning identified $k = 250$ as the best balance between semantic compression
+and information preservation.
+
+% ----------------------------------------------------------
 \textbf{Method Formulation:}
 
-Given TF--IDF matrix:
+Given the TF--IDF document-term matrix:
+
 \begin{equation}
-M_{d \times v}
+M \in \mathbb{R}^{d \times v}
 \end{equation}
 
-We compute truncated SVD:
+where $d$ is the number of documents and $v$ is the vocabulary size,
+we compute the truncated SVD:
+
 \begin{equation}
 M \approx U_k \Sigma_k V_k^T
 \end{equation}
 
-Document and query projections:
-\begin{equation}
-D_{latent} = U_k \Sigma_k, \quad Q_{latent} = Q V_k
-\end{equation}
+where:
 
-Final scoring:
-\begin{equation}
-S(q,d) = Q_{latent} \cdot D_{latent}^T
-\end{equation}
-
-\textbf{Design Decisions:}
-\begin{itemize}
-    \item \textbf{Sublinear TF scaling:} Prevents dominance of frequent terms
-    \item \textbf{Latent dimension $k=250$:} Balances generalization vs overfitting
-    \item \textbf{L2 normalization:} Ensures stable cosine similarity in latent space
+\begin{itemize}[noitemsep]
+    \item $U_k$ contains document latent vectors
+    \item $\Sigma_k$ contains singular values
+    \item $V_k$ contains latent term directions
 \end{itemize}
+
+Document representations in latent space are computed as:
+
+\begin{equation}
+D_{\text{latent}} = U_k \Sigma_k
+\end{equation}
+
+A query vector $Q$ is projected into the same latent space using:
+
+\begin{equation}
+Q_{\text{latent}} = QV_k
+\end{equation}
+
+Final relevance scores are computed via cosine similarity:
+
+\begin{equation}
+S(q,d) =
+Q_{\text{latent}}
+\cdot
+D_{\text{latent}}^T
+\end{equation}
+
+% ----------------------------------------------------------
+\textbf{Design Decisions:}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Sublinear TF scaling:}
+    Reduces dominance of highly frequent terms
+
+    \item \textbf{Latent dimensionality ($k = 250$):}
+    Balances semantic generalization against overfitting
+
+    \item \textbf{L2 normalization:}
+    Stabilizes cosine similarity in latent space
+
+    \item \textbf{Truncated SVD instead of full SVD:}
+    Improves scalability while retaining dominant semantic structure
+\end{itemize}
+
+% ----------------------------------------------------------
 \begin{table}[htbp]
 \centering
-\caption{Effect of the number of latent components $k$ on LSA retrieval performance.}
+\caption{Effect of latent dimensionality $k$ on LSA retrieval performance.}
 \label{tab:lsa-k-tuning}
 \begin{tabular}{l c c c c c}
 \toprule
-\textbf{LSA Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\textbf{LSA Variant} &
+\textbf{P@10} &
+\textbf{R@10} &
+\textbf{MAP@10} &
+\textbf{nDCG@10} &
+\textbf{MRR@10} \\
 \midrule
-Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
-LSA ($k=100$) & 0.3116 & 0.4446 & 0.3321 & 0.4795 & 0.7289 \\
-LSA ($k=200$) & 0.3222 & \textbf{0.4645} & 0.3639 & 0.5139 & 0.7937 \\
-LSA ($k=250$) & \textbf{0.3227} & 0.4641 & \textbf{0.3665} & 0.5169 & 0.7952 \\
-LSA ($k=300$) & 0.3196 & 0.4617 & 0.3640 & \textbf{0.5180} & \textbf{0.8016} \\
+Baseline TF--IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+LSA ($k = 100$) & 0.3116 & 0.4446 & 0.3321 & 0.4795 & 0.7289 \\
+LSA ($k = 200$) & 0.3222 & \textbf{0.4645} & 0.3639 & 0.5139 & 0.7937 \\
+LSA ($k = 250$) & \textbf{0.3227} & 0.4641 & \textbf{0.3665} & 0.5169 & 0.7952 \\
+LSA ($k = 300$) & 0.3196 & 0.4617 & 0.3640 & \textbf{0.5180} & \textbf{0.8016} \\
 \bottomrule
 \end{tabular}
 \end{table}
-Table~\ref{tab:lsa-k-tuning} presents the effect of varying the number of latent semantic 
-components $k$ on retrieval performance. All LSA variants substantially outperform the 
-baseline TF-IDF, confirming that projecting into a latent semantic space captures 
-cross-term correlations missed by raw term matching. Increasing $k$ from 100 to 200 
-yields the largest single improvement, with MAP@10 rising from 0.3321 to 0.3639 
-($+9.6\%$ relative), as the model captures increasingly informative latent dimensions. 
-The optimal configuration is $k = 250$, which achieves the highest MAP@10 (0.3665) and 
-P@10 (0.3227). Extending to $k = 300$ causes MAP@10 to decline slightly to 0.3640, 
-indicating that higher-order singular vectors encode document-specific noise rather 
-than generalizable semantic structure---a classic manifestation of the bias--variance 
-trade-off. We note that $k = 300$ marginally leads on nDCG@10 and MRR@10, reflecting 
-slightly better ordering of the top-ranked result, but the overall ranking quality 
-(as measured by MAP) degrades. We therefore adopt $k = 250$ as the optimal LSA 
-configuration, balancing semantic richness against overfitting risk.
 
-\textbf{Insights:}
-\begin{itemize}
-    \item LSA significantly improves ranking depth (MAP, nDCG)
-    \item Captures multi-term conceptual relationships
-    \item Provides robust performance across query types
+Table~\ref{tab:lsa-k-tuning} demonstrates that all LSA variants substantially outperform
+the baseline TF--IDF model across every evaluation metric. This confirms that latent
+semantic projection successfully captures cross-term relationships ignored by direct
+lexical matching.
+
+Increasing the latent dimensionality from $k = 100$ to $k = 200$ yields the largest
+performance improvement, with MAP@10 increasing from 0.3321 to 0.3639
+($+9.6\%$ relative improvement). This indicates that additional latent dimensions
+encode increasingly informative semantic structure.
+
+The best overall balance occurs at $k = 250$, which achieves:
+
+\begin{itemize}[noitemsep]
+    \item Highest MAP@10: 0.3665
+    \item Highest P@10: 0.3227
+    \item Strong overall ranking consistency
 \end{itemize}
 
-\textbf{Limitation:}
-Latent dimensions are not interpretable and may fail on highly domain-specific rare concepts.
+Although $k = 300$ slightly improves nDCG@10 and MRR@10, MAP@10 declines marginally,
+suggesting that higher-order singular vectors begin encoding document-specific noise
+rather than general semantic structure. This reflects the classical
+\textit{bias--variance trade-off} in latent dimensionality selection.
 
+We therefore adopt $k = 250$ as the final LSA configuration.
+
+% ----------------------------------------------------------
+\textbf{Key Insights:}
+
+\begin{itemize}[noitemsep]
+    \item LSA substantially improves ranking depth and semantic retrieval quality
+    \item Latent semantic projection captures conceptual relationships beyond lexical overlap
+    \item Performance remains stable across diverse query formulations
+    \item Semantic compression effectively mitigates vocabulary mismatch
+\end{itemize}
+
+% ----------------------------------------------------------
+\textbf{Limitations:}
+
+\begin{itemize}[noitemsep]
+    \item Latent dimensions are not directly interpretable
+    \item Rare domain-specific concepts may be poorly represented
+    \item Retrieval quality is sensitive to dimensionality selection
+\end{itemize}
+
+% ==========================================================
 \subsection{Hybrid Semantic Retrieval}
 
 \textbf{Hypothesis:}
-Pure semantic models may lose exact-match precision, while lexical models lack semantic understanding. A hybrid combination can balance both.
 
-\textbf{Method:}
+Pure semantic retrieval models often lose exact-match precision, while purely lexical
+models fail to capture conceptual similarity. We hypothesized that combining both signals
+would yield a more robust retrieval system.
+
+% ----------------------------------------------------------
+\textbf{Method Formulation:}
+
+The hybrid retrieval score is defined as:
 
 \begin{equation}
-S(q,d) = \alpha \cdot S_{TFIDF} + (1-\alpha) \cdot S_{LSA}
+S(q,d)
+=
+\alpha \cdot S_{\text{TF--IDF}}
++
+(1-\alpha)\cdot S_{\text{LSA}}
 \end{equation}
 
-\textbf{Design Choice:}
-We set $\alpha = 0.2$, prioritizing semantic similarity while retaining lexical anchoring. \\
+where:
 
+\begin{itemize}[noitemsep]
+    \item $S_{\text{TF--IDF}}$ is lexical cosine similarity
+    \item $S_{\text{LSA}}$ is latent semantic similarity
+    \item $\alpha$ controls the lexical-semantic trade-off
+\end{itemize}
+
+% ----------------------------------------------------------
+\textbf{Design Decision:}
+
+We set:
+
+\begin{equation}
+\alpha = 0.2
+\end{equation}
+
+thereby assigning:
+
+\begin{itemize}[noitemsep]
+    \item 20\% weight to lexical similarity
+    \item 80\% weight to semantic similarity
+\end{itemize}
+
+This configuration preserves exact-match precision while strongly emphasizing semantic
+generalization.
+
+% ----------------------------------------------------------
 \begin{table}[htbp]
 \centering
-\caption{Comparison of Baseline TF-IDF, pure LSA, and Hybrid (TF-IDF + LSA) retrieval on the Cranfield dataset.}
+\caption{Comparison of TF--IDF, LSA, and Hybrid Retrieval on the Cranfield dataset.}
 \label{tab:hybrid-comparison}
 \begin{tabular}{l c c c c c}
 \toprule
-\textbf{Retrieval Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\textbf{Retrieval Variant} &
+\textbf{P@10} &
+\textbf{R@10} &
+\textbf{MAP@10} &
+\textbf{nDCG@10} &
+\textbf{MRR@10} \\
 \midrule
-Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+Baseline TF--IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
 LSA ($k = 250$) & 0.3227 & 0.4641 & 0.3665 & 0.5169 & 0.7952 \\
-\textbf{Hybrid} ($k = 240$, $\alpha = 0.2$) & \textbf{0.3231} & \textbf{0.4642} & \textbf{0.3695} & \textbf{0.5220} & \textbf{0.8053} \\
+\textbf{Hybrid} ($k = 240$, $\alpha = 0.2$)
+& \textbf{0.3231}
+& \textbf{0.4642}
+& \textbf{0.3695}
+& \textbf{0.5220}
+& \textbf{0.8053} \\
 \bottomrule
 \end{tabular}
+\end{table}
 
-\end{table} 
-Table~\ref{tab:hybrid-comparison} compares the baseline TF-IDF, pure LSA ($k = 250$), and 
-our hybrid model that fuses both via a weighted linear combination: 
-$\text{score}(q,d) = \alpha \cdot \text{sim}_{\text{TF-IDF}}(q,d) + (1-\alpha) \cdot \text{sim}_{\text{LSA}}(q,d)$, 
-with $\alpha = 0.2$ and $k = 240$ LSA components. The hybrid model achieves the best 
-performance across \emph{all five metrics}, confirming that lexical and semantic signals 
-are complementary.
+Table~\ref{tab:hybrid-comparison} shows that the hybrid model achieves the strongest
+performance across all evaluation metrics, demonstrating that lexical and semantic
+signals are complementary rather than competing.
 
-Compared to the baseline TF-IDF, the hybrid achieves a $+22.1\%$ relative improvement 
-in MAP@10 (0.3026 $\to$ 0.3695), $+13.9\%$ in P@10, and $+9.3\%$ in MRR@10, 
-demonstrating that the latent semantic component captures cross-term correlations 
-(e.g., synonymy and polysemy) that raw lexical matching misses entirely.
+Compared with the baseline TF--IDF system, the hybrid model achieves:
 
-Compared to pure LSA, the hybrid improves MAP@10 by $+0.003$ ($+0.8\%$), nDCG@10 by 
-$+0.005$ ($+1.0\%$), and---most notably---MRR@10 by $+0.010$ ($+1.3\%$). These gains 
-arise because the TF-IDF branch provides a corrective lexical signal that prevents 
-``semantic drift''---the phenomenon where LSA's latent projections occasionally rank 
-a topically related but non-relevant document above one with direct term overlap. 
-By retaining $20\%$ of the original TF-IDF similarity, the hybrid anchors the ranking 
-in lexical evidence while allowing the $80\%$ LSA component to bridge vocabulary gaps. 
-
-The low $\alpha = 0.2$ reflects the Cranfield corpus's technical vocabulary: most 
-queries benefit substantially from semantic expansion, but a small lexical anchor 
-ensures that exact-match signals are not lost in the projection. \\
-
-\textbf{Insights:}
-\begin{itemize}
-    \item Prevents semantic drift
-    \item Retains exact-match precision
-    \item Produces the most stable overall performance
+\begin{itemize}[noitemsep]
+    \item $+22.1\%$ relative improvement in MAP@10
+    \item $+13.9\%$ improvement in P@10
+    \item $+9.3\%$ improvement in MRR@10
 \end{itemize}
 
+These gains confirm that the semantic branch successfully captures synonymy,
+concept overlap, and cross-term relationships absent in pure lexical retrieval.
+
+Compared with standalone LSA, the hybrid system provides smaller but consistent gains:
+
+\begin{itemize}[noitemsep]
+    \item MAP@10 improves from 0.3665 to 0.3695
+    \item nDCG@10 improves from 0.5169 to 0.5220
+    \item MRR@10 improves from 0.7952 to 0.8053
+\end{itemize}
+
+The lexical TF--IDF component acts as a corrective signal that prevents
+\textbf{semantic drift}, where semantically related but non-relevant documents are ranked
+too highly.
+
+Because the Cranfield corpus contains highly technical terminology, semantic expansion
+is extremely beneficial; however, preserving a small lexical anchor improves ranking
+precision for exact technical matches.
+
+% ----------------------------------------------------------
+\textbf{Key Insights:}
+
+\begin{itemize}[noitemsep]
+    \item Hybrid retrieval combines semantic flexibility with lexical precision
+    \item TF--IDF prevents semantic drift in latent space
+    \item The hybrid model produces the most stable overall retrieval performance
+\end{itemize}
+
+% ----------------------------------------------------------
 \textbf{Conclusion:}
-Hybrid retrieval achieves the best trade-off between precision and semantic generalization.
-% --------------------------------------------------
-\subsection{Explicit Semantic Analysis (ESA) --- 2nd-Order TF--IDF}
 
-\textbf{Hypothesis \& Targeted Limitations:}
-We hypothesized that TF--IDF's core failure lies in its \emph{single-stage} comparison:
-it directly matches surface-level terms between query and document, ignoring that two
-texts can be semantically related even when they share no vocabulary. This corresponds
-to the \textbf{Vocabulary Mismatch}, \textbf{Sparse Representation}, and
-\textbf{Concept Overlap} limitations. Unlike LSA, which projects into abstract latent
-factors, ESA maps texts into an \emph{explicit} concept space where each concept
-is a real document, yielding an interpretable, second-order similarity.
+Hybrid retrieval provides the strongest trade-off between semantic generalization and
+exact-match precision, making it the best-performing backbone overall.
 
-\textbf{Evolution \& Intermediate Methods:}
-Having observed that LSA significantly improved retrieval through latent semantic
-projection, we investigated whether an \emph{explicit} concept-based approach could
-offer complementary benefits. Standard ESA uses Wikipedia articles as concepts; however,
-to maintain domain consistency and avoid concept--domain mismatch, we adapted ESA to use
-the Cranfield documents themselves as explicit concepts (self-referential ESA).
+% ==========================================================
+\subsection{Explicit Semantic Analysis (ESA) --- Second-Order TF--IDF}
 
-Early experiments revealed two critical insights: (1)~unigram-only features missed
-multi-word technical phrases (``heat transfer,'' ``shell buckling''), leading to
-ambiguous concept activations; adding bigrams improved MAP by +7.2\%.
-(2)~The number of retained concepts $k$ controlled a fundamental trade-off:
-too few concepts ($k < 10$) caused severe information loss, while too many ($k > 30$)
-introduced noisy, weakly-related concepts that degraded ranking precision.
-Systematic grid search across 288 configurations determined $k = 25$ as optimal.
+\textbf{Hypothesis and Targeted Limitations:}
 
+We hypothesized that TF--IDF fails primarily because it performs only a
+\textit{first-order} lexical comparison between queries and documents. Two texts may
+be semantically related even when they share little or no vocabulary.
+
+ESA addresses:
+
+\begin{itemize}[noitemsep]
+    \item Vocabulary mismatch
+    \item Sparse term overlap
+    \item Concept-level semantic disconnect
+\end{itemize}
+
+Unlike LSA, which learns latent abstract dimensions, ESA maps texts into an
+\textbf{explicit concept space} where each concept corresponds to a real document.
+
+% ----------------------------------------------------------
+\textbf{Evolution and Intermediate Experiments:}
+
+After observing strong semantic improvements from LSA, we investigated whether
+an explicit concept-based representation could provide additional interpretability
+and phrase-level semantic matching.
+
+Traditional ESA uses Wikipedia articles as concepts. However, to avoid
+domain mismatch, we adopted a \textbf{self-referential ESA} approach in which
+the Cranfield documents themselves serve as concepts.
+
+Early experiments revealed two important findings:
+
+\begin{enumerate}[noitemsep]
+    \item Unigram-only features failed to capture multi-word technical expressions
+    such as ``heat transfer'' and ``shell buckling''
+
+    \item The number of retained concepts introduced a strong
+    precision--noise trade-off
+\end{enumerate}
+
+Adding bigram features improved semantic discrimination significantly, while
+grid-search tuning identified $k = 25$ retained concepts as optimal.
+
+% ----------------------------------------------------------
 \textbf{Method Formulation:}
 
-Given a collection of $m$ documents, construct TF--IDF matrix with sublinear scaling
-and bigram features:
+Given a collection of $m$ documents, we first construct a TF--IDF matrix:
+
 \begin{equation}
-M_{d \times v}, \quad v = 81{,}756 \text{ (unigrams + bigrams)}
+M \in \mathbb{R}^{d \times v}
 \end{equation}
 
-\noindent\textbf{Stage 1 --- Concept Space Construction:}\\
-Compute the document--concept similarity matrix via pairwise cosine similarity
-in TF--IDF space:
-\begin{equation}
-C_{ij} = \cos\bigl(\text{tfidf}(d_i),\; \text{tfidf}(c_j)\bigr),
-\quad C \in \mathbb{R}^{d \times m}
-\end{equation}
-Since concepts are the documents themselves ($d = m = 1398$),
-$C$ is a symmetric $1398 \times 1398$ matrix with $C_{ii} = 1$.
+using unigram and bigram features:
 
-\noindent\textbf{Stage 2 --- Concept Pruning (top-$k$ selection):}\\
-For each row of $C$ (and for each query activation vector),
-retain only the $k$ highest-similarity concepts:
+\begin{equation}
+v = 81{,}756
+\end{equation}
+
+% ----------------------------------------------------------
+\noindent\textbf{Stage 1 --- Concept Space Construction}
+
+The document--concept similarity matrix is computed using cosine similarity:
+
+\begin{equation}
+C_{ij}
+=
+\cos\left(
+\text{tfidf}(d_i),
+\text{tfidf}(c_j)
+\right)
+\end{equation}
+
+where each concept corresponds to a Cranfield document itself.
+
+Thus:
+
+\begin{equation}
+C \in \mathbb{R}^{1398 \times 1398}
+\end{equation}
+
+with:
+
+\begin{equation}
+C_{ii} = 1
+\end{equation}
+
+% ----------------------------------------------------------
+\noindent\textbf{Stage 2 --- Top-$k$ Concept Pruning}
+
+For each document vector, only the top-$k$ concept activations are retained:
+
 \begin{equation}
 \tilde{C}_{i,\cdot} =
 \begin{cases}
-C_{ij} & \text{if } j \in \text{top-}k(C_{i,\cdot}) \text{ and } C_{ij} > 0 \\
-0 & \text{otherwise}
+C_{ij}, & j \in \text{top-}k(C_{i,\cdot}) \\
+0, & \text{otherwise}
 \end{cases}
 \end{equation}
-followed by L2 row-normalization:
-\begin{equation}
-\hat{C}_{i,\cdot} = \frac{\tilde{C}_{i,\cdot}}{\|\tilde{C}_{i,\cdot}\|_2}
-\end{equation}
-Top-$k$ selection uses \texttt{argpartition} for $O(m)$
-complexity instead of full $O(m \log m)$ sorting.
 
-\noindent\textbf{Stage 3 --- Query Projection:}\\
-Transform query into concept activation vector via TF--IDF similarity
-to all concepts:
+followed by L2 normalization:
+
 \begin{equation}
-s_j = \cos\bigl(\text{tfidf}(q),\; \text{tfidf}(c_j)\bigr),
-\quad \hat{s} = \text{prune-and-normalize}(s, k)
+\hat{C}_{i,\cdot}
+=
+\frac{
+\tilde{C}_{i,\cdot}
+}{
+\|\tilde{C}_{i,\cdot}\|_2
+}
 \end{equation}
 
-\noindent\textbf{Stage 4 --- Document Ranking:}\\
-Final relevance score via dot product in concept space:
+Efficient top-$k$ selection is implemented using \texttt{argpartition}.
+
+% ----------------------------------------------------------
+\noindent\textbf{Stage 3 --- Query Projection}
+
+Queries are projected into concept space using cosine similarity:
+
 \begin{equation}
-S(q, d) = \hat{s} \cdot \hat{C}_{d,\cdot}^{T}
+s_j
+=
+\cos\left(
+\text{tfidf}(q),
+\text{tfidf}(c_j)
+\right)
 \end{equation}
 
-This is a \emph{second-order} TF--IDF: the first order produces TF--IDF vectors,
-and the second order re-represents every text as a weighted combination of its
-concept-document similarities before final comparison.
+The query activation vector is then pruned and normalized:
 
+\begin{equation}
+\hat{s}
+=
+\text{prune-and-normalize}(s,k)
+\end{equation}
+
+% ----------------------------------------------------------
+\noindent\textbf{Stage 4 --- Document Ranking}
+
+Final relevance scores are computed in concept space:
+
+\begin{equation}
+S(q,d)
+=
+\hat{s}
+\cdot
+\hat{C}_{d,\cdot}^{T}
+\end{equation}
+
+ESA therefore acts as a \textbf{second-order TF--IDF model}:
+TF--IDF first represents terms, and ESA subsequently represents texts
+through similarities to concept-documents.
+
+% ----------------------------------------------------------
 \textbf{Design Decisions:}
+
 \begin{itemize}[noitemsep]
-  \item \textbf{Bigram features (ngram\_range = (1,2)):} Captures multi-word technical
-    phrases (``heat transfer,'' ``shell buckling,'' ``interference effects'') as atomic
-    units, producing 81,756 features vs.\ LSA's 3,406 unigrams.
-    Bigrams improved MAP by +7.2\%.
-  \item \textbf{Top-$k$ concepts $k = 25$:} Determined via grid search over
-    $\{5, 10, 15, 20, 25, 30\}$. Balances semantic coverage (enough concepts
-    to capture query intent) against noise (irrelevant concept activations).
-    Average active concepts per query: 19.2 out of 1398.
-  \item \textbf{Sublinear TF scaling:} $\text{tf} = 1 + \log(\text{raw\_tf})$;
-    prevents dominance of high-frequency terms. Improved MAP by +5.2\%.
-  \item \textbf{Stricter max\_df = 0.9} (vs.\ LSA's 0.95): ESA's bigrams create
-    more high-frequency term combinations; tighter filtering improves concept
-    discrimination.
-  \item \textbf{Self-referential concepts} (Cranfield-as-concepts): Avoids domain
-    mismatch from external corpora; concepts come from the same aeronautics domain
-    as the retrieval targets.
+    \item \textbf{Bigram features $(1,2)$:}
+    Capture technical multi-word expressions as atomic semantic units
+
+    \item \textbf{Top-$k$ concepts $(k = 25)$:}
+    Balances semantic coverage and noise suppression
+
+    \item \textbf{Sublinear TF scaling:}
+    Prevents frequent terms from dominating concept activation
+
+    \item \textbf{Stricter max\_df $(0.9)$:}
+    Improves concept discrimination in dense bigram space
+
+    \item \textbf{Self-referential concepts:}
+    Avoids external-domain mismatch
 \end{itemize}
+
+% ----------------------------------------------------------
 \begin{table}[htbp]
 \centering
 \caption{ESA retrieval performance with and without bigram features.}
 \label{tab:esa-bigram}
 \begin{tabular}{l c c c c c}
 \toprule
-\textbf{ESA Variant} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10} & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\textbf{ESA Variant} &
+\textbf{P@10} &
+\textbf{R@10} &
+\textbf{MAP@10} &
+\textbf{nDCG@10} &
+\textbf{MRR@10} \\
 \midrule
-Baseline TF-IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+Baseline TF--IDF & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
 ESA (Unigram only) & \textbf{0.3204} & \textbf{0.4530} & \textbf{0.3537} & 0.4977 & 0.7458 \\
-\textbf{ESA (Unigram + Bigram)} & 0.3133 & 0.4456 & 0.3431 & \textbf{0.4980} & \textbf{0.7654} \\
+ESA (Unigram + Bigram) & 0.3133 & 0.4456 & 0.3431 & \textbf{0.4980} & \textbf{0.7654} \\
 \bottomrule
 \end{tabular}
 \end{table}
-Table~\ref{tab:esa-bigram} compares ESA with unigram-only features against our adopted 
-configuration that incorporates bigrams ($\text{ngram\_range} = (1,2)$). Both ESA variants 
-outperform the baseline TF-IDF across all metrics, validating the concept-space projection 
-approach. The unigram-only ESA achieves a higher MAP@10 (0.3537 vs.\ 0.3431) and P@10 
-(0.3204 vs.\ 0.3133), indicating slightly better average precision across the full top-10 
-list. However, the bigram-enhanced ESA yields superior nDCG@10 (0.4980 vs.\ 0.4977) and, 
-critically, a substantially higher MRR@10 (0.7654 vs.\ 0.7458, $+2.6\%$ relative), meaning 
-that the first relevant document is consistently retrieved at a higher rank. This improvement 
-stems from bigrams capturing multi-word technical phrases---such as ``boundary layer,'' 
-``heat transfer,'' and ``shock wave''---as atomic TF-IDF features, enabling more 
-discriminative concept similarity computations. In the Cranfield aerospace corpus, such 
-phrases are semantically distinct from their constituent unigrams; without bigrams, ESA may 
-conflate documents that share individual words in unrelated contexts. We adopt the bigram 
-configuration because ESA's primary role is concept-level semantic matching, where correctly 
-identifying the top result (P@1 improves by $+4.1\%$ relative with bigrams) outweighs 
-marginal gains in late-list precision. \\
 
-\textbf{Insights:}
+Both ESA variants outperform the baseline TF--IDF system, validating the effectiveness
+of concept-space retrieval.
+
+The unigram-only ESA achieves slightly higher MAP@10 and P@10, while the bigram-enhanced
+variant produces the strongest MRR@10 and nDCG@10. This indicates that bigrams improve
+the ranking of the earliest relevant documents.
+
+The improvement arises because technical phrases such as:
+
 \begin{itemize}[noitemsep]
-  \item ESA achieves +13.4\% MAP improvement over baseline TF--IDF (0.3431 vs.\ 0.3026),
-    confirming that second-order concept representation captures semantic relationships
-    beyond surface-level term matching.
-  \item ESA excels on narrowly-defined, technically-specific queries where relevant
-    documents form explicit semantic clusters (e.g., Query~75: vorticity/heat-transfer
-    analysis recovered from complete TF--IDF/LSA failure).
-  \item Bigrams are critical: multi-word phrases like ``heat transfer,''
-    ``large deflection,'' ``conical shells'' act as diagnostic concept markers.
-  \item The explicit concept space provides \emph{interpretability}: one can inspect
-    which concept-documents activated for a given query, unlike LSA's opaque latent
-    dimensions.
-  \item ESA's concept density is only 1.8\% (25 active out of 1398), showing extreme
-    sparsity in concept space --- each query focuses on a very small semantic neighbourhood.
+    \item ``boundary layer''
+    \item ``heat transfer''
+    \item ``shock wave''
 \end{itemize}
 
+carry meanings that cannot be reliably inferred from individual unigrams.
+
+Because ESA is fundamentally concept-oriented, retrieving the correct top-ranked document
+is more important than marginal gains in deeper ranking precision. We therefore adopt the
+bigram-enhanced configuration.
+
+% ----------------------------------------------------------
+\textbf{Key Insights:}
+
+\begin{itemize}[noitemsep]
+    \item ESA achieves strong semantic retrieval improvements over TF--IDF
+    \item Explicit concepts improve interpretability compared with LSA
+    \item Bigrams are essential for technical phrase discrimination
+    \item ESA performs particularly well on narrowly focused technical queries
+    \item Concept activations remain extremely sparse, focusing retrieval on compact semantic neighborhoods
+\end{itemize}
+
+% ----------------------------------------------------------
 \textbf{Limitations:}
+
 \begin{itemize}[noitemsep]
-  \item Concept space is bounded by the document collection: if no document covers
-    a query's topic, ESA cannot activate relevant concepts.
-  \item The 92\% sparsity in the document--concept matrix limits ranking expressiveness
-    for multi-faceted queries spanning multiple sub-domains.
-  \item ESA underperforms LSA overall (MAP 0.3431 vs.\ 0.3703) because LSA's learned
-    latent factors are more flexible at capturing cross-domain relationships; ESA's
-    explicit concepts are fixed to individual documents.
-  \item Computational cost: 81,756-dimensional bigram feature space and full $O(d^2)$
-    concept matrix construction make ESA $\sim$6$\times$ slower per query than LSA.
-  \item Concept selection ($k = 25$) is a global threshold; query-adaptive concept
-    selection could improve performance on diverse query types.
+    \item Concept space is bounded by the existing corpus
+    \item Explicit concepts are less flexible than latent semantic factors
+    \item Computational cost is substantially higher than LSA
+    \item Global top-$k$ pruning may not generalize equally across all query types
 \end{itemize}
 
-% --------------------------------------------------
-
+% ==========================================================
 \subsection*{Comparative Analysis}
 
 \textbf{Hypothesis:}
-We hypothesized that latent semantic models would generalize better than explicit concept models due to their ability to compress global structure.
 
+We hypothesized that latent semantic models would generalize more effectively than
+explicit concept models because they compress global semantic structure into continuous
+representations.
+
+% ----------------------------------------------------------
 \textbf{Findings:}
-\begin{itemize}
+
+\begin{itemize}[noitemsep]
     \item LSA consistently outperforms ESA in MAP and nDCG
-    \item ESA shows localized improvements on phrase-heavy queries
-    \item LSA provides more stable performance across diverse queries
+    \item ESA performs strongly on phrase-heavy technical queries
+    \item Hybrid retrieval provides the best overall performance
+    \item Latent semantic compression generalizes more effectively across diverse queries
 \end{itemize}
 
+% ----------------------------------------------------------
 \textbf{Core Insight:}
-\begin{quote}
-Latent semantic compression is more effective than explicit concept expansion for technical information retrieval.
-\end{quote}
 
+\begin{quote}
+Latent semantic compression provides stronger generalization than explicit concept
+expansion for technical information retrieval, while hybrid lexical-semantic retrieval
+offers the most balanced and robust overall performance.
+\end{quote}
 % ============================================================
 %  BM25, N-gram, WordNet + Local Context, Limitations Eval
 % ============================================================
 
 % ------------------------------------------------------------------
-\section{BM25 Retrieval}
+\subsection{BM25 Retrieval}
 % ------------------------------------------------------------------
 
-\subsection{Hypothesis \& Targeted Limitations}
+\subsubsection*{Hypothesis \& Targeted Limitations}
 
 The TF--IDF baseline suffers from two pathologies: (1)~\textbf{unbounded
 term-frequency saturation}, where repeating a query term arbitrarily many
@@ -864,7 +1114,7 @@ accumulate query terms by chance. BM25 addresses both through a
 probabilistic weighting scheme, directly targeting the
 \textit{Sparse Representation} limitation.
 
-\subsection{Evolution \& Intermediate Methods}
+\subsubsection*{Evolution \& Intermediate Methods}
 
 Early experiments confirmed TF--IDF's length bias on Cranfield. Raw BM25
 with default parameters gave an immediate MAP improvement. A grid search
@@ -872,7 +1122,7 @@ over $k_1 \in \{1.2, 1.5, 2.0\}$ and $b \in \{0.5, 0.65, 0.75, 1.0\}$
 evaluated on all 225 queries determined the best configuration:
 $k_1 = 1.5$, $b = 0.75$.
 
-\subsection{Method Formulation}
+\subsubsection*{Method Formulation}
 
 \begin{equation}
     \text{BM25}(q, d)
@@ -893,7 +1143,7 @@ $\text{avgdl}$ is the mean document length, and:
 The $k_1$ parameter bounds TF saturation; $b$ interpolates between no
 length normalisation ($b=0$) and full pivoted normalisation ($b=1$).
 
-\subsection{Design Decisions}
+\subsubsection*{Design Decisions}
 \begin{itemize}[noitemsep]
     \item \textbf{Best configuration:} $k_1 = 1.5$, $b = 0.75$
     \item \textbf{IDF smoothing:} additive $+1$ prevents negative IDF
@@ -902,9 +1152,8 @@ length normalisation ($b=0$) and full pivoted normalisation ($b=1$).
     \item \textbf{Inverted-index retrieval} ranked by descending BM25 score
 \end{itemize}
 
-\subsection{Results}
+\subsubsection*{Results}
 
-% ------- REPLACE THIS TABLE with values from comparison_table.txt -------
 \begin{table}[h]
 \centering
 \begin{tabular}{lccccc}
@@ -912,15 +1161,13 @@ length normalisation ($b=0$) and full pivoted normalisation ($b=1$).
 \textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
                & \textbf{nDCG@10} & \textbf{MRR@10} \\
 \midrule
-TF--IDF Baseline & -- & -- & -- & -- & -- \\
-BM25 ($k_1{=}1.5$, $b{=}0.75$) & -- & -- & -- & -- & -- \\
+TF--IDF Baseline & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+BM25 ($k_1{=}1.5$, $b{=}0.75$) & 0.2893 & 0.4168 & 0.3330 & 0.4950 & 0.7954 \\
 \bottomrule
 \end{tabular}
-\caption{BM25 vs.\ TF--IDF on the Cranfield collection at $k=10$.
-Values from \texttt{bm25/output\_bm25/comparison\_table.txt}.}
+\caption{BM25 vs.\ TF--IDF on the Cranfield collection at $k=10$.}
 \label{tab:bm25_results}
 \end{table}
-% ------------------------------------------------------------------------
 
 \begin{figure}[h]
 \centering
@@ -929,7 +1176,7 @@ Values from \texttt{bm25/output\_bm25/comparison\_table.txt}.}
 \label{fig:bm25_plot}
 \end{figure}
 
-\subsection{Insights \& Limitations}
+\subsection*{Insights \& Limitations}
 
 BM25 consistently outperformed TF--IDF across all metrics. The MAP gain
 reflects improved discrimination: TF saturation and length normalisation
@@ -985,25 +1232,21 @@ vocabulary $\mathcal{V}_n$ are cosine-compared.
 
 \subsection{Results}
 
-% ------- REPLACE THIS TABLE with values from summary_k10.csv -------
 \begin{table}[h]
 \centering
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
-               & \textbf{nDCG@10} & \textbf{MRR@10} \\
+\textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{F@10} & \textbf{MAP@10} \\
 \midrule
-Unigram TF--IDF & -- & -- & -- & -- & -- \\
-Bigram ($n=2$)  & -- & -- & -- & -- & -- \\
-Trigram ($n=3$) & -- & -- & -- & -- & -- \\
-$n=4$           & -- & -- & -- & -- & -- \\
+Unigram TF--IDF & 0.2836 & 0.4100 & 0.3103 & 0.3026 \\
+Bigram ($n=2$)  & 0.2760 & 0.3994 & 0.3022 & 0.3044 \\
+Trigram ($n=3$) & 0.2724 & 0.3956 & 0.2987 & 0.2954 \\
+$n=4$           & 0.2720 & 0.3944 & 0.2980 & 0.2924 \\
 \bottomrule
 \end{tabular}
-\caption{N-gram sweep results at $k=10$.
-Values from \texttt{ngram/output\_ngram/summary\_k10.csv}.}
+\caption{N-gram sweep results at $k=10$.}
 \label{tab:ngram_results}
 \end{table}
-% -------------------------------------------------------------------
 
 \begin{figure}[h]
 \centering
@@ -1025,7 +1268,7 @@ $k=1$--$10$ (N-gram experiment).}
 Bigrams improved on the unigram baseline for queries containing two-word
 technical compounds. Larger $n$ degraded performance monotonically due to
 extreme feature sparsity: most query $n$-grams matched zero documents.
-N-gram retrieval still cannot handle synonymy or paraphrase --- semantic
+N-gram retrieval still cannot handle synonymy or paraphrase, semantic
 methods are needed for that.
 
 % ------------------------------------------------------------------
@@ -1100,7 +1343,6 @@ IDF-weighted and L2-normalised:
 
 \subsection{Results}
 
-% ------- REPLACE THIS TABLE with values from summary_k10.csv -------
 \begin{table}[h]
 \centering
 \begin{tabular}{lccccc}
@@ -1108,9 +1350,9 @@ IDF-weighted and L2-normalised:
 \textbf{Model} & \textbf{P@10} & \textbf{R@10} & \textbf{MAP@10}
                & \textbf{nDCG@10} & \textbf{MRR@10} \\
 \midrule
-TF--IDF Baseline          & -- & -- & -- & -- & -- \\
-WordNet (no context)      & -- & -- & -- & -- & -- \\
-WordNet + Context ($w=5$) & -- & -- & -- & -- & -- \\
+TF--IDF Baseline          & 0.2836 & 0.4100 & 0.3026 & 0.4589 & 0.7368 \\
+WordNet (no context)      & 0.2591 & 0.3693 & 0.2641 & 0.4118 & 0.6672 \\
+WordNet + Context ($w=5$) & 0.2529 & 0.3629 & 0.2505 & 0.3993 & 0.6447 \\
 \bottomrule
 \end{tabular}
 \caption{WordNet expansion results at $k=10$.
