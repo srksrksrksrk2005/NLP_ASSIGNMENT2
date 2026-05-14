@@ -19,10 +19,10 @@
 - base_min_similarity_floor: 0.08
 - method_threshold_quantile: 0.6
 - self_weight: 1.0
-- expansion_weight: 0.0
+- expansion_weight: 0.2
 - replacement_weight: 0.85
 - replacement_expansion_weight: 0.15
-- adaptive_mean_similarity_threshold: True
+- adaptive_mean_similarity_threshold: False
 - mean_similarity_factor: 1.0
 - normalize_neighbor_mass: True
 - similarity_power: 1.0
@@ -42,30 +42,30 @@
 | Method | P@10 | R@10 | F@10 | MAP@10 | nDCG@10 | MRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | baseline_tfidf | 0.2813 | 0.4005 | 0.3059 | 0.3024 | 0.4546 | 0.7379 |
-| wordnet | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
-| embedding_tfidf | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
-| embedding_lsa | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
-| embedding_esa | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
-| embedding_word2vec | 0.2809 | 0.3998 | 0.3054 | 0.3019 | 0.4544 | 0.7379 |
+| wordnet | 0.2800 | 0.3991 | 0.3047 | 0.3047 | 0.4577 | 0.7482 |
+| embedding_tfidf | 0.2804 | 0.3985 | 0.3046 | 0.3010 | 0.4530 | 0.7372 |
+| embedding_lsa | 0.2791 | 0.3986 | 0.3043 | 0.3009 | 0.4510 | 0.7335 |
+| embedding_esa | 0.2804 | 0.3985 | 0.3046 | 0.3009 | 0.4531 | 0.7375 |
+| embedding_word2vec | 0.2796 | 0.3974 | 0.3037 | 0.3011 | 0.4532 | 0.7371 |
 
 ## Delta vs Baseline (k=10)
 
 | Method | dP@10 | dR@10 | dF@10 | dMAP@10 | dnDCG@10 | dMRR@10 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| wordnet | -0.0004 | -0.0006 | -0.0005 | -0.0005 | -0.0003 | +0.0000 |
-| embedding_tfidf | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
-| embedding_lsa | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
-| embedding_esa | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
-| embedding_word2vec | -0.0004 | -0.0006 | -0.0005 | -0.0004 | -0.0002 | +0.0000 |
+| wordnet | -0.0013 | -0.0014 | -0.0012 | +0.0024 | +0.0031 | +0.0103 |
+| embedding_tfidf | -0.0009 | -0.0020 | -0.0013 | -0.0013 | -0.0017 | -0.0007 |
+| embedding_lsa | -0.0022 | -0.0019 | -0.0016 | -0.0015 | -0.0037 | -0.0044 |
+| embedding_esa | -0.0009 | -0.0019 | -0.0013 | -0.0014 | -0.0015 | -0.0004 |
+| embedding_word2vec | -0.0018 | -0.0030 | -0.0022 | -0.0013 | -0.0014 | -0.0007 |
 
 ## Best Method Per Metric at k=10
 
 - precision: baseline_tfidf (0.2813)
 - recall: baseline_tfidf (0.4005)
 - fscore: baseline_tfidf (0.3059)
-- map: baseline_tfidf (0.3024)
-- ndcg: baseline_tfidf (0.4546)
-- mrr: baseline_tfidf (0.7379)
+- map: wordnet (0.3047)
+- ndcg: wordnet (0.4577)
+- mrr: wordnet (0.7482)
 
 ## Example Cases Summary
 
@@ -104,8 +104,8 @@
 
 ## Output Files
 
-- Summary JSON: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary.json
-- Summary CSV: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/summary_k10.csv
-- Overlay plot: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/eval_overlay.png
-- Example comparison markdown: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.md
-- Example comparison json: /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/Nikhil/query_expansion/output/example_query_comparison.json
+- Summary JSON: NLP_ASSIGNMENT2/project/humanised/output_query_expansion/summary.json
+- Summary CSV: NLP_ASSIGNMENT2/project/humanised/output_query_expansion/summary_k10.csv
+- Overlay plot: NLP_ASSIGNMENT2/project/humanised/output_query_expansion/eval_overlay.png
+- Example comparison markdown: NLP_ASSIGNMENT2/project/humanised/output_query_expansion/example_query_comparison.md
+- Example comparison json: NLP_ASSIGNMENT2/project/humanised/output_query_expansion/example_query_comparison.json
