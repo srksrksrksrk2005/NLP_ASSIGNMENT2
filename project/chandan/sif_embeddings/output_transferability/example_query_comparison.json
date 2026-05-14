@@ -1,0 +1,246 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      846,
+      763,
+      398
+    ],
+    "method_top5": [
+      102,
+      846,
+      45,
+      623,
+      847
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.1538,
+    "method_ap_at_10": 0.335,
+    "delta_ap_at_10": 0.1812,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      272,
+      295
+    ],
+    "method_top5": [
+      536,
+      976,
+      272,
+      126,
+      558
+    ],
+    "relevant_hits_in_method_top5": [
+      536,
+      976,
+      272,
+      558
+    ]
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.2619,
+    "method_ap_at_10": 0.7556,
+    "delta_ap_at_10": 0.4937,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      52,
+      390,
+      878,
+      593,
+      834
+    ],
+    "method_top5": [
+      390,
+      52,
+      627,
+      856,
+      391
+    ],
+    "relevant_hits_in_method_top5": [
+      390,
+      627,
+      391
+    ]
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.2869,
+    "method_ap_at_10": 0.5889,
+    "delta_ap_at_10": 0.302,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      249,
+      206,
+      652,
+      714,
+      799
+    ],
+    "method_top5": [
+      652,
+      799,
+      631,
+      203,
+      672
+    ],
+    "relevant_hits_in_method_top5": [
+      799,
+      631,
+      672
+    ]
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.1048,
+    "method_ap_at_10": 0.2095,
+    "delta_ap_at_10": 0.1048,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      311,
+      1187,
+      187,
+      996
+    ],
+    "method_top5": [
+      265,
+      798,
+      291,
+      187,
+      311
+    ],
+    "relevant_hits_in_method_top5": [
+      798,
+      291,
+      311
+    ]
+  },
+  {
+    "query_id": 35,
+    "query": "are there any papers dealing with acoustic wave propagation in reacting gases .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.6875,
+    "delta_ap_at_10": 0.6875,
+    "delta_hits_at_5": 3,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      724,
+      1244,
+      1208,
+      1203,
+      75
+    ],
+    "method_top5": [
+      517,
+      132,
+      319,
+      166,
+      1327
+    ],
+    "relevant_hits_in_method_top5": [
+      517,
+      132,
+      166
+    ]
+  },
+  {
+    "query_id": 5,
+    "query": "what chemical kinetic system is applicable to hypersonic aerodynamic problems .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.1067,
+    "method_ap_at_10": 0.6643,
+    "delta_ap_at_10": 0.5576,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      103,
+      1032,
+      410,
+      943,
+      552
+    ],
+    "method_top5": [
+      1296,
+      552,
+      103,
+      401,
+      1061
+    ],
+    "relevant_hits_in_method_top5": [
+      1296,
+      552,
+      401
+    ]
+  },
+  {
+    "query_id": 119,
+    "query": "what is the effect of initial axisymmetric deviations from circularity on the non linear (large-deflection) load-deflection response of cylinders under hydrostatic pressure .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.1944,
+    "method_ap_at_10": 0.75,
+    "delta_ap_at_10": 0.5556,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 6,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      928,
+      781,
+      1116,
+      938,
+      1331
+    ],
+    "method_top5": [
+      897,
+      1133,
+      1129,
+      926,
+      1132
+    ],
+    "relevant_hits_in_method_top5": [
+      897,
+      926
+    ]
+  }
+]

@@ -1,0 +1,234 @@
+[
+  {
+    "query_id": 9,
+    "query": "papers on internal /slip flow/ heat transfer studies .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": 0.0,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      102,
+      45,
+      846,
+      763,
+      398
+    ],
+    "method_top5": [
+      45,
+      270,
+      546,
+      489,
+      607
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 40,
+    "query": "how can one detect transition phenomena in hypersonic wakes .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.1538,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": -0.1538,
+    "delta_hits_at_5": -2,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      536,
+      37,
+      1141,
+      272,
+      295
+    ],
+    "method_top5": [
+      1158,
+      804,
+      64,
+      311,
+      969
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 64,
+    "query": "can't the static deflection shapes be used in predicting flutter in place of vibrational shapes . if so,  can we provide a justification by means of an example .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 0,
+    "baseline_ap_at_10": 0.2619,
+    "method_ap_at_10": 0.0,
+    "delta_ap_at_10": -0.2619,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": null,
+    "baseline_top5": [
+      52,
+      390,
+      878,
+      593,
+      834
+    ],
+    "method_top5": [
+      482,
+      416,
+      928,
+      1215,
+      152
+    ],
+    "relevant_hits_in_method_top5": []
+  },
+  {
+    "query_id": 81,
+    "query": "what are wind-tunnel corrections for a two-dimensional aerofoil mounted off-centre in a tunnel .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.2869,
+    "method_ap_at_10": 0.0833,
+    "delta_ap_at_10": -0.2036,
+    "delta_hits_at_5": 0,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 4,
+    "baseline_top5": [
+      249,
+      206,
+      652,
+      714,
+      799
+    ],
+    "method_top5": [
+      714,
+      598,
+      809,
+      672,
+      1353
+    ],
+    "relevant_hits_in_method_top5": [
+      672
+    ]
+  },
+  {
+    "query_id": 90,
+    "query": "recent data on shock-induced boundary-layer separation .",
+    "baseline_hits_at_5": 2,
+    "method_hits_at_5": 1,
+    "baseline_ap_at_10": 0.1048,
+    "method_ap_at_10": 0.0357,
+    "delta_ap_at_10": -0.069,
+    "delta_hits_at_5": -1,
+    "baseline_first_relevant_rank": 2,
+    "method_first_relevant_rank": 2,
+    "baseline_top5": [
+      265,
+      311,
+      1187,
+      187,
+      996
+    ],
+    "method_top5": [
+      1160,
+      1187,
+      866,
+      892,
+      1045
+    ],
+    "relevant_hits_in_method_top5": [
+      1187
+    ]
+  },
+  {
+    "query_id": 131,
+    "query": "what agreement is found between theoretically predicted instability times and experimentally measured collapse times for compressed columns in creep .",
+    "baseline_hits_at_5": 1,
+    "method_hits_at_5": 3,
+    "baseline_ap_at_10": 0.0873,
+    "method_ap_at_10": 0.4015,
+    "delta_ap_at_10": 0.3142,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": 5,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      1021,
+      1023,
+      1025,
+      1026,
+      950
+    ],
+    "method_top5": [
+      950,
+      1026,
+      1018,
+      1017,
+      1023
+    ],
+    "relevant_hits_in_method_top5": [
+      950,
+      1018,
+      1017
+    ]
+  },
+  {
+    "query_id": 135,
+    "query": "what are the experimental results for the creep buckling of columns .",
+    "baseline_hits_at_5": 3,
+    "method_hits_at_5": 4,
+    "baseline_ap_at_10": 0.4586,
+    "method_ap_at_10": 0.6204,
+    "delta_ap_at_10": 0.1618,
+    "delta_hits_at_5": 1,
+    "baseline_first_relevant_rank": 1,
+    "method_first_relevant_rank": 1,
+    "baseline_top5": [
+      1026,
+      1023,
+      1017,
+      1015,
+      1012
+    ],
+    "method_top5": [
+      1026,
+      1023,
+      1017,
+      1018,
+      1012
+    ],
+    "relevant_hits_in_method_top5": [
+      1026,
+      1023,
+      1017,
+      1018
+    ]
+  },
+  {
+    "query_id": 75,
+    "query": "do the discrepancies among current analyses of the vorticity effect on stagnation-point heat transfer result primarily from the differences in the viscosity-temperature law assumed .",
+    "baseline_hits_at_5": 0,
+    "method_hits_at_5": 2,
+    "baseline_ap_at_10": 0.0,
+    "method_ap_at_10": 0.1389,
+    "delta_ap_at_10": 0.1389,
+    "delta_hits_at_5": 2,
+    "baseline_first_relevant_rank": null,
+    "method_first_relevant_rank": 3,
+    "baseline_top5": [
+      565,
+      1146,
+      629,
+      180,
+      951
+    ],
+    "method_top5": [
+      1160,
+      658,
+      670,
+      630,
+      486
+    ],
+    "relevant_hits_in_method_top5": [
+      670,
+      630
+    ]
+  }
+]
