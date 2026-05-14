@@ -1,137 +1,100 @@
-import json
-import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import TruncatedSVD
-from sklearn.metrics.pairwise import cosine_similarity
+"""Run the original LSA experiment and keep the outputs inside `humanised/`."""
 
-class LSAModel:
-    """
-    Retrieval model using Latent Semantic Analysis (SVD on TF-IDF).
-    """
-    def __init__(self, components=250):
-        self.components = components
-        self.vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.95, min_df=2)
-        self.svd = TruncatedSVD(n_components=components, random_state=42)
-        self.doc_matrix = None
-        self.doc_ids = []
-        
-    def fit(self, docs):
-        self.doc_ids = [d['id'] for d in docs]
-        texts = [d['body'] for d in docs]
-        
-        tfidf_m = self.vectorizer.fit_transform(texts)
-        self.doc_matrix = self.svd.fit_transform(tfidf_m)
-        
-    def search(self, query):
-        q_vec = self.vectorizer.transform([query])
-        q_lsa = self.svd.transform(q_vec)
-        
-        sims = cosine_similarity(q_lsa, self.doc_matrix)[0]
-        res = list(zip(self.doc_ids, sims))
-        res.sort(key=lambda x: x[1], reverse=True)
-        return res
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+from _common import CRANFIELD_DIR, SCRIPT_DIR, VENDOR_DIR, k10_row, load_json, metric_rows, run_script, write_csv
 
 
-def main():
-    import os
-    import sys
-    import json
-    import matplotlib.pyplot as plt
-    sys.path.append("../../")
-    from evaluation import Evaluation
-    
-    base_dir = "../../cranfield"
-    docs = json.load(open(os.path.join(base_dir, "cran_docs.json")))
-    queries = json.load(open(os.path.join(base_dir, "cran_queries.json")))
-    
-    # Inject optimal dataset features
-    try:
-        prep_docs = json.load(open("../../output/stopword_removed_docs.txt"))
-        prep_queries = json.load(open("../../output/stopword_removed_queries.txt"))
-        for i, d in enumerate(docs): d['body'] = " ".join(t for s in prep_docs[i] for t in s)
-        for i, q in enumerate(queries): q['query'] = " ".join(t for s in prep_queries[i] for t in s)
-    except:
-        pass
-    qrels = json.load(open(os.path.join(base_dir, "cran_qrels.json")))
+ORIGINAL_SCRIPT = VENDOR_DIR / "ramakrishna" / "lsa" / "run_lsa.py"
+DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "output_lsa"
 
-    mdl = LSAModel()
-    mdl.fit(docs)
-    
-    doc_IDs_ordered = []
-    query_ids = []
-    
-    for q in queries:
-        ranked = mdl.search(q['query'])
-        doc_IDs_ordered.append([str(did) for did, _ in ranked])
-        query_ids.append(q['query number'])
 
-    evaluator = Evaluation()
-    
-    ks = list(range(1, 11))
-    
-    # Metrics for Proposed Model
-    p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr = [], [], [], [], [], []
-    for k in ks:
-        p_prec.append(evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_rec.append(evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k))
-        p_f1.append(evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k))
-        p_map.append(evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_ndcg.append(evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k))
-        p_mrr.append(evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k))
-        
-    print(f"Model MAP@10: {p_map[-1]:.4f}")
-    
-    # Baseline comparison (Simple TF-IDF)
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-    
-    base_vec = TfidfVectorizer()
-    doc_mat = base_vec.fit_transform([d["body"] for d in docs])
-    
-    base_docs_ordered = []
-    for q in queries:
-        q_vec = base_vec.transform([q["query"]])
-        sims = cosine_similarity(q_vec, doc_mat)[0]
-        res = list(zip([d["id"] for d in docs], sims))
-        res.sort(key=lambda x: x[1], reverse=True)
-        base_docs_ordered.append([str(did) for did, _ in res])
-        
-    # Metrics for Baseline
-    b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr = [], [], [], [], [], []
-    for k in ks:
-        b_prec.append(evaluator.meanPrecision(base_docs_ordered, query_ids, qrels, k))
-        b_rec.append(evaluator.meanRecall(base_docs_ordered, query_ids, qrels, k))
-        b_f1.append(evaluator.meanFscore(base_docs_ordered, query_ids, qrels, k))
-        b_map.append(evaluator.meanAveragePrecision(base_docs_ordered, query_ids, qrels, k))
-        b_ndcg.append(evaluator.meanNDCG(base_docs_ordered, query_ids, qrels, k))
-        b_mrr.append(evaluator.meanReciprocalRank(base_docs_ordered, query_ids, qrels, k))
-        
-    plt.clf()
-    plt.figure(figsize=(12, 8))
-    
-    colors = ["b", "g", "r", "c", "m", "k"]
-    labels = ["Precision", "Recall", "F-score", "MAP", "nDCG", "MRR"]
-    proposed_metrics = [p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr]
-    baseline_metrics = [b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr]
-    
-    for i in range(6):
-        plt.plot(ks, proposed_metrics[i], label=f"Proposed {labels[i]}", color=colors[i], marker="o")
-        plt.plot(ks, baseline_metrics[i], label=f"Baseline {labels[i]}", color=colors[i], linestyle="--", marker="x")
-        
-    plt.title("Evaluation Metrics @k - Proposed vs Baseline")
-    plt.xlabel("k")
-    plt.ylabel("Score")
-    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
-    plt.xticks(ks)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    
-    if not os.path.exists("output"):
-        os.makedirs("output")
-        
-    script_name = os.path.basename(__file__).replace(".py", "")
-    plt.savefig(f"output/{script_name}_metrics_k.png")
+def build_tables(output_dir: Path) -> None:
+    summary = load_json(output_dir / "lsa_summary.json")
+    metrics_by_k = {
+        "precision": summary["precision"],
+        "recall": summary["recall"],
+        "fscore": summary["fscore"],
+        "map": summary["map"],
+        "ndcg": summary["ndcg"],
+        "mrr": summary["mrr"],
+    }
 
-if __name__ == '__main__':
+    write_csv(
+        output_dir / "lsa_metrics.csv",
+        metric_rows(metrics_by_k, "lsa"),
+        ["method", "k", "precision", "recall", "fscore", "map", "ndcg", "mrr"],
+    )
+
+    write_csv(
+        output_dir / "summary_k10.csv",
+        [
+            {
+                **k10_row("lsa", metrics_by_k),
+                "lsa_components_requested": summary["lsa_components_requested"],
+                "lsa_components_used": summary["lsa_components_used"],
+                "explained_variance_ratio_sum": summary["explained_variance_ratio_sum"],
+            }
+        ],
+        [
+            "method",
+            "precision@10",
+            "recall@10",
+            "fscore@10",
+            "map@10",
+            "ndcg@10",
+            "mrr@10",
+            "lsa_components_requested",
+            "lsa_components_used",
+            "explained_variance_ratio_sum",
+        ],
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Humanised LSA wrapper")
+    parser.add_argument("--dataset", default=str(CRANFIELD_DIR))
+    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--lsa-components", type=int, default=250)
+    parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--max-df", type=float, default=0.95)
+    parser.add_argument("--min-df", type=int, default=2)
+    parser.add_argument("--tfidf-norm", default="l2", choices=["l1", "l2", "none"])
+    parser.add_argument("--ngram-max", type=int, default=1, choices=[1, 2])
+    parser.add_argument("--disable-sublinear-tf", action="store_true")
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    run_args = [
+        "-dataset",
+        str(Path(args.dataset)),
+        "-out_folder",
+        str(output_dir),
+        "-lsa_components",
+        str(args.lsa_components),
+        "-random_state",
+        str(args.random_state),
+        "-max_df",
+        str(args.max_df),
+        "-min_df",
+        str(args.min_df),
+        "-tfidf_norm",
+        args.tfidf_norm,
+        "-ngram_max",
+        str(args.ngram_max),
+    ]
+    if args.disable_sublinear_tf:
+        run_args.append("-disable_sublinear_tf")
+
+    run_script(ORIGINAL_SCRIPT, run_args)
+    build_tables(output_dir)
+    print("LSA outputs written to:", output_dir)
+
+
+if __name__ == "__main__":
     main()

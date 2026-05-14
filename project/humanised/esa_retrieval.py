@@ -1,143 +1,107 @@
-import json
-import os
-import sys
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import TruncatedSVD
-from sklearn.metrics.pairwise import cosine_similarity
+"""Run the original ESA experiment and keep the outputs inside `humanised/`."""
 
-sys.path.append("../../")
-from evaluation import Evaluation
+from __future__ import annotations
 
-class ESARetriever:
-    """
-    Explicit Semantic Analysis.
-    Models documents as vectors in a concept space using Top K docs.
-    """
-    def __init__(self, n_concepts=100):
-        self.n_concepts = n_concepts
-        self.vectorizer = TfidfVectorizer(max_df=0.9, min_df=2, ngram_range=(1,2), sublinear_tf=True)
-        self.doc_tfidf = None
-        self.concept_matrix = None
-        self.doc_ids = []
+import argparse
+from pathlib import Path
 
-    def fit(self, docs):
-        self.doc_ids = [str(d['id']) for d in docs]
-        texts = [d['body'] for d in docs]
-        
-        # Self-referencing ESA: Use TF-IDF sparse matrix, keep top k highest tf-idf docs per term
-        self.doc_tfidf = self.vectorizer.fit_transform(texts)
-        term_doc = self.doc_tfidf.T
-        
-        # Create concept representations by keeping only top concepts
-        # For simplicity, we implement a truncated concept approximation:
-        # Instead of Wikipedia, using the dataset itself as concept space via SVD or dense TF-IDF subset
-        svd = TruncatedSVD(n_components=self.n_concepts, random_state=42)
-        self.concept_matrix = svd.fit_transform(self.doc_tfidf)
+from _common import CRANFIELD_DIR, SCRIPT_DIR, VENDOR_DIR, k10_row, load_json, metric_rows, run_script, write_csv
 
-    def search(self, query):
-        q_v = self.vectorizer.transform([query])
-        # Project to concept space
-        # (This is a simplified self-ESA approximation using LSA components as concept proxies)
-        # Using exact ESA would be doc_tfidf * doc_tfidf.T but that's memory heavy.
-        sims = cosine_similarity(q_v, self.doc_tfidf)[0]
-        results = [(self.doc_ids[i], sims[i]) for i in range(len(self.doc_ids))]
-        results.sort(key=lambda x: x[1], reverse=True)
-        return results
 
-def main():
-    base_dir = "../../cranfield"
-    docs = json.load(open(os.path.join(base_dir, "cran_docs.json")))
-    queries = json.load(open(os.path.join(base_dir, "cran_queries.json")))
-    
-    # Inject optimal dataset features
-    try:
-        prep_docs = json.load(open("../../output/stopword_removed_docs.txt"))
-        prep_queries = json.load(open("../../output/stopword_removed_queries.txt"))
-        for i, d in enumerate(docs): d['body'] = " ".join(t for s in prep_docs[i] for t in s)
-        for i, q in enumerate(queries): q['query'] = " ".join(t for s in prep_queries[i] for t in s)
-    except:
-        pass
-    qrels = json.load(open(os.path.join(base_dir, "cran_qrels.json")))
-    
-    rt = ESARetriever(n_concepts=200)
-    rt.fit(docs)
-    
-    doc_IDs_ordered = []
-    query_ids = []
-    
-    for q in queries:
-        ranked = rt.search(q['query'])
-        doc_IDs_ordered.append([str(did) for did, _ in ranked])
-        query_ids.append(q['query number'])
+ORIGINAL_SCRIPT = VENDOR_DIR / "ramakrishna" / "esa" / "run_esa.py"
+DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "output_esa"
 
-    evaluator = Evaluation()
-    
-    ks = list(range(1, 11))
-    
-    # Metrics for Proposed Model
-    p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr = [], [], [], [], [], []
-    for k in ks:
-        p_prec.append(evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_rec.append(evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k))
-        p_f1.append(evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k))
-        p_map.append(evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_ndcg.append(evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k))
-        p_mrr.append(evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k))
-        
-    print(f"Model MAP@10: {p_map[-1]:.4f}")
-    
-    # Baseline comparison (Simple TF-IDF)
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-    
-    base_vec = TfidfVectorizer()
-    doc_mat = base_vec.fit_transform([d["body"] for d in docs])
-    
-    base_docs_ordered = []
-    for q in queries:
-        q_vec = base_vec.transform([q["query"]])
-        sims = cosine_similarity(q_vec, doc_mat)[0]
-        res = list(zip([d["id"] for d in docs], sims))
-        res.sort(key=lambda x: x[1], reverse=True)
-        base_docs_ordered.append([str(did) for did, _ in res])
-        
-    # Metrics for Baseline
-    b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr = [], [], [], [], [], []
-    for k in ks:
-        b_prec.append(evaluator.meanPrecision(base_docs_ordered, query_ids, qrels, k))
-        b_rec.append(evaluator.meanRecall(base_docs_ordered, query_ids, qrels, k))
-        b_f1.append(evaluator.meanFscore(base_docs_ordered, query_ids, qrels, k))
-        b_map.append(evaluator.meanAveragePrecision(base_docs_ordered, query_ids, qrels, k))
-        b_ndcg.append(evaluator.meanNDCG(base_docs_ordered, query_ids, qrels, k))
-        b_mrr.append(evaluator.meanReciprocalRank(base_docs_ordered, query_ids, qrels, k))
-        
-    plt.clf()
-    plt.figure(figsize=(12, 8))
-    
-    colors = ["b", "g", "r", "c", "m", "k"]
-    labels = ["Precision", "Recall", "F-score", "MAP", "nDCG", "MRR"]
-    proposed_metrics = [p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr]
-    baseline_metrics = [b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr]
-    
-    for i in range(6):
-        plt.plot(ks, proposed_metrics[i], label=f"Proposed {labels[i]}", color=colors[i], marker="o")
-        plt.plot(ks, baseline_metrics[i], label=f"Baseline {labels[i]}", color=colors[i], linestyle="--", marker="x")
-        
-    plt.title("Evaluation Metrics @k - Proposed vs Baseline")
-    plt.xlabel("k")
-    plt.ylabel("Score")
-    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
-    plt.xticks(ks)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    
-    if not os.path.exists("output"):
-        os.makedirs("output")
-        
-    script_name = os.path.basename(__file__).replace(".py", "")
-    plt.savefig(f"output/{script_name}_metrics_k.png")
 
-if __name__ == '__main__':
+def build_tables(output_dir: Path) -> None:
+    summary = load_json(output_dir / "esa_metrics_summary.json")
+    rows = []
+    summary_rows = []
+    for method_name, metrics in summary.items():
+        metrics_by_k = {
+            "precision": metrics["precision"],
+            "recall": metrics["recall"],
+            "fscore": metrics["fscore"],
+            "map": metrics["map"],
+            "ndcg": metrics["ndcg"],
+            "mrr": metrics["mrr"],
+        }
+        rows.extend(metric_rows(metrics_by_k, method_name))
+        summary_rows.append(k10_row(method_name, metrics_by_k))
+
+    write_csv(
+        output_dir / "esa_metrics.csv",
+        rows,
+        ["method", "k", "precision", "recall", "fscore", "map", "ndcg", "mrr"],
+    )
+    write_csv(
+        output_dir / "summary_k10.csv",
+        summary_rows,
+        ["method", "precision@10", "recall@10", "fscore@10", "map@10", "ndcg@10", "mrr@10"],
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Humanised ESA wrapper")
+    parser.add_argument("--dataset", default=str(CRANFIELD_DIR))
+    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--lsa-components", type=int, default=250)
+    parser.add_argument("--hybrid-lsa-components", type=int, default=240)
+    parser.add_argument("--tfidf-weight", type=float, default=0.2)
+    parser.add_argument("--esa-top-concepts", type=int, default=25)
+    parser.add_argument("--esa-min-similarity", type=float, default=0.0)
+    parser.add_argument("--concept-source", default="cranfield", choices=["cranfield", "20news-technical"])
+    parser.add_argument("--concept-limit", type=int, default=0)
+    parser.add_argument("--prebuilt-index-path", default="")
+    parser.add_argument("--random-state", type=int, default=42)
+    parser.add_argument("--max-df", type=float, default=0.9)
+    parser.add_argument("--min-df", type=int, default=1)
+    parser.add_argument("--tfidf-norm", default="l2", choices=["l1", "l2", "none"])
+    parser.add_argument("--ngram-max", type=int, default=2, choices=[1, 2])
+    parser.add_argument("--disable-sublinear-tf", action="store_true")
+    args = parser.parse_args()
+
+    output_dir = Path(args.output_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    run_args = [
+        "-dataset",
+        str(Path(args.dataset)),
+        "-out_folder",
+        str(output_dir),
+        "-lsa_components",
+        str(args.lsa_components),
+        "-hybrid_lsa_components",
+        str(args.hybrid_lsa_components),
+        "-tfidf_weight",
+        str(args.tfidf_weight),
+        "-esa_top_concepts",
+        str(args.esa_top_concepts),
+        "-esa_min_similarity",
+        str(args.esa_min_similarity),
+        "-concept_source",
+        args.concept_source,
+        "-concept_limit",
+        str(args.concept_limit),
+        "-prebuilt_index_path",
+        str(args.prebuilt_index_path),
+        "-random_state",
+        str(args.random_state),
+        "-max_df",
+        str(args.max_df),
+        "-min_df",
+        str(args.min_df),
+        "-tfidf_norm",
+        args.tfidf_norm,
+        "-ngram_max",
+        str(args.ngram_max),
+    ]
+    if args.disable_sublinear_tf:
+        run_args.append("-disable_sublinear_tf")
+
+    run_script(ORIGINAL_SCRIPT, run_args)
+    build_tables(output_dir)
+    print("ESA outputs written to:", output_dir)
+
+
+if __name__ == "__main__":
     main()

@@ -1,0 +1,2211 @@
+{
+  "description": "Expanded test set: 20+ queries per limitation. Set A = Cranfield queries (verified against cran_qrels.json). Set B = custom queries.",
+  "limitations": {
+    "lack_of_semantic_understanding": {
+      "abbreviation": "Sem.",
+      "methods_that_address": [
+        "WordNet expansion",
+        "Word-embedding expansion",
+        "LSA",
+        "ESA",
+        "WordNet local context"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 5,
+          "query": "what chemical kinetic system is applicable to hypersonic aerodynamic problems .",
+          "relevant_docs": [
+            "1296",
+            "1297",
+            "401",
+            "488",
+            "552"
+          ],
+          "why": "chemical kinetic system vs reacting gas mixtures/dissociation"
+        },
+        {
+          "query_number": 94,
+          "query": "what is the theoretical heat transfer rate at the stagnation point of a blunt body .",
+          "relevant_docs": [
+            "101",
+            "1104",
+            "1161",
+            "1393",
+            "1395",
+            "24",
+            "283",
+            "294",
+            "354",
+            "559",
+            "635",
+            "689",
+            "690"
+          ],
+          "why": "heat transfer rate at stagnation point: conceptual gap with BL theory"
+        },
+        {
+          "query_number": 4,
+          "query": "can a criterion be developed to show empirically the validity of flow solutions for chemically reacting gas mixtures based on the simplifying assumption of instantaneous local chemical equilibrium .",
+          "relevant_docs": [
+            "166",
+            "236",
+            "488"
+          ],
+          "why": "chemically reacting gas mixtures: domain-specific phrasing mismatch"
+        },
+        {
+          "query_number": 73,
+          "query": "what role does the effect of chemical reaction (particularly when out of equilibrium) play in the similitude laws governing hypersonic flows over slender aerodynamic bodies .",
+          "relevant_docs": [
+            "1198",
+            "1213",
+            "1252",
+            "1304",
+            "1355",
+            "160",
+            "25",
+            "317",
+            "332",
+            "401",
+            "421",
+            "541",
+            "571",
+            "572",
+            "573",
+            "574",
+            "577",
+            "578",
+            "625",
+            "655",
+            "68"
+          ],
+          "why": "similitude laws vs similarity parameters; out of equilibrium vs nonequilibrium"
+        },
+        {
+          "query_number": 155,
+          "query": "technical report on measurement of ablation during flight .",
+          "relevant_docs": [
+            "1065",
+            "1099",
+            "1100",
+            "1101",
+            "1103",
+            "1104",
+            "983"
+          ],
+          "why": "ablation measurement vs mass loss/heat protection shield"
+        },
+        {
+          "query_number": 156,
+          "query": "what qualitative and quantitative material is available on ablation materials research .",
+          "relevant_docs": [
+            "1065",
+            "1096",
+            "1097",
+            "1098",
+            "1099",
+            "1100",
+            "1101",
+            "1102",
+            "1103",
+            "1104",
+            "274",
+            "553",
+            "82",
+            "982",
+            "983"
+          ],
+          "why": "ablation materials research: qualitative/quantitative vs specific material terms"
+        },
+        {
+          "query_number": 201,
+          "query": "what are the nonequilibrium chemical constituents in the viscous shock layer ahead of a blunt re-entry vehicle .",
+          "relevant_docs": [
+            "110",
+            "1140",
+            "1151",
+            "1295",
+            "1296",
+            "1304",
+            "1391",
+            "160",
+            "318",
+            "369",
+            "401",
+            "423",
+            "482",
+            "541",
+            "552",
+            "625",
+            "93"
+          ],
+          "why": "nonequilibrium chemical constituents: specialized concept vocabulary"
+        },
+        {
+          "query_number": 53,
+          "query": "what investigations have been made of the flow field about a body moving through a rarefied,  partially ionized gas in the presence of a magneticfield .",
+          "relevant_docs": [
+            "208",
+            "296",
+            "297",
+            "298",
+            "299",
+            "33",
+            "446",
+            "447",
+            "448",
+            "449",
+            "531"
+          ],
+          "why": "ionized gas + magnetic field: semantic gap across physics domains"
+        },
+        {
+          "query_number": 20,
+          "query": "has anyone formally determined the influence of joule heating,  produced by the induced current,  in magnetohydrodynamic free convection flows under general conditions .",
+          "relevant_docs": [
+            "104",
+            "267",
+            "268",
+            "269",
+            "270",
+            "407",
+            "408",
+            "500",
+            "87",
+            "88"
+          ],
+          "why": "joule heating + magnetohydrodynamic: concept-level gap"
+        },
+        {
+          "query_number": 10,
+          "query": "are real-gas transport properties for air available over a wide range of enthalpies and densities .",
+          "relevant_docs": [
+            "1011",
+            "259",
+            "302",
+            "405",
+            "436",
+            "437",
+            "438",
+            "493",
+            "998"
+          ],
+          "why": "real-gas transport properties: conceptual domain mismatch"
+        },
+        {
+          "query_number": 19,
+          "query": "does there exist a good basic treatment of the dynamics of re-entry combining consideration of realistic effects with relative simplicity of results .",
+          "relevant_docs": [
+            "1379",
+            "164",
+            "32",
+            "499",
+            "639",
+            "67",
+            "715",
+            "716",
+            "717",
+            "719"
+          ],
+          "why": "dynamics of re-entry: realistic effects vs specific aerodynamic terms"
+        },
+        {
+          "query_number": 74,
+          "query": "how significant is the possible pressure of a dissociated free stream with respect to the realization of hypersonic simulation in high enthalpy wind tunnels .",
+          "relevant_docs": [
+            "317",
+            "541",
+            "574",
+            "575",
+            "576",
+            "578",
+            "656"
+          ],
+          "why": "dissociated free stream + hypersonic simulation: concept bridging needed"
+        },
+        {
+          "query_number": 208,
+          "query": "what is the effect of the shape of the drag polar of a lifting spacecraft on the amount of reduction in maximum deceleration obtainable by continuously varying the aerodynamic coefficients during re-entry .",
+          "relevant_docs": [
+            "1291",
+            "1344",
+            "1345",
+            "1346",
+            "1347",
+            "163",
+            "164"
+          ],
+          "why": "drag polar of lifting spacecraft: paraphrase of aerodynamic concepts"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "sem_c1",
+          "query": "how does thermal erosion protect spacecraft during atmospheric re-entry",
+          "target_concept": "ablation heat protection",
+          "expected_relevant_docs": [
+            "82"
+          ],
+          "why": "thermal erosion = ablation synonym"
+        },
+        {
+          "custom_id": "sem_c2",
+          "query": "air resistance effects on orbiting body altitude decay",
+          "target_concept": "satellite orbit contraction under drag",
+          "expected_relevant_docs": [
+            "613",
+            "614",
+            "615",
+            "548"
+          ],
+          "why": "air resistance = drag"
+        },
+        {
+          "custom_id": "sem_c3",
+          "query": "computing fluid shear forces on aircraft surfaces at high velocity",
+          "target_concept": "skin friction at supersonic speeds",
+          "expected_relevant_docs": [
+            "50",
+            "49",
+            "9",
+            "16"
+          ],
+          "why": "fluid shear forces = skin friction"
+        },
+        {
+          "custom_id": "sem_c4",
+          "query": "methods to estimate temperature distribution in multi-component structural panels under rapid heating",
+          "target_concept": "transient thermal analysis in composites",
+          "expected_relevant_docs": [
+            "5",
+            "6",
+            "29",
+            "30",
+            "66"
+          ],
+          "why": "multi-component panels = composite slabs"
+        },
+        {
+          "custom_id": "sem_c5",
+          "query": "mathematical modeling of oscillatory structural instability in thin panels exposed to airflow",
+          "target_concept": "panel flutter analysis",
+          "expected_relevant_docs": [
+            "15",
+            "52"
+          ],
+          "why": "oscillatory structural instability = flutter"
+        },
+        {
+          "custom_id": "sem_c6",
+          "query": "predicting nose-region thermal loads on vehicles entering planetary atmospheres",
+          "target_concept": "stagnation point heat transfer on re-entry bodies",
+          "expected_relevant_docs": [
+            "24",
+            "283"
+          ],
+          "why": "thermal loads = heat transfer"
+        },
+        {
+          "custom_id": "sem_c7",
+          "query": "electrically conducting fluid flow control using magnetic fields",
+          "target_concept": "magnetohydrodynamic flow over plates",
+          "expected_relevant_docs": [
+            "61",
+            "33",
+            "34"
+          ],
+          "why": "conducting fluid + magnetic = MHD"
+        },
+        {
+          "custom_id": "sem_c8",
+          "query": "numerical approaches for solving viscous fluid motion equations",
+          "target_concept": "Navier-Stokes solutions",
+          "expected_relevant_docs": [
+            "1078",
+            "1083",
+            "1084",
+            "1063"
+          ],
+          "why": "viscous fluid motion equations = Navier-Stokes"
+        },
+        {
+          "custom_id": "sem_c9",
+          "query": "structural failure under repeated cyclic loading in aerospace components",
+          "target_concept": "fatigue of aircraft structures",
+          "expected_relevant_docs": [
+            "75",
+            "724",
+            "726",
+            "727"
+          ],
+          "why": "cyclic loading failure = fatigue"
+        },
+        {
+          "custom_id": "sem_c10",
+          "query": "gas molecule mean free path effects on surface heat exchange",
+          "target_concept": "slip flow heat transfer / rarefied gas effects",
+          "expected_relevant_docs": [
+            "21",
+            "22"
+          ],
+          "why": "mean free path effects = slip flow"
+        }
+      ]
+    },
+    "high_dimensionality_and_computational_cost": {
+      "abbreviation": "Dim./Cost",
+      "methods_that_address": [
+        "LSA",
+        "Query reduction"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 92,
+          "query": "given complete freedom in the design of an airplane,  what procedure would be used in order to minimize sonic boom intensity,  and is there a limit to the degree of minimizing that can be accomplished .",
+          "relevant_docs": [
+            "1243",
+            "1247",
+            "253",
+            "758",
+            "802",
+            "803",
+            "804",
+            "805",
+            "806",
+            "807",
+            "808",
+            "809",
+            "810",
+            "811"
+          ],
+          "why": "extremely long verbose query about sonic boom minimization"
+        },
+        {
+          "query_number": 114,
+          "query": "it is not likely that the airforces on a wing of general planform oscillating in transonic flow can be determined by purely analytical methods . is it possible to determine the airforces on a single particular planform, such as the rectangular one by such method .",
+          "relevant_docs": [
+            "895",
+            "916",
+            "919",
+            "920",
+            "921"
+          ],
+          "why": "long multi-sentence query about airforces on oscillating wing"
+        },
+        {
+          "query_number": 137,
+          "query": "have any analytical studies been conducted on the time-to-failure mechanism associated with creep collapse for a long circular cylindrical shell which exhibits both primary and secondary creep as well as elastic deformations under various distributed force systems .",
+          "relevant_docs": [
+            "1021",
+            "1029",
+            "1034",
+            "951",
+            "952"
+          ],
+          "why": "verbose: time-to-failure + creep collapse + cylindrical shell"
+        },
+        {
+          "query_number": 124,
+          "query": "in what areas, other than low density wind tunnel flows, is viscous compressible flow in slender channels a problem . what analytical investigations have been made of the stability of conical shells . how do the results compare with experiment .",
+          "relevant_docs": [
+            "941",
+            "964",
+            "965",
+            "967",
+            "968"
+          ],
+          "why": "multi-part query mixing viscous channel flow + conical shells"
+        },
+        {
+          "query_number": 107,
+          "query": "in summarizing theoretical and experimental work on the behaviour of a typical aircraft structure in a noise environment is it possible to develop a design procedure .",
+          "relevant_docs": [
+            "640",
+            "720",
+            "725",
+            "728",
+            "729",
+            "75",
+            "909",
+            "911"
+          ],
+          "why": "long: summarizing theoretical/experimental work in noise environment"
+        },
+        {
+          "query_number": 144,
+          "query": "can studies of pure membrane cylinders having no wall bending stiffness but maintaining their shape by virtue of internal pressure provide any insight into the behaviour of pressurized cylinders with finite wall stiffness .",
+          "relevant_docs": [
+            "1045",
+            "763",
+            "838",
+            "839",
+            "840",
+            "841",
+            "955"
+          ],
+          "why": "long: membrane cylinders + internal pressure + shape maintenance"
+        },
+        {
+          "query_number": 99,
+          "query": "given that an uncontrolled vehicle will tumble as it enters an atmosphere, is it possible to predict when and how it will stop tumbling and its subsequent motion .",
+          "relevant_docs": [
+            "1001",
+            "1379",
+            "639",
+            "717",
+            "719"
+          ],
+          "why": "verbose: uncontrolled vehicle tumbling in atmosphere"
+        },
+        {
+          "query_number": 160,
+          "query": "compressive circumferential stresses in a torispherical shell reveal the possibility of buckling under internal pressure . has anyone investigated for which ranges of shell parameters these stresses are sufficiently large to cause elastic buckling .",
+          "relevant_docs": [
+            "1071",
+            "1134",
+            "1135",
+            "1136",
+            "1137",
+            "1138"
+          ],
+          "why": "long: torispherical shell + compressive stresses + buckling + internal pressure"
+        },
+        {
+          "query_number": 104,
+          "query": "can the load deformation characteristics of a beam be obtained with the material being inelastic and a non uniform temperature being present .",
+          "relevant_docs": [
+            "762",
+            "833",
+            "834",
+            "835",
+            "836",
+            "837"
+          ],
+          "why": "verbose: load deformation + inelastic material + non-uniform temperature"
+        },
+        {
+          "query_number": 7,
+          "query": "is it possible to relate the available pressure distributions for an ogive forebody at zero angle of attack to the lower surface pressures of an equivalent ogive forebody at angle of attack .",
+          "relevant_docs": [
+            "19",
+            "20",
+            "492",
+            "56",
+            "57",
+            "58"
+          ],
+          "why": "long: ogive forebody + zero angle of attack + lower surface pressures + equivalent"
+        },
+        {
+          "query_number": 46,
+          "query": "what is the combined effect of surface heat and mass transfer on hypersonic flow .",
+          "relevant_docs": [
+            "1185",
+            "1226",
+            "123",
+            "1355",
+            "305",
+            "338",
+            "344",
+            "481",
+            "525",
+            "570",
+            "572",
+            "623",
+            "629",
+            "663",
+            "798",
+            "84"
+          ],
+          "why": "verbose: combined effect of surface heat and mass transfer on hypersonic flow"
+        },
+        {
+          "query_number": 55,
+          "query": "to what extent can the available information for incompressible boundary layers be applied to problems involving compressible boundary layers .",
+          "relevant_docs": [
+            "16",
+            "255",
+            "271",
+            "375",
+            "376",
+            "377",
+            "378",
+            "460",
+            "502",
+            "538",
+            "562"
+          ],
+          "why": "verbose: incompressible BL info applied to compressible BL problems"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "dim_c1",
+          "query": "theoretical and experimental investigations of the combined effects of aerodynamic heating structural deformation boundary layer transition and surface roughness on the performance of supersonic aircraft wing panels during prolonged high-speed flight",
+          "target_concept": "aerothermoelastic effects on panels",
+          "expected_relevant_docs": [
+            "12",
+            "15",
+            "31",
+            "66",
+            "29"
+          ],
+          "why": "extremely long query: noise terms dilute TF-IDF signal"
+        },
+        {
+          "custom_id": "dim_c2",
+          "query": "analytical and numerical methods for solving the complete set of Navier-Stokes equations including viscous terms turbulence modeling and boundary conditions for incompressible and compressible flows over various body shapes at different Reynolds and Mach numbers",
+          "target_concept": "Navier-Stokes solution methods",
+          "expected_relevant_docs": [
+            "1078",
+            "1083",
+            "1084"
+          ],
+          "why": "verbose query with many redundant terms"
+        },
+        {
+          "custom_id": "dim_c3",
+          "query": "what are all the available experimental data and theoretical analyses and computational studies dealing with the effects of initial geometric imperfections and residual stresses and material nonlinearities on the elastic and inelastic buckling behavior of thin-walled circular cylindrical shells subjected to axial compression",
+          "target_concept": "shell buckling with imperfections",
+          "expected_relevant_docs": [
+            "821",
+            "822",
+            "824",
+            "760"
+          ],
+          "why": "extremely verbose: 40+ word query"
+        },
+        {
+          "custom_id": "dim_c4",
+          "query": "comprehensive investigation of laminar and turbulent boundary layer flows including effects of pressure gradient heat transfer surface roughness compressibility and three-dimensionality on flat plates cones and bodies of revolution at subsonic transonic supersonic and hypersonic speeds",
+          "target_concept": "boundary layer comprehensive",
+          "expected_relevant_docs": [
+            "50",
+            "49",
+            "54",
+            "55",
+            "62"
+          ],
+          "why": "kitchen-sink query: too many dimensions"
+        },
+        {
+          "custom_id": "dim_c5",
+          "query": "what methods either exact or approximate have been developed and validated for predicting the aerodynamic forces and moments acting on various wing planforms oscillating in unsteady transonic and supersonic flow fields",
+          "target_concept": "unsteady aero forces on wings",
+          "expected_relevant_docs": [
+            "900",
+            "902",
+            "916",
+            "919"
+          ],
+          "why": "verbose query needing dimensionality reduction"
+        },
+        {
+          "custom_id": "dim_c6",
+          "query": "investigation of thermal stresses discontinuity stresses edge loading effects and pressure-induced deformations in pressurized cylindrical and spherical shell structures used in aerospace vehicles",
+          "target_concept": "stresses in pressurized shells",
+          "expected_relevant_docs": [
+            "1038",
+            "1039",
+            "1041",
+            "1042",
+            "954"
+          ],
+          "why": "verbose multi-concept query"
+        },
+        {
+          "custom_id": "dim_c7",
+          "query": "determining the flutter speed boundaries vibration mode shapes natural frequencies and aeroelastic stability characteristics of heated supersonic wing panels with various boundary conditions and material properties",
+          "target_concept": "panel flutter at supersonic speeds",
+          "expected_relevant_docs": [
+            "15",
+            "391",
+            "858",
+            "859",
+            "948"
+          ],
+          "why": "verbose query spanning multiple sub-topics"
+        },
+        {
+          "custom_id": "dim_c8",
+          "query": "all papers reports and experimental data concerning the measurement prediction and control of transition from laminar to turbulent flow on aircraft surfaces at speeds ranging from low subsonic through transonic to hypersonic",
+          "target_concept": "boundary layer transition survey",
+          "expected_relevant_docs": [
+            "7",
+            "8",
+            "9",
+            "40",
+            "41",
+            "79",
+            "80",
+            "608"
+          ],
+          "why": "extremely broad verbose survey query"
+        }
+      ]
+    },
+    "poor_scalability": {
+      "abbreviation": "Scale",
+      "methods_that_address": [
+        "LSA (4/10)",
+        "ESA (4/10)"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 23,
+          "query": "what progress has been made in research on unsteady aerodynamics .",
+          "relevant_docs": [
+            "1109",
+            "1112",
+            "1141",
+            "1197",
+            "1256",
+            "1259",
+            "1272",
+            "1289",
+            "1290",
+            "1333",
+            "199",
+            "200",
+            "201",
+            "544",
+            "593",
+            "594",
+            "597",
+            "601",
+            "634",
+            "687",
+            "698",
+            "700",
+            "704",
+            "705",
+            "749",
+            "892",
+            "899",
+            "900",
+            "901",
+            "902",
+            "903",
+            "917",
+            "919"
+          ],
+          "why": "broad: unsteady aerodynamics, 33 relevant docs"
+        },
+        {
+          "query_number": 84,
+          "query": "references on the methods available for accurately estimating aerodynamic heat transfer to conical bodies for both laminar and turbulent flow .",
+          "relevant_docs": [
+            "1192",
+            "1213",
+            "142",
+            "294",
+            "354",
+            "406",
+            "522",
+            "546",
+            "606",
+            "608",
+            "873",
+            "962"
+          ],
+          "why": "broad topic: heat transfer to conical bodies"
+        },
+        {
+          "query_number": 157,
+          "query": "have flow fields been calculated for blunt-nosed bodies and compared with experiment for a wide range of free stream conditions and body shapes .",
+          "relevant_docs": [
+            "1006",
+            "1011",
+            "1105",
+            "1106",
+            "1107",
+            "1151",
+            "122",
+            "1304",
+            "1307",
+            "1355",
+            "160",
+            "161",
+            "19",
+            "215",
+            "25",
+            "273",
+            "302",
+            "318",
+            "35",
+            "354",
+            "36",
+            "369",
+            "370",
+            "372",
+            "410",
+            "421",
+            "423",
+            "44",
+            "456",
+            "482",
+            "556",
+            "557",
+            "572",
+            "605",
+            "626",
+            "655",
+            "657",
+            "666",
+            "689",
+            "93"
+          ],
+          "why": "very broad: flow fields for blunt-nosed bodies, 40+ rel docs"
+        },
+        {
+          "query_number": 65,
+          "query": "does the boundary layer on a flat plate in a shear flow induce a pressure gradient .",
+          "relevant_docs": [
+            "128",
+            "1302",
+            "180",
+            "2",
+            "3",
+            "323",
+            "324",
+            "384",
+            "388",
+            "393",
+            "394",
+            "4",
+            "418",
+            "629",
+            "659",
+            "664"
+          ],
+          "why": "broad: boundary layer on flat plate in shear flow, many docs"
+        },
+        {
+          "query_number": 47,
+          "query": "what are the existing solutions for hypersonic viscous interactions over an insulated flat plate .",
+          "relevant_docs": [
+            "1185",
+            "1355",
+            "304",
+            "305",
+            "306",
+            "307",
+            "308",
+            "309",
+            "310",
+            "525",
+            "570",
+            "572",
+            "629",
+            "663",
+            "798"
+          ],
+          "why": "broad: hypersonic viscous interactions over insulated flat plate"
+        },
+        {
+          "query_number": 67,
+          "query": "can series expansions be found for the boundary layer on a flat plate in a shear flow .",
+          "relevant_docs": [
+            "128",
+            "1302",
+            "180",
+            "2",
+            "3",
+            "323",
+            "324",
+            "388",
+            "389",
+            "393",
+            "394",
+            "4",
+            "629",
+            "659",
+            "664"
+          ],
+          "why": "broad: series expansions for BL on flat plate in shear flow"
+        },
+        {
+          "query_number": 132,
+          "query": "theoretical studies of creep buckling .",
+          "relevant_docs": [
+            "1012",
+            "1013",
+            "1014",
+            "1015",
+            "1016",
+            "1017",
+            "1018",
+            "1019",
+            "1020",
+            "1023",
+            "1024",
+            "1025",
+            "1026",
+            "950",
+            "951",
+            "952"
+          ],
+          "why": "broad: theoretical studies of creep buckling"
+        },
+        {
+          "query_number": 225,
+          "query": "what design factors can be used to control lift-drag ratios at mach numbers above 5 .",
+          "relevant_docs": [
+            "1062",
+            "1074",
+            "1075",
+            "1124",
+            "1188",
+            "1213",
+            "1280",
+            "1304",
+            "1305",
+            "1309",
+            "1377",
+            "1378",
+            "1379",
+            "1380",
+            "1381",
+            "161",
+            "225",
+            "293",
+            "40",
+            "421",
+            "433",
+            "448",
+            "449",
+            "923",
+            "924"
+          ],
+          "why": "broad: design factors for lift-drag ratios above Mach 5"
+        },
+        {
+          "query_number": 220,
+          "query": "find a calculation procedure applicable to all incompressible laminar boundary layer flow problems having good accuracy and reasonable computation time .",
+          "relevant_docs": [
+            "111",
+            "1182",
+            "1365",
+            "1366",
+            "1370",
+            "1382",
+            "1383",
+            "1384",
+            "1385",
+            "1386",
+            "150",
+            "155",
+            "241",
+            "292",
+            "376",
+            "458",
+            "459",
+            "479",
+            "62",
+            "977"
+          ],
+          "why": "broad: calculation procedure for all incompressible laminar BL flows"
+        },
+        {
+          "query_number": 221,
+          "query": "papers applicable to this problem (calculation procedures for laminar incompressible flow with arbitrary pressure gradient) .",
+          "relevant_docs": [
+            "111",
+            "1182",
+            "1365",
+            "1366",
+            "1370",
+            "1382",
+            "1383",
+            "1384",
+            "1385",
+            "1386",
+            "150",
+            "155",
+            "241",
+            "292",
+            "458",
+            "459",
+            "461",
+            "479",
+            "62"
+          ],
+          "why": "broad: papers on calculation procedures for laminar incompressible flow"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "scale_c1",
+          "query": "all available experimental and theoretical papers on boundary layer behavior",
+          "target_concept": "broad boundary-layer literature",
+          "expected_relevant_docs": [
+            "2",
+            "3",
+            "4",
+            "7",
+            "8",
+            "9",
+            "16",
+            "40",
+            "41",
+            "50",
+            "54",
+            "55",
+            "62",
+            "63",
+            "73",
+            "80"
+          ],
+          "why": "extremely broad: hundreds of possible matches"
+        },
+        {
+          "custom_id": "scale_c2",
+          "query": "comprehensive survey of heat transfer research in aerospace applications",
+          "target_concept": "heat transfer survey",
+          "expected_relevant_docs": [
+            "5",
+            "6",
+            "21",
+            "22",
+            "24",
+            "29",
+            "37",
+            "49",
+            "62",
+            "66",
+            "81"
+          ],
+          "why": "broad survey query spanning many clusters"
+        },
+        {
+          "custom_id": "scale_c3",
+          "query": "survey of structural stability and buckling analysis methods for shells",
+          "target_concept": "shell buckling survey",
+          "expected_relevant_docs": [
+            "821",
+            "822",
+            "824",
+            "820",
+            "823",
+            "825",
+            "760"
+          ],
+          "why": "broad structural topic, many related docs"
+        },
+        {
+          "custom_id": "scale_c4",
+          "query": "overview of all supersonic and hypersonic flow research",
+          "target_concept": "supersonic/hypersonic flow survey",
+          "expected_relevant_docs": [
+            "25",
+            "27",
+            "35",
+            "36",
+            "44",
+            "56",
+            "57",
+            "20"
+          ],
+          "why": "extremely broad topic"
+        },
+        {
+          "custom_id": "scale_c5",
+          "query": "papers on aerodynamic heating and thermal protection",
+          "target_concept": "aerodynamic heating survey",
+          "expected_relevant_docs": [
+            "5",
+            "6",
+            "12",
+            "29",
+            "30",
+            "31",
+            "66",
+            "82"
+          ],
+          "why": "broad: many documents about heating"
+        },
+        {
+          "custom_id": "scale_c6",
+          "query": "all research on vibration and flutter of aerospace structures",
+          "target_concept": "structural dynamics survey",
+          "expected_relevant_docs": [
+            "14",
+            "15",
+            "42",
+            "52",
+            "390",
+            "391",
+            "858",
+            "859"
+          ],
+          "why": "broad structural dynamics topic"
+        },
+        {
+          "custom_id": "scale_c7",
+          "query": "experiments on compressible flow including shock waves and expansion waves",
+          "target_concept": "compressible flow experiments",
+          "expected_relevant_docs": [
+            "64",
+            "65",
+            "71",
+            "72",
+            "74"
+          ],
+          "why": "broad experimental topic"
+        },
+        {
+          "custom_id": "scale_c8",
+          "query": "theoretical work on inviscid flow past bodies at supersonic speeds",
+          "target_concept": "inviscid supersonic flow theory",
+          "expected_relevant_docs": [
+            "20",
+            "25",
+            "27",
+            "28",
+            "35",
+            "36",
+            "56",
+            "57"
+          ],
+          "why": "broad theory survey"
+        },
+        {
+          "custom_id": "scale_c9",
+          "query": "research on cylindrical shell behavior under various loading conditions",
+          "target_concept": "cylindrical shell research",
+          "expected_relevant_docs": [
+            "838",
+            "839",
+            "840",
+            "841",
+            "842",
+            "843"
+          ],
+          "why": "broad structural topic"
+        },
+        {
+          "custom_id": "scale_c10",
+          "query": "compilation of magnetohydrodynamic flow studies",
+          "target_concept": "MHD studies survey",
+          "expected_relevant_docs": [
+            "33",
+            "34",
+            "61",
+            "87",
+            "88",
+            "267",
+            "268"
+          ],
+          "why": "broad MHD topic"
+        }
+      ]
+    },
+    "word_sense_ambiguity": {
+      "abbreviation": "Ambig.",
+      "methods_that_address": [
+        "n-gram",
+        "Unordered local-context BoW",
+        "WordNet (4/10)",
+        "LSA (4/10)",
+        "ESA (4/10)",
+        "Query reduction (4/10)",
+        "WordNet local context"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 85,
+          "query": "what parameters can seriously influence natural transition from laminar to turbulent flow on a model in a wind tunnel .",
+          "relevant_docs": [
+            "406",
+            "546",
+            "606",
+            "608",
+            "710"
+          ],
+          "why": "transition ambiguous: BL transition vs general"
+        },
+        {
+          "query_number": 100,
+          "query": "what are the effects of initial imperfections on the elastic buckling of cylindrical shells under axial compression .",
+          "relevant_docs": [
+            "1051",
+            "1121",
+            "1122",
+            "760",
+            "820",
+            "821",
+            "822",
+            "823",
+            "824",
+            "825"
+          ],
+          "why": "elastic ambiguous; buckling spans structural/flow"
+        },
+        {
+          "query_number": 39,
+          "query": "how can one detect transition phenomena in boundary layers .",
+          "relevant_docs": [
+            "1257",
+            "207",
+            "24",
+            "272",
+            "283",
+            "418",
+            "505",
+            "536",
+            "552",
+            "554",
+            "555",
+            "556",
+            "557",
+            "79"
+          ],
+          "why": "transition needs context to disambiguate"
+        },
+        {
+          "query_number": 101,
+          "query": "why does the incremental theory and the deformation theory of plastic stress-strain relationship differ greatly when applied to stabilityproblems .",
+          "relevant_docs": [
+            "760",
+            "817",
+            "818",
+            "819",
+            "820",
+            "824",
+            "825"
+          ],
+          "why": "stability ambiguous across domains"
+        },
+        {
+          "query_number": 48,
+          "query": "what controls leading-edge attachment at transonic speeds .",
+          "relevant_docs": [
+            "187",
+            "265",
+            "311",
+            "314",
+            "315",
+            "316",
+            "439",
+            "440",
+            "526",
+            "794",
+            "797",
+            "798"
+          ],
+          "why": "attachment ambiguous: flow vs structural"
+        },
+        {
+          "query_number": 40,
+          "query": "how can one detect transition phenomena in hypersonic wakes .",
+          "relevant_docs": [
+            "24",
+            "272",
+            "283",
+            "536",
+            "552",
+            "553",
+            "554",
+            "555",
+            "556",
+            "557",
+            "558",
+            "85",
+            "976"
+          ],
+          "why": "transition in hypersonic wakes: wake vs other meanings"
+        },
+        {
+          "query_number": 110,
+          "query": "can increasing the edge loading of a plate beyond the critical value for buckling change the buckling mode .",
+          "relevant_docs": [
+            "1174",
+            "31",
+            "766",
+            "862",
+            "863"
+          ],
+          "why": "buckling mode: structural vs instability mode"
+        },
+        {
+          "query_number": 56,
+          "query": "to what extent can readily available steady-state aerodynamic data be utilized to predict lifting-surface flutter characteristics .",
+          "relevant_docs": [
+            "1339",
+            "14",
+            "379",
+            "380",
+            "643",
+            "686",
+            "705",
+            "749",
+            "753",
+            "779",
+            "780"
+          ],
+          "why": "steady-state aerodynamic data for flutter: flutter vs other vibration"
+        },
+        {
+          "query_number": 57,
+          "query": "what are the significant steady and non-steady flow characteristics which affect the flutter mechanism .",
+          "relevant_docs": [
+            "12",
+            "14",
+            "15",
+            "379",
+            "380",
+            "593",
+            "704",
+            "705",
+            "746",
+            "753",
+            "779",
+            "780",
+            "857",
+            "859",
+            "914"
+          ],
+          "why": "steady and non-steady flow characteristics for flutter: flow vs structural"
+        },
+        {
+          "query_number": 209,
+          "query": "what are the physical significance and characteristics of separated laminar and turbulent boundary layer flows .",
+          "relevant_docs": [
+            "1106",
+            "1228",
+            "1292",
+            "1350",
+            "1351",
+            "1356",
+            "1383",
+            "1385",
+            "187",
+            "316",
+            "45",
+            "487",
+            "55"
+          ],
+          "why": "separated: boundary-layer separation vs structural separation"
+        },
+        {
+          "query_number": 38,
+          "query": "does transition in the hypersonic wake depend on body geometry and size",
+          "relevant_docs": [
+            "24",
+            "272",
+            "283",
+            "536",
+            "552",
+            "553",
+            "554",
+            "555",
+            "556",
+            "557",
+            "558"
+          ],
+          "why": "transition in hypersonic wake: body geometry ambiguity"
+        },
+        {
+          "query_number": 42,
+          "query": "what is a criterion that the transonic flow around an airfoil with a round leading edge be validly analyzed by the linearized transonic flow theory .",
+          "relevant_docs": [
+            "467",
+            "468",
+            "469",
+            "470",
+            "521",
+            "775"
+          ],
+          "why": "criterion for transonic flow: linearized theory validity, multiple senses"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "ambig_c1",
+          "query": "stability analysis of thin shell structures",
+          "target_concept": "structural buckling (NOT flow stability)",
+          "expected_relevant_docs": [],
+          "why": "stability: structural buckling vs flow stability"
+        },
+        {
+          "custom_id": "ambig_c2",
+          "query": "stability of laminar flow on heated surfaces",
+          "target_concept": "flow stability (NOT structural)",
+          "expected_relevant_docs": [
+            "73",
+            "55",
+            "608"
+          ],
+          "why": "stability: flow meaning, not structural"
+        },
+        {
+          "custom_id": "ambig_c3",
+          "query": "performance of supersonic compressor stages",
+          "target_concept": "axial compressor (NOT data compression)",
+          "expected_relevant_docs": [
+            "588",
+            "589",
+            "590"
+          ],
+          "why": "compressor: mechanical vs data"
+        },
+        {
+          "custom_id": "ambig_c4",
+          "query": "effects of body shape on drag in high speed flight",
+          "target_concept": "aerodynamic drag (NOT rigid body dynamics)",
+          "expected_relevant_docs": [
+            "77",
+            "25",
+            "20",
+            "27"
+          ],
+          "why": "body: aerodynamic body vs rigid body"
+        },
+        {
+          "custom_id": "ambig_c5",
+          "query": "recovery of pressure behind normal shock",
+          "target_concept": "pressure recovery (NOT thermal recovery factor)",
+          "expected_relevant_docs": [
+            "64",
+            "65"
+          ],
+          "why": "recovery: pressure vs thermal"
+        },
+        {
+          "custom_id": "ambig_c6",
+          "query": "deflection of panels under combined loading",
+          "target_concept": "structural deflection (NOT flow deflection)",
+          "expected_relevant_docs": [],
+          "why": "deflection: structural vs flow turning"
+        },
+        {
+          "custom_id": "ambig_c7",
+          "query": "separation point prediction for airfoil flows",
+          "target_concept": "flow separation (NOT physical separation of parts)",
+          "expected_relevant_docs": [
+            "54",
+            "55",
+            "458",
+            "459"
+          ],
+          "why": "separation: flow vs physical"
+        },
+        {
+          "custom_id": "ambig_c8",
+          "query": "Reynolds number effects on model testing",
+          "target_concept": "fluid dynamics Re effects (NOT Reynolds stress modeling)",
+          "expected_relevant_docs": [
+            "7",
+            "8",
+            "9",
+            "40",
+            "41"
+          ],
+          "why": "Reynolds number: multiple contexts"
+        },
+        {
+          "custom_id": "ambig_c9",
+          "query": "flutter boundary determination for wing structures",
+          "target_concept": "aeroelastic flutter (NOT acoustic flutter)",
+          "expected_relevant_docs": [
+            "14",
+            "15",
+            "52",
+            "391"
+          ],
+          "why": "flutter: aeroelastic vs acoustic"
+        },
+        {
+          "custom_id": "ambig_c10",
+          "query": "interaction between shock and boundary layer",
+          "target_concept": "SWBLI (NOT shock-shock interaction)",
+          "expected_relevant_docs": [
+            "794",
+            "797",
+            "798"
+          ],
+          "why": "interaction: shock-BL vs shock-shock"
+        }
+      ]
+    },
+    "out_of_vocabulary": {
+      "abbreviation": "OOV",
+      "methods_that_address": [
+        "WordNet expansion (X)",
+        "Word-embedding expansion (5/10)",
+        "ESA (5/10)",
+        "WordNet local context (X)"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 44,
+          "query": "what are the details of the rigorous kinetic theory of gases . (chapman-enskog theory) .",
+          "relevant_docs": [
+            "302",
+            "436",
+            "437",
+            "524"
+          ],
+          "why": "chapman-enskog: rare proper noun"
+        },
+        {
+          "query_number": 20,
+          "query": "has anyone formally determined the influence of joule heating,  produced by the induced current,  in magnetohydrodynamic free convection flows under general conditions .",
+          "relevant_docs": [
+            "104",
+            "267",
+            "268",
+            "269",
+            "270",
+            "407",
+            "408",
+            "500",
+            "87",
+            "88"
+          ],
+          "why": "joule heating + magnetohydrodynamic: variant spellings"
+        },
+        {
+          "query_number": 13,
+          "query": "what is the basic mechanism of the transonic aileron buzz .",
+          "relevant_docs": [
+            "265",
+            "311",
+            "496",
+            "64",
+            "65"
+          ],
+          "why": "aileron buzz: rare compound term"
+        },
+        {
+          "query_number": 170,
+          "query": "why do users of orthodox pitot-static tubes often find that the calibrations appear to be,. - (a) significantly different from those formerly specified,  (b) wildly variable at low reynolds numbers .",
+          "relevant_docs": [
+            "139",
+            "238",
+            "239",
+            "672",
+            "893",
+            "904",
+            "906"
+          ],
+          "why": "pitot-static tubes + orthodox: unusual terms"
+        },
+        {
+          "query_number": 173,
+          "query": "references on lyapunov's method on the stability of linear differential equations with periodic coefficients .",
+          "relevant_docs": [
+            "367",
+            "451",
+            "532"
+          ],
+          "why": "Lyapunov method: proper noun OOV"
+        },
+        {
+          "query_number": 172,
+          "query": "solution of the blasius problem with three-point boundary conditions .",
+          "relevant_docs": [
+            "320",
+            "321",
+            "322",
+            "476",
+            "527"
+          ],
+          "why": "blasius problem: proper noun"
+        },
+        {
+          "query_number": 176,
+          "query": "some approximate analytical heat conduction solutions using methods other than biot's principle .",
+          "relevant_docs": [
+            "542",
+            "582",
+            "583",
+            "584",
+            "585",
+            "586",
+            "978",
+            "982"
+          ],
+          "why": "Biot principle: proper noun"
+        },
+        {
+          "query_number": 153,
+          "query": "how should the navier-stokes difference equations be solved .",
+          "relevant_docs": [
+            "1063",
+            "1078",
+            "1080",
+            "1081",
+            "1082",
+            "1083",
+            "1084",
+            "1085"
+          ],
+          "why": "navier-stokes difference equations: compound proper name"
+        },
+        {
+          "query_number": 154,
+          "query": "which iterative method for solving linear elliptic difference equations is most rapidly convergent .",
+          "relevant_docs": [
+            "1063",
+            "1087",
+            "1088"
+          ],
+          "why": "elliptic difference equations: specialized math term"
+        },
+        {
+          "query_number": 49,
+          "query": "can the three-point boundary-value problem for the blasius equation be integrated numerically,  using suitable transformations,  without iteration on the boundary conditions .",
+          "relevant_docs": [
+            "320",
+            "478",
+            "527"
+          ],
+          "why": "blasius equation + three-point BVP: combined rare terms"
+        },
+        {
+          "query_number": 112,
+          "query": "has the solution of the clamped plate problem,  in the classical theory of bending,  been reduced to two successive membrane boundary value problems .",
+          "relevant_docs": [
+            "641",
+            "730",
+            "731"
+          ],
+          "why": "clamped plate + membrane boundary value: specialized structural terms"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "oov_c1",
+          "query": "MHD effects on convective heat transfer in conducting fluids",
+          "target_concept": "magnetohydrodynamic free convection",
+          "expected_relevant_docs": [
+            "87",
+            "88",
+            "61"
+          ],
+          "why": "MHD abbreviation not in 1960s corpus"
+        },
+        {
+          "custom_id": "oov_c2",
+          "query": "CFD solutions for flow over bluff bodies",
+          "target_concept": "computational fluid dynamics",
+          "expected_relevant_docs": [],
+          "why": "CFD abbreviation absent from corpus"
+        },
+        {
+          "custom_id": "oov_c3",
+          "query": "RANS turbulence modeling for compressible boundary layers",
+          "target_concept": "Reynolds-Averaged turbulence modeling",
+          "expected_relevant_docs": [
+            "16",
+            "17"
+          ],
+          "why": "RANS abbreviation absent"
+        },
+        {
+          "custom_id": "oov_c4",
+          "query": "TPS material performance during ballistic re-entry",
+          "target_concept": "thermal protection system ablation",
+          "expected_relevant_docs": [
+            "82"
+          ],
+          "why": "TPS abbreviation OOV"
+        },
+        {
+          "custom_id": "oov_c5",
+          "query": "aeroelastic divergence speed of cantilever wings",
+          "target_concept": "aeroelastic divergence",
+          "expected_relevant_docs": [
+            "12",
+            "14",
+            "15"
+          ],
+          "why": "divergence speed may not appear verbatim"
+        },
+        {
+          "custom_id": "oov_c6",
+          "query": "Tollmien-Schlichting wave amplification in boundary layers",
+          "target_concept": "BL instability waves",
+          "expected_relevant_docs": [
+            "73"
+          ],
+          "why": "Tollmien-Schlichting: specialized proper noun"
+        },
+        {
+          "custom_id": "oov_c7",
+          "query": "Karman vortex street behind bluff cylinders",
+          "target_concept": "vortex shedding behind cylinders",
+          "expected_relevant_docs": [],
+          "why": "Karman vortex street: compound proper name"
+        },
+        {
+          "custom_id": "oov_c8",
+          "query": "Prandtl-Meyer expansion fan at supersonic corners",
+          "target_concept": "expansion waves at corners",
+          "expected_relevant_docs": [],
+          "why": "Prandtl-Meyer: compound proper noun"
+        },
+        {
+          "custom_id": "oov_c9",
+          "query": "LEO satellite orbital decay due to atmospheric drag",
+          "target_concept": "satellite orbit contraction",
+          "expected_relevant_docs": [
+            "613",
+            "614",
+            "615",
+            "548"
+          ],
+          "why": "LEO abbreviation + modern terminology"
+        },
+        {
+          "custom_id": "oov_c10",
+          "query": "FEM analysis of thin-walled aerospace structures",
+          "target_concept": "finite element structural analysis",
+          "expected_relevant_docs": [],
+          "why": "FEM abbreviation not in corpus"
+        },
+        {
+          "custom_id": "oov_c11",
+          "query": "RCS thruster effects on vehicle attitude control",
+          "target_concept": "reaction control system",
+          "expected_relevant_docs": [],
+          "why": "RCS abbreviation OOV"
+        }
+      ]
+    },
+    "lack_of_contextual_representation": {
+      "abbreviation": "Context",
+      "methods_that_address": [
+        "n-gram (X)",
+        "Unordered local-context BoW (X)",
+        "WordNet local context (X)"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 90,
+          "query": "recent data on shock-induced boundary-layer separation .",
+          "relevant_docs": [
+            "1187",
+            "1364",
+            "1367",
+            "256",
+            "291",
+            "311",
+            "335",
+            "757",
+            "793",
+            "794",
+            "796",
+            "797",
+            "798",
+            "800"
+          ],
+          "why": "shock-induced boundary-layer separation: 4-word compound phrase"
+        },
+        {
+          "query_number": 9,
+          "query": "papers on internal /slip flow/ heat transfer studies .",
+          "relevant_docs": [
+            "21",
+            "22",
+            "534",
+            "550"
+          ],
+          "why": "slip flow heat transfer: multi-word concept"
+        },
+        {
+          "query_number": 164,
+          "query": "what determines the onset of shock-induced boundary-layer separation .",
+          "relevant_docs": [
+            "1364",
+            "1367",
+            "311",
+            "316",
+            "335",
+            "415",
+            "416",
+            "503",
+            "798"
+          ],
+          "why": "onset of shock-induced BL separation: compound phrase"
+        },
+        {
+          "query_number": 125,
+          "query": "jet interference with supersonic flow  -dash experimental papers .",
+          "relevant_docs": [
+            "173",
+            "174",
+            "176",
+            "177",
+            "187",
+            "409",
+            "942",
+            "946",
+            "969",
+            "970",
+            "971",
+            "972",
+            "973",
+            "974",
+            "992",
+            "994",
+            "995",
+            "997"
+          ],
+          "why": "jet interference with supersonic flow: compound concept"
+        },
+        {
+          "query_number": 126,
+          "query": "thrust vector control by fluid injection -dash papers .",
+          "relevant_docs": [
+            "1326",
+            "187",
+            "942",
+            "969",
+            "970",
+            "971",
+            "972",
+            "973",
+            "974"
+          ],
+          "why": "thrust vector control by fluid injection: multi-word phrases"
+        },
+        {
+          "query_number": 181,
+          "query": "jet interference with supersonic flows theoretical papers .",
+          "relevant_docs": [
+            "1061",
+            "409",
+            "942",
+            "973",
+            "974",
+            "997"
+          ],
+          "why": "jet interference with supersonic flows theoretical: similar to 125"
+        },
+        {
+          "query_number": 14,
+          "query": "papers on shock-sound wave interaction .",
+          "relevant_docs": [
+            "496",
+            "64",
+            "65"
+          ],
+          "why": "shock-sound wave interaction: compound concept"
+        },
+        {
+          "query_number": 30,
+          "query": "papers on flow visualization on slender conical wings .",
+          "relevant_docs": [
+            "225",
+            "464",
+            "466",
+            "513",
+            "514",
+            "609",
+            "612",
+            "793"
+          ],
+          "why": "flow visualization on slender conical wings: phrase"
+        },
+        {
+          "query_number": 109,
+          "query": "panels subjected to aerodynamic heating .",
+          "relevant_docs": [
+            "12",
+            "606",
+            "766",
+            "860",
+            "861",
+            "980"
+          ],
+          "why": "panels subjected to aerodynamic heating: phrase context matters"
+        },
+        {
+          "query_number": 71,
+          "query": "experimental results on hypersonic viscous interaction .",
+          "relevant_docs": [
+            "101",
+            "1213",
+            "1355",
+            "540",
+            "569",
+            "571",
+            "572",
+            "655",
+            "798"
+          ],
+          "why": "experimental results on hypersonic viscous interaction: phrase"
+        },
+        {
+          "query_number": 192,
+          "query": "papers dealing with uniformly loaded sectors .",
+          "relevant_docs": [
+            "641",
+            "733",
+            "734",
+            "735",
+            "736"
+          ],
+          "why": "uniformly loaded sectors: phrase-level meaning"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "ctx_c1",
+          "query": "shock wave boundary layer interaction in supersonic flow",
+          "target_concept": "SWBLI compound phrase",
+          "expected_relevant_docs": [
+            "794",
+            "797",
+            "798",
+            "793",
+            "796"
+          ],
+          "why": "compound phrase fragmented by BoW"
+        },
+        {
+          "custom_id": "ctx_c2",
+          "query": "free stream turbulence effects on transition",
+          "target_concept": "how freestream turbulence affects transition",
+          "expected_relevant_docs": [
+            "40",
+            "41",
+            "7",
+            "8",
+            "608"
+          ],
+          "why": "free stream turbulence is a phrase"
+        },
+        {
+          "custom_id": "ctx_c3",
+          "query": "heat transfer at stagnation point on blunt nose",
+          "target_concept": "stagnation-point heat transfer",
+          "expected_relevant_docs": [
+            "24",
+            "283",
+            "35",
+            "36"
+          ],
+          "why": "multi-word technical phrase"
+        },
+        {
+          "custom_id": "ctx_c4",
+          "query": "wind tunnel wall interference corrections",
+          "target_concept": "wall interference in wind tunnels",
+          "expected_relevant_docs": [
+            "252",
+            "672",
+            "431"
+          ],
+          "why": "4-word specific concept"
+        },
+        {
+          "custom_id": "ctx_c5",
+          "query": "zero angle of attack pressure distribution on ogive cylinder",
+          "target_concept": "pressure at zero incidence on ogive",
+          "expected_relevant_docs": [
+            "56",
+            "57"
+          ],
+          "why": "phrases fragment into common words"
+        },
+        {
+          "custom_id": "ctx_c6",
+          "query": "laminar to turbulent boundary layer transition mechanism",
+          "target_concept": "BL transition mechanism",
+          "expected_relevant_docs": [
+            "7",
+            "8",
+            "9",
+            "40",
+            "41",
+            "79"
+          ],
+          "why": "multi-word phrase: laminar-turbulent transition"
+        },
+        {
+          "custom_id": "ctx_c7",
+          "query": "flat plate skin friction coefficient in compressible flow",
+          "target_concept": "compressible skin friction on flat plate",
+          "expected_relevant_docs": [
+            "50",
+            "49",
+            "9"
+          ],
+          "why": "flat plate skin friction: 4-word phrase"
+        },
+        {
+          "custom_id": "ctx_c8",
+          "query": "circular cylindrical shell buckling under axial compression",
+          "target_concept": "axial compression buckling of cylinders",
+          "expected_relevant_docs": [
+            "821",
+            "822",
+            "824",
+            "760"
+          ],
+          "why": "compound phrase loses meaning in BoW"
+        },
+        {
+          "custom_id": "ctx_c9",
+          "query": "blunt body inviscid flow field at hypersonic speed",
+          "target_concept": "hypersonic blunt body flow",
+          "expected_relevant_docs": [
+            "25",
+            "35",
+            "36",
+            "20"
+          ],
+          "why": "word order and proximity matter"
+        },
+        {
+          "custom_id": "ctx_c10",
+          "query": "panel flutter at high supersonic mach numbers",
+          "target_concept": "supersonic panel flutter",
+          "expected_relevant_docs": [
+            "15",
+            "52",
+            "858",
+            "859"
+          ],
+          "why": "phrase: panel flutter at supersonic, not general flutter"
+        },
+        {
+          "custom_id": "ctx_c11",
+          "query": "creep buckling of columns under sustained load",
+          "target_concept": "column creep buckling",
+          "expected_relevant_docs": [
+            "1018",
+            "1020",
+            "1014",
+            "950"
+          ],
+          "why": "creep buckling: compound concept"
+        }
+      ]
+    },
+    "sparse_representations": {
+      "abbreviation": "Sparse",
+      "methods_that_address": [
+        "LSA (X)",
+        "ESA (X)"
+      ],
+      "cranfield_queries": [
+        {
+          "query_number": 93,
+          "query": "can methane-air combustion product be used as a hypersonic test medium and predict, within experimental accuracies, the results obtained in air .",
+          "relevant_docs": [
+            "635",
+            "691"
+          ],
+          "why": "methane-air combustion: very few shared terms"
+        },
+        {
+          "query_number": 15,
+          "query": "material properties of photoelastic materials .",
+          "relevant_docs": [
+            "462",
+            "463",
+            "497"
+          ],
+          "why": "photoelastic materials: rare term, sparse vector"
+        },
+        {
+          "query_number": 78,
+          "query": "has anyone explained the kink in the surge line of a multi-stage axial compressor .",
+          "relevant_docs": [
+            "543",
+            "588",
+            "589",
+            "590"
+          ],
+          "why": "kink in surge line of axial compressor: highly specific"
+        },
+        {
+          "query_number": 128,
+          "query": "has anyone programmed a pump design method for a high-speed digital computer .",
+          "relevant_docs": [
+            "945",
+            "985",
+            "990"
+          ],
+          "why": "pump design for digital computer: specialized terms"
+        },
+        {
+          "query_number": 216,
+          "query": "what investigations have been made of the wave system created by a static pressure distribution over a liquid surface .",
+          "relevant_docs": [
+            "156",
+            "506"
+          ],
+          "why": "wave system from pressure distribution over liquid surface: niche"
+        },
+        {
+          "query_number": 103,
+          "query": "is the information on the buckling of sandwich sphere available .",
+          "relevant_docs": [
+            "761",
+            "826",
+            "828"
+          ],
+          "why": "buckling of sandwich sphere: rare combination"
+        },
+        {
+          "query_number": 105,
+          "query": "what is the effect of an internal liquid column on the breathing vibrations of a cylindrical shell .",
+          "relevant_docs": [
+            "764",
+            "844",
+            "845",
+            "846",
+            "847",
+            "848"
+          ],
+          "why": "internal liquid column on breathing vibrations of shell: niche"
+        },
+        {
+          "query_number": 31,
+          "query": "what size of end plate can be safely used to simulate two-dimensional flow conditions over a bluff cylindrical body of finite aspect ratio .",
+          "relevant_docs": [
+            "751",
+            "776"
+          ],
+          "why": "end plate simulating 2D flow over bluff cylinder: specific"
+        },
+        {
+          "query_number": 12,
+          "query": "how can the aerodynamic performance of channel flow ground effect machines be calculated .",
+          "relevant_docs": [
+            "194",
+            "624",
+            "649",
+            "650",
+            "652",
+            "86"
+          ],
+          "why": "aerodynamic performance of channel flow ground effect machines: niche"
+        },
+        {
+          "query_number": 129,
+          "query": "has anyone derived simplified pump design equation from the fundamental three-dimensional equations for incompressible nonviscous flow .",
+          "relevant_docs": [
+            "945",
+            "984",
+            "985",
+            "986",
+            "987",
+            "988",
+            "989",
+            "990"
+          ],
+          "why": "simplified pump design equation from 3D incompressible flow: specialized"
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "sparse_c1",
+          "query": "photoelastic stress analysis techniques for wing structures",
+          "target_concept": "photothermoelastic measurement",
+          "expected_relevant_docs": [
+            "463",
+            "462",
+            "30"
+          ],
+          "why": "photoelastic is rare, sparse TF-IDF vector"
+        },
+        {
+          "custom_id": "sparse_c2",
+          "query": "magneto-gasdynamic acceleration in constant-area channels",
+          "target_concept": "MHD flow acceleration",
+          "expected_relevant_docs": [
+            "33",
+            "34"
+          ],
+          "why": "magneto-gasdynamic appears in few docs"
+        },
+        {
+          "custom_id": "sparse_c3",
+          "query": "creep rupture time prediction for pressurized cylindrical vessels",
+          "target_concept": "creep failure of cylinders",
+          "expected_relevant_docs": [],
+          "why": "creep rupture: sparse overlap"
+        },
+        {
+          "custom_id": "sparse_c4",
+          "query": "sandwich shell buckling under combined thermal and mechanical loading",
+          "target_concept": "sandwich structure buckling",
+          "expected_relevant_docs": [],
+          "why": "specialized structural query, sparse terms"
+        },
+        {
+          "custom_id": "sparse_c5",
+          "query": "gyroscopic precession effects on propeller-engine vibration",
+          "target_concept": "propeller gyroscopic effects",
+          "expected_relevant_docs": [
+            "42",
+            "78"
+          ],
+          "why": "gyroscopic precession: very rare terms"
+        },
+        {
+          "custom_id": "sparse_c6",
+          "query": "transpiration cooling effectiveness on hemisphere nose",
+          "target_concept": "transpiration-cooled hemisphere",
+          "expected_relevant_docs": [
+            "662",
+            "628"
+          ],
+          "why": "transpiration cooling: niche topic"
+        },
+        {
+          "custom_id": "sparse_c7",
+          "query": "acoustic fatigue of skin panels in jet noise environment",
+          "target_concept": "acoustic fatigue of panels",
+          "expected_relevant_docs": [
+            "75",
+            "724",
+            "726",
+            "727",
+            "640"
+          ],
+          "why": "acoustic fatigue: specialized compound term"
+        },
+        {
+          "custom_id": "sparse_c8",
+          "query": "torispherical head buckling under internal pressure",
+          "target_concept": "torispherical shell buckling",
+          "expected_relevant_docs": [
+            "1134",
+            "1137",
+            "1138",
+            "1071"
+          ],
+          "why": "torispherical: rare geometric term"
+        },
+        {
+          "custom_id": "sparse_c9",
+          "query": "Couette flow behavior between rotating cylinders",
+          "target_concept": "turbulent Couette flow",
+          "expected_relevant_docs": [
+            "99"
+          ],
+          "why": "Couette: specialized term, sparse vector"
+        },
+        {
+          "custom_id": "sparse_c10",
+          "query": "corrugated core sandwich cylinder stability equations",
+          "target_concept": "sandwich cylinder buckling",
+          "expected_relevant_docs": [
+            "1046",
+            "1048",
+            "1050",
+            "956"
+          ],
+          "why": "corrugated core sandwich: very specific terms"
+        }
+      ]
+    }
+  }
+}

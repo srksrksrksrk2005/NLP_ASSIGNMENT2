@@ -1,0 +1,467 @@
+{
+  "description": "Test set of queries per limitation. Two sets: (A) Cranfield queries from cran_queries.json, (B) Custom-written queries. Relevant doc IDs come from cran_qrels.json (position 1-2 = highly relevant, 3-4 = partially relevant).",
+  "limitations": {
+    "lack_of_semantic_understanding": {
+      "abbreviation": "Sem.",
+      "description": "The baseline TF-IDF model fails when a query uses different words than the relevant documents to express the same concept. There is no understanding of meaning, only surface-level lexical matching.",
+      "methods_that_address": ["WordNet expansion", "Word-embedding expansion", "LSA", "ESA", "WordNet-based local context retrieval"],
+      "cranfield_queries": [
+        {
+          "query_number": 5,
+          "query": "what chemical kinetic system is applicable to hypersonic aerodynamic problems .",
+          "relevant_docs": ["552", "401", "1297", "1296", "488"],
+          "why": "Query says 'chemical kinetic system'; relevant documents use 'reacting gas mixtures', 'dissociation', 'chemical reactions'. Semantic gap between user's phrasing and document terminology."
+        },
+        {
+          "query_number": 94,
+          "query": "what is the theoretical heat transfer rate at the stagnation point of a blunt body .",
+          "relevant_docs": ["24", "283", "294", "559", "689", "690", "101", "1393", "354", "1104", "1161", "1395", "635"],
+          "why": "Query uses 'heat transfer rate at stagnation point'; documents discuss 'boundary-layer equations', 'dissociated air', 'equilibrium'. The conceptual link between stagnation-point heating and boundary-layer theory is semantic."
+        },
+        {
+          "query_number": 4,
+          "query": "can a criterion be developed to show empirically the validity of flow solutions for chemically reacting gas mixtures based on the simplifying assumption of instantaneous local chemical equilibrium .",
+          "relevant_docs": ["236", "166", "488"],
+          "why": "Long conceptual query with domain-specific phrasing. Documents use different terminology for the same equilibrium-flow concepts."
+        },
+        {
+          "query_number": 73,
+          "query": "what role does the effect of chemical reaction (particularly when out of equilibrium) play in the similitude laws governing hypersonic flows over slender aerodynamic bodies .",
+          "relevant_docs": ["332", "572", "578", "573", "574", "421", "25", "317", "577", "401", "625", "160", "1213", "1304", "1198", "655", "1355", "68", "571", "1252", "541"],
+          "why": "Vocabulary mismatch: 'similitude laws' vs 'similarity parameters'; 'out of equilibrium' vs 'nonequilibrium'. Requires semantic bridging."
+        },
+        {
+          "query_number": 155,
+          "query": "technical report on measurement of ablation during flight .",
+          "relevant_docs": [],
+          "why": "Short query using 'ablation measurement'; documents use 'mass loss', 'heat protection shield', 'thermal erosion'. Pure lexical methods miss these connections."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "sem_c1",
+          "query": "how does thermal erosion protect spacecraft during atmospheric re-entry",
+          "target_concept": "ablation as heat protection for re-entry vehicles",
+          "expected_relevant_docs": ["82", "167"],
+          "why": "Uses 'thermal erosion' instead of 'ablation', 'spacecraft' instead of 'vehicle/body'. Tests synonym-level semantic understanding."
+        },
+        {
+          "custom_id": "sem_c2",
+          "query": "air resistance effects on orbiting body altitude decay",
+          "target_concept": "satellite orbit contraction under air drag",
+          "expected_relevant_docs": ["613", "614", "615", "616", "617", "618", "548"],
+          "why": "Uses 'air resistance' instead of 'air drag', 'altitude decay' instead of 'orbit contraction'. Requires semantic matching."
+        },
+        {
+          "custom_id": "sem_c3",
+          "query": "computing fluid shear forces on aircraft surfaces at high velocity",
+          "target_concept": "skin friction calculations in supersonic/hypersonic flow",
+          "expected_relevant_docs": ["50", "49", "9", "16"],
+          "why": "Uses 'fluid shear forces' instead of 'skin friction', 'high velocity' instead of 'supersonic'. Tests concept-level understanding."
+        },
+        {
+          "custom_id": "sem_c4",
+          "query": "methods to estimate temperature distribution in multi-component structural panels under rapid heating",
+          "target_concept": "transient thermal analysis in composite/multiweb structures",
+          "expected_relevant_docs": ["5", "6", "29", "30", "66"],
+          "why": "'multi-component structural panels' → 'composite slabs' / 'multiweb wing'; 'rapid heating' → 'aerodynamic heating'. Semantic mapping needed."
+        },
+        {
+          "custom_id": "sem_c5",
+          "query": "mathematical modeling of oscillatory structural instability in thin panels exposed to airflow",
+          "target_concept": "panel flutter analysis",
+          "expected_relevant_docs": ["15", "52", "380", "391"],
+          "why": "'oscillatory structural instability' → 'flutter'; 'thin panels' → 'plate/panel'. Strong semantic gap between query and document vocabulary."
+        }
+      ]
+    },
+
+    "high_dimensionality_and_computational_cost": {
+      "abbreviation": "Dim./Cost",
+      "description": "The TF-IDF term-document matrix is very high-dimensional and sparse. Matching in this space is expensive and noisy for large collections.",
+      "methods_that_address": ["LSA", "Query reduction"],
+      "cranfield_queries": [
+        {
+          "query_number": 92,
+          "query": "given complete freedom in the design of an airplane, what procedure would be used in order to minimize sonic boom intensity, and is there a limit to the degree of minimizing that can be accomplished .",
+          "relevant_docs": ["802", "803", "808", "809", "811", "804", "805", "806", "253", "1247", "807", "810", "1243", "758"],
+          "why": "Very long verbose query with many terms. High-dimensional matching introduces noise from irrelevant terms. Dimensionality reduction (LSA) or query reduction helps."
+        },
+        {
+          "query_number": 114,
+          "query": "it is not likely that the airforces on a wing of general planform oscillating in transonic flow can be determined by purely analytical methods . is it possible to determine the airforces on a single particular planform, such as the rectangular one by such method .",
+          "relevant_docs": [],
+          "why": "Extremely long and verbose. Many noise terms dilute the TF-IDF signal. Dimensionality reduction or query reduction would focus matching."
+        },
+        {
+          "query_number": 137,
+          "query": "have any analytical studies been conducted on the time-to-failure mechanism associated with creep collapse for a long circular cylindrical shell which exhibits both primary and secondary creep as well as elastic deformations under various distributed force systems .",
+          "relevant_docs": [],
+          "why": "Highly verbose query with many specific terms. High-dimensional sparse matching introduces noise."
+        },
+        {
+          "query_number": 124,
+          "query": "in what areas, other than low density wind tunnel flows, is viscous compressible flow in slender channels a problem . what analytical investigations have been made of the stability of conical shells . how do the results compare with experiment .",
+          "relevant_docs": [],
+          "why": "Multi-part query combining unrelated concepts. High dimensionality makes it hard to separate signals. Query reduction or LSA projection helps."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "dim_c1",
+          "query": "theoretical and experimental investigations of the combined effects of aerodynamic heating, structural deformation, boundary layer transition, and surface roughness on the performance characteristics of supersonic aircraft wing panels during prolonged high-speed flight through various atmospheric conditions",
+          "target_concept": "aerothermoelastic effects on supersonic panels",
+          "expected_relevant_docs": ["12", "15", "31", "66", "29"],
+          "why": "Extremely long query. Many terms are noise in high-dimensional TF-IDF space. Dimensionality reduction focuses on core meaning."
+        },
+        {
+          "custom_id": "dim_c2",
+          "query": "analytical and numerical methods for solving the complete set of Navier-Stokes equations including viscous terms turbulence modeling and boundary conditions for incompressible and compressible flows over various body shapes at different Reynolds numbers and Mach numbers",
+          "target_concept": "Navier-Stokes solution methods",
+          "expected_relevant_docs": [],
+          "why": "Artificially verbose query. Tests whether dimensionality reduction or query reduction can extract the core signal."
+        },
+        {
+          "custom_id": "dim_c3",
+          "query": "how does reducing the number of features in the term-document representation affect retrieval accuracy for technical aerospace document search",
+          "target_concept": "Latent dimensionality reduction in IR (meta-query)",
+          "expected_relevant_docs": [],
+          "why": "Meta-level query about dimensionality reduction itself. Tests system's ability to handle IR-related concepts in an aerospace corpus."
+        }
+      ]
+    },
+
+    "poor_scalability": {
+      "abbreviation": "Scale",
+      "description": "As the collection grows, exact TF-IDF matching becomes slower and less effective. Compressed representations improve scalability.",
+      "methods_that_address": ["LSA (4/10)", "ESA (4/10)"],
+      "cranfield_queries": [
+        {
+          "query_number": 23,
+          "query": "what progress has been made in research on unsteady aerodynamics .",
+          "relevant_docs": ["900", "902", "200", "201", "601", "899", "903", "593", "199", "594", "901", "544", "597", "749", "917", "919", "1333", "634", "687", "698", "1290", "700", "704", "705", "1109", "1112", "1141", "1197", "1256", "1259", "1272", "1289", "892"],
+          "why": "Very broad query with 33 relevant documents spread across the collection. As collection scales, scanning all TF-IDF vectors becomes expensive; compressed representations (LSA/ESA) provide faster approximate matching."
+        },
+        {
+          "query_number": 84,
+          "query": "references on the methods available for accurately estimating aerodynamic heat transfer to conical bodies for both laminar and turbulent flow .",
+          "relevant_docs": ["606", "406", "608", "142", "294", "354", "522", "962", "1192", "1213", "873", "546"],
+          "why": "Broad topic query needing many documents. Compressed representations scale better for such broad retrieval."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "scale_c1",
+          "query": "all available experimental and theoretical papers on boundary layer behavior",
+          "target_concept": "broad boundary layer literature",
+          "expected_relevant_docs": ["2", "3", "4", "7", "8", "9", "16", "40", "41", "50", "54", "55", "62", "63", "73", "80"],
+          "why": "Extremely broad query that would match hundreds of documents. Tests scalability of retrieval method."
+        },
+        {
+          "custom_id": "scale_c2",
+          "query": "comprehensive survey of heat transfer research in aerospace applications",
+          "target_concept": "heat transfer survey across all subtopics",
+          "expected_relevant_docs": ["5", "6", "21", "22", "24", "29", "37", "49", "62", "66", "81"],
+          "why": "Very broad survey query spanning many document clusters. Scalable methods like LSA can group related documents in latent space."
+        }
+      ]
+    },
+
+    "word_sense_ambiguity": {
+      "abbreviation": "Ambig.",
+      "description": "A word like 'stability' can mean boundary-layer stability, structural stability, or numerical stability. TF-IDF treats all senses equally, retrieving irrelevant documents.",
+      "methods_that_address": ["n-gram (3/10)", "Unordered local-context BoW (X)", "WordNet expansion (4/10)", "LSA (4/10)", "ESA (4/10)", "Query reduction (4/10)", "WordNet-based local context retrieval (X)"],
+      "cranfield_queries": [
+        {
+          "query_number": 85,
+          "query": "what parameters can seriously influence natural transition from laminar to turbulent flow on a model in a wind tunnel .",
+          "relevant_docs": ["608", "406", "606", "710", "546"],
+          "why": "'transition' is ambiguous: boundary-layer transition vs phase transition vs general transition. Without disambiguation, wrong documents are retrieved."
+        },
+        {
+          "query_number": 100,
+          "query": "what are the effects of initial imperfections on the elastic buckling of cylindrical shells under axial compression .",
+          "relevant_docs": [],
+          "why": "'elastic' is ambiguous (material elasticity vs elastic deformation vs elastic theory). 'buckling' could match structural buckling or flow instability papers."
+        },
+        {
+          "query_number": 39,
+          "query": "how can one detect transition phenomena in boundary layers .",
+          "relevant_docs": ["272", "555", "24", "283", "552", "79", "207", "418", "557", "554", "556", "505", "1257", "536"],
+          "why": "'transition' needs disambiguation (laminar-to-turbulent transition, not other transitions). Context 'boundary layers' helps disambiguate."
+        },
+        {
+          "query_number": 101,
+          "query": "why does the incremental theory and the deformation theory of plastic stress-strain relationship differ greatly when applied to stability problems .",
+          "relevant_docs": [],
+          "why": "'stability' is ambiguous (structural stability, flow stability, numerical stability). 'deformation theory' could match structural or material science papers."
+        },
+        {
+          "query_number": 48,
+          "query": "what controls leading-edge attachment at transonic speeds .",
+          "relevant_docs": ["439", "311", "316", "440", "187", "314", "315", "797", "798", "794", "265", "526"],
+          "why": "'attachment' is ambiguous (flow attachment/reattachment vs structural attachment). Needs context to disambiguate."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "ambig_c1",
+          "query": "stability analysis of thin shell structures",
+          "target_concept": "structural/buckling stability of shells (NOT flow stability)",
+          "expected_relevant_docs": [],
+          "why": "'stability' is ambiguous. In this context it means structural buckling, not laminar-flow stability. Tests whether the system can disambiguate."
+        },
+        {
+          "custom_id": "ambig_c2",
+          "query": "stability of laminar flow on heated surfaces",
+          "target_concept": "boundary-layer stability (NOT structural stability)",
+          "expected_relevant_docs": ["73", "55", "608"],
+          "why": "'stability' here means flow stability. The word 'laminar' and 'flow' provide context that should help disambiguate from structural papers."
+        },
+        {
+          "custom_id": "ambig_c3",
+          "query": "performance of supersonic compressor stages",
+          "target_concept": "axial compressor operation at supersonic flow (NOT data compression)",
+          "expected_relevant_docs": ["588", "589", "590"],
+          "why": "'compressor' is ambiguous (axial flow compressor vs data compression). Aerospace context needed for disambiguation."
+        },
+        {
+          "custom_id": "ambig_c4",
+          "query": "effects of body shape on drag in high speed flight",
+          "target_concept": "aerodynamic drag of various body shapes (NOT body as 'rigid body dynamics')",
+          "expected_relevant_docs": ["77", "25", "20", "27"],
+          "why": "'body' is ambiguous (aerodynamic body vs rigid body vs body of revolution). 'drag' + 'high speed flight' should disambiguate."
+        },
+        {
+          "custom_id": "ambig_c5",
+          "query": "recovery of pressure behind normal shock",
+          "target_concept": "pressure recovery after a normal shock wave (NOT 'recovery factor' in heat transfer)",
+          "expected_relevant_docs": ["64", "65"],
+          "why": "'recovery' is ambiguous: pressure recovery vs recovery factor (thermal). Context 'shock' should disambiguate."
+        }
+      ]
+    },
+
+    "out_of_vocabulary": {
+      "abbreviation": "OOV",
+      "description": "When a query uses terms not present in the document corpus vocabulary, TF-IDF returns zero similarity for those terms. This is especially problematic for synonyms, abbreviations, or rare technical variants.",
+      "methods_that_address": ["WordNet expansion (X)", "Word-embedding expansion (5/10)", "ESA (5/10)", "WordNet-based local context retrieval (X)"],
+      "cranfield_queries": [
+        {
+          "query_number": 44,
+          "query": "what are the details of the rigorous kinetic theory of gases . (chapman-enskog theory) .",
+          "relevant_docs": ["302", "436", "437", "524"],
+          "why": "'chapman-enskog' is a proper noun / rare term that may not appear verbatim in document bodies. If missing from vocabulary, TF-IDF cannot match it."
+        },
+        {
+          "query_number": 20,
+          "query": "has anyone formally determined the influence of joule heating, produced by the induced current, in magnetohydrodynamic free convection flows under general conditions .",
+          "relevant_docs": ["87", "88", "104", "267", "268", "269", "270", "407", "408", "500"],
+          "why": "'joule heating' and 'magnetohydrodynamic' are specialized terms. Variant spellings ('magneto-hydrodynamic') create OOV problems."
+        },
+        {
+          "query_number": 13,
+          "query": "what is the basic mechanism of the transonic aileron buzz .",
+          "relevant_docs": ["64", "265", "65", "311", "496"],
+          "why": "'aileron buzz' is a rare compound term. If not in vocabulary, baseline fails. WordNet or embedding expansion can find related terms."
+        },
+        {
+          "query_number": 170,
+          "query": "why do users of orthodox pitot-static tubes often find that the calibrations appear to be,. - (a) significantly different from those formerly specified, (b) wildly variable at low reynolds numbers .",
+          "relevant_docs": [],
+          "why": "'pitot-static tubes' and 'orthodox' are unusual terms in this context. OOV problem for the baseline."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "oov_c1",
+          "query": "MHD effects on convective heat transfer in conducting fluids",
+          "target_concept": "magnetohydrodynamic (MHD) free convection",
+          "expected_relevant_docs": ["87", "88", "61", "267", "268"],
+          "why": "'MHD' is an abbreviation for 'magnetohydrodynamic'. Documents use the full word. OOV for the abbreviation."
+        },
+        {
+          "custom_id": "oov_c2",
+          "query": "CFD solutions for Navier-Stokes over bluff bodies",
+          "target_concept": "computational fluid dynamics for blunt body flows",
+          "expected_relevant_docs": [],
+          "why": "'CFD' is an abbreviation not in the 1960s Cranfield corpus. Tests OOV handling for modern abbreviations."
+        },
+        {
+          "custom_id": "oov_c3",
+          "query": "RANS turbulence modeling for compressible boundary layers",
+          "target_concept": "Reynolds-Averaged Navier-Stokes turbulence for compressible flow",
+          "expected_relevant_docs": ["16", "17"],
+          "why": "'RANS' is a modern abbreviation absent from Cranfield. Documents discuss the same concept using full terminology."
+        },
+        {
+          "custom_id": "oov_c4",
+          "query": "TPS material performance during ballistic re-entry",
+          "target_concept": "thermal protection system (ablation) materials for re-entry",
+          "expected_relevant_docs": ["82"],
+          "why": "'TPS' (thermal protection system) is a modern abbreviation. Documents use 'heat protection shield', 'ablation'. Tests OOV recovery."
+        },
+        {
+          "custom_id": "oov_c5",
+          "query": "aeroelastic divergence speed of cantilever wings",
+          "target_concept": "aeroelastic divergence (static instability) of wings",
+          "expected_relevant_docs": ["12", "14", "15"],
+          "why": "'divergence speed' may not appear verbatim. Documents use 'flutter', 'aeroelastic problems'. WordNet/embedding expansion can bridge."
+        }
+      ]
+    },
+
+    "lack_of_contextual_representation": {
+      "abbreviation": "Context",
+      "description": "TF-IDF treats each term independently (bag-of-words). It ignores word order, proximity, and local context, which are critical for understanding technical phrases.",
+      "methods_that_address": ["n-gram (X)", "Unordered local-context BoW (X)", "WordNet-based local context retrieval (X)"],
+      "cranfield_queries": [
+        {
+          "query_number": 90,
+          "query": "recent data on shock-induced boundary-layer separation .",
+          "relevant_docs": ["794", "797", "798", "793", "796", "291", "800", "1187", "256", "311", "335", "1364", "1367", "757"],
+          "why": "'shock-induced boundary-layer separation' is a 4-word technical phrase. BoW treats these independently, matching 'shock', 'boundary', 'layer', 'separation' separately, losing the compound meaning."
+        },
+        {
+          "query_number": 9,
+          "query": "papers on internal /slip flow/ heat transfer studies .",
+          "relevant_docs": ["21", "22", "550", "534"],
+          "why": "'slip flow heat transfer' is a multi-word technical concept. Without n-grams or local context, 'slip', 'flow', 'heat', 'transfer' match independently."
+        },
+        {
+          "query_number": 164,
+          "query": "what determines the onset of shock-induced boundary-layer separation .",
+          "relevant_docs": [],
+          "why": "'shock-induced boundary-layer separation' again. The phrase as a unit has different meaning than its individual words."
+        },
+        {
+          "query_number": 125,
+          "query": "jet interference with supersonic flow -dash experimental papers .",
+          "relevant_docs": [],
+          "why": "'jet interference' is a compound technical concept. Without context, 'jet' and 'interference' match many unrelated documents."
+        },
+        {
+          "query_number": 126,
+          "query": "thrust vector control by fluid injection -dash papers .",
+          "relevant_docs": [],
+          "why": "'thrust vector control' and 'fluid injection' are multi-word phrases. BoW loses the phrase-level meaning."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "ctx_c1",
+          "query": "shock wave boundary layer interaction in supersonic flow",
+          "target_concept": "SWBLI - the interaction between a shock and a boundary layer",
+          "expected_relevant_docs": ["794", "797", "798", "793", "796"],
+          "why": "'shock wave boundary layer interaction' is a well-known compound phrase. BoW would match any document with 'shock', 'wave', 'boundary', 'layer' independently."
+        },
+        {
+          "custom_id": "ctx_c2",
+          "query": "free stream turbulence effects on transition",
+          "target_concept": "how turbulence in the free stream affects laminar-turbulent transition",
+          "expected_relevant_docs": ["40", "41", "7", "8", "608"],
+          "why": "'free stream turbulence' is a phrase; without context, 'free' and 'stream' match many unrelated documents."
+        },
+        {
+          "custom_id": "ctx_c3",
+          "query": "heat transfer at a stagnation point on a blunt nose",
+          "target_concept": "stagnation-point heat transfer on blunt bodies",
+          "expected_relevant_docs": ["24", "283", "35", "36"],
+          "why": "'stagnation point heat transfer' and 'blunt nose' are multi-word phrases whose meaning is lost in BoW."
+        },
+        {
+          "custom_id": "ctx_c4",
+          "query": "wind tunnel wall interference corrections",
+          "target_concept": "corrections for wall interference effects in wind tunnels",
+          "expected_relevant_docs": ["252", "672", "431", "799", "800"],
+          "why": "'wind tunnel wall interference' is a specific 4-word concept. Individual words match many irrelevant documents."
+        },
+        {
+          "custom_id": "ctx_c5",
+          "query": "zero angle of attack pressure distribution on ogive cylinder",
+          "target_concept": "pressure distribution at zero incidence on ogive-cylinder bodies",
+          "expected_relevant_docs": ["56", "57"],
+          "why": "'zero angle of attack' and 'ogive cylinder' are phrases. Without context/n-grams, they fragment into common words."
+        }
+      ]
+    },
+
+    "sparse_representations": {
+      "abbreviation": "Sparse",
+      "description": "TF-IDF vectors are extremely sparse; most entries are zero. This means that documents and queries with no shared terms get zero similarity even if they are topically related.",
+      "methods_that_address": ["LSA (X)", "ESA (X)"],
+      "cranfield_queries": [
+        {
+          "query_number": 93,
+          "query": "can methane-air combustion product be used as a hypersonic test medium and predict, within experimental accuracies, the results obtained in air .",
+          "relevant_docs": ["691", "635"],
+          "why": "Very few shared terms between query and relevant docs. Sparse TF-IDF vectors give near-zero similarity. LSA/ESA project into dense space where latent topics can bridge."
+        },
+        {
+          "query_number": 15,
+          "query": "material properties of photoelastic materials .",
+          "relevant_docs": ["463", "462", "497"],
+          "why": "'photoelastic' is a rare term. TF-IDF vector for this query is extremely sparse with very few non-zero entries. Dense representations help."
+        },
+        {
+          "query_number": 78,
+          "query": "has anyone explained the kink in the surge line of a multi-stage axial compressor .",
+          "relevant_docs": ["588", "589", "590", "543"],
+          "why": "'kink in the surge line' uses highly specific terminology. The TF-IDF vector is sparse and has little overlap with document vectors."
+        },
+        {
+          "query_number": 128,
+          "query": "has anyone programmed a pump design method for a high-speed digital computer .",
+          "relevant_docs": [],
+          "why": "'pump design' and 'digital computer' are specialized terms with sparse TF-IDF representation in an aerospace corpus."
+        }
+      ],
+      "custom_queries": [
+        {
+          "custom_id": "sparse_c1",
+          "query": "photoelastic stress analysis techniques for wing structures",
+          "target_concept": "photothermoelastic stress measurement",
+          "expected_relevant_docs": ["463", "462", "30"],
+          "why": "'photoelastic' is rare, making the TF-IDF vector very sparse. Dense projections (LSA/ESA) can capture latent topic similarity."
+        },
+        {
+          "custom_id": "sparse_c2",
+          "query": "magneto-gasdynamic acceleration in constant-area channels",
+          "target_concept": "MHD flow acceleration in channels",
+          "expected_relevant_docs": ["33", "34"],
+          "why": "'magneto-gasdynamic' appears in few documents. Sparse overlap with other MHD-related documents. Dense representations help bridge."
+        },
+        {
+          "custom_id": "sparse_c3",
+          "query": "creep rupture time prediction for pressurized cylindrical vessels",
+          "target_concept": "creep buckling/failure of cylinders under pressure",
+          "expected_relevant_docs": [],
+          "why": "'creep rupture' and 'pressurized cylindrical vessels' have sparse overlap in TF-IDF. LSA/ESA can connect related latent topics."
+        },
+        {
+          "custom_id": "sparse_c4",
+          "query": "sandwich shell buckling under combined thermal and mechanical loading",
+          "target_concept": "buckling of sandwich structures",
+          "expected_relevant_docs": [],
+          "why": "Specialized structural engineering query with sparse term overlap. Dense methods can link 'sandwich shell' to related structural concepts."
+        }
+      ]
+    }
+  },
+
+  "summary_statistics": {
+    "total_limitations": 7,
+    "total_cranfield_queries": 28,
+    "total_custom_queries": 29,
+    "total_test_queries": 57,
+    "limitations_list": [
+      "lack_of_semantic_understanding",
+      "high_dimensionality_and_computational_cost",
+      "poor_scalability",
+      "word_sense_ambiguity",
+      "out_of_vocabulary",
+      "lack_of_contextual_representation",
+      "sparse_representations"
+    ]
+  }
+}

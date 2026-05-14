@@ -1,172 +1,230 @@
-import json
-import os
+"""Run the original soft-cosine source comparison without WordNet."""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
 import sys
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.sparse import csr_matrix
+from pathlib import Path
 
-sys.path.append("../../")
-from evaluation import Evaluation
+from _common import CRANFIELD_DIR, SCRIPT_DIR, VENDOR_DIR, load_json, write_csv, write_json
 
-class SoftCosineWord2Vec:
-    """
-    Soft Cosine Measure.
-    Blends TF-IDF with semantic similarities between individual terms.
-    If actual word2vec is unavailable during run, a dummy synonym matrix is generated
-    for structural demonstration.
-    """
-    def __init__(self, vocab_sim_threshold=0.5):
-        self.vectorizer = TfidfVectorizer(max_df=0.9, min_df=2)
-        self.doc_tfidf = None
-        self.term_sim_matrix = None
-        self.doc_ids = []
-        self.vocab_sim_threshold = vocab_sim_threshold
 
-    def _build_similarity_matrix(self, vocab):
-        # In a real scenario, you'd load gensim word2vec here:
-        # e.g. w2v = api.load('word2vec-google-news-300')
-        # However, to make this script standalone and fast, we simulate a sparse
-        # block-diagonal or random sparse term similarity matrix where words
-        # sharing prefixes are deemed similar.
-        
-        n = len(vocab)
-        sims = np.eye(n)
-        # simplistic heuristic for demo: words sharing first 4 chars get a tiny bump
-        v_list = list(vocab.keys())
-        # Sort to easily group
-        for i in range(n):
-            for j in range(i+1, min(i+50, n)):
-                if v_list[i][:4] == v_list[j][:4] and len(v_list[i]) >= 4:
-                    sims[i, j] = 0.6
-                    sims[j, i] = 0.6
-                    
-        # zero out below threshold
-        sims[sims < self.vocab_sim_threshold] = 0.0
-        return csr_matrix(sims)
+ORIGINAL_DIR = VENDOR_DIR / "sudheer" / "soft_cosine_sources"
+ORIGINAL_SCRIPT = ORIGINAL_DIR / "run_experiments.py"
+DEFAULT_OUTPUT_DIR = SCRIPT_DIR / "output_soft_cosine"
+DEFAULT_PROCESSED_DOCS = VENDOR_DIR / "output" / "stopword_removed_docs.txt"
+DEFAULT_PROCESSED_QUERIES = VENDOR_DIR / "output" / "stopword_removed_queries.txt"
 
-    def fit(self, docs):
-        self.doc_ids = [str(d['id']) for d in docs]
-        texts = [d['body'] for d in docs]
-        
-        self.doc_tfidf = self.vectorizer.fit_transform(texts)
-        self.term_sim_matrix = self._build_similarity_matrix(self.vectorizer.vocabulary_)
 
-    def search(self, query):
-        q_v = self.vectorizer.transform([query])
-        
-        # Soft Cosine formula: sim = (q * S * d^T) / (norm(q)_S * norm(d)_S)
-        # For ranking we can simplify by just using the numerator if norms are stable
-        # or calculate full soft norm.
-        
-        S = self.term_sim_matrix
-        q_S = q_v.dot(S)
-        doc_S = self.doc_tfidf.dot(S)
-        
-        q_norm = np.sqrt(np.asarray(q_S.multiply(q_v).sum(axis=1)).ravel()[0]) or 1.0
-        doc_norms = np.sqrt(np.asarray(doc_S.multiply(self.doc_tfidf).sum(axis=1)).ravel())
-        doc_norms[doc_norms == 0] = 1.0
-        
-        numerator = q_S.dot(self.doc_tfidf.T).toarray()[0]
-        
-        sims = numerator / (q_norm * doc_norms)
-        
-        results = [(self.doc_ids[i], sims[i]) for i in range(len(self.doc_ids))]
-        results.sort(key=lambda x: x[1], reverse=True)
-        return results
+def load_original_module():
+    module_name = "humanised_soft_cosine_sources_original"
+    spec = importlib.util.spec_from_file_location(module_name, ORIGINAL_SCRIPT)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Unable to load soft cosine runner from {ORIGINAL_SCRIPT}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
-def main():
-    base_dir = "../../cranfield"
-    docs = json.load(open(os.path.join(base_dir, "cran_docs.json")))
-    queries = json.load(open(os.path.join(base_dir, "cran_queries.json")))
-    
-    # Inject optimal dataset features
-    try:
-        prep_docs = json.load(open("../../output/stopword_removed_docs.txt"))
-        prep_queries = json.load(open("../../output/stopword_removed_queries.txt"))
-        for i, d in enumerate(docs): d['body'] = " ".join(t for s in prep_docs[i] for t in s)
-        for i, q in enumerate(queries): q['query'] = " ".join(t for s in prep_queries[i] for t in s)
-    except:
-        pass
-    qrels = json.load(open(os.path.join(base_dir, "cran_qrels.json")))
 
-    mdl = SoftCosineWord2Vec()
-    mdl.fit(docs)
-    
-    doc_IDs_ordered = []
-    query_ids = []
-    
-    for q in queries:
-        ranked = mdl.search(q['query'])
-        doc_IDs_ordered.append([str(did) for did, _ in ranked])
-        query_ids.append(q['query number'])
+def build_tables(output_dir: Path, source_results: list[dict[str, object]]) -> None:
+    baseline_source = next((row for row in source_results if row["source"] == "tfidf"), source_results[0])
+    baseline_metrics = baseline_source["baseline"]["metrics_by_k"]
+    baseline_k10 = baseline_source["baseline"]["k10"]
 
-    evaluator = Evaluation()
-    
-    ks = list(range(1, 11))
-    
-    # Metrics for Proposed Model
-    p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr = [], [], [], [], [], []
-    for k in ks:
-        p_prec.append(evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_rec.append(evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k))
-        p_f1.append(evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k))
-        p_map.append(evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k))
-        p_ndcg.append(evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k))
-        p_mrr.append(evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k))
-        
-    print(f"Model MAP@10: {p_map[-1]:.4f}")
-    
-    # Baseline comparison (Simple TF-IDF)
-    from sklearn.feature_extraction.text import TfidfVectorizer
-    from sklearn.metrics.pairwise import cosine_similarity
-    
-    base_vec = TfidfVectorizer()
-    doc_mat = base_vec.fit_transform([d["body"] for d in docs])
-    
-    base_docs_ordered = []
-    for q in queries:
-        q_vec = base_vec.transform([q["query"]])
-        sims = cosine_similarity(q_vec, doc_mat)[0]
-        res = list(zip([d["id"] for d in docs], sims))
-        res.sort(key=lambda x: x[1], reverse=True)
-        base_docs_ordered.append([str(did) for did, _ in res])
-        
-    # Metrics for Baseline
-    b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr = [], [], [], [], [], []
-    for k in ks:
-        b_prec.append(evaluator.meanPrecision(base_docs_ordered, query_ids, qrels, k))
-        b_rec.append(evaluator.meanRecall(base_docs_ordered, query_ids, qrels, k))
-        b_f1.append(evaluator.meanFscore(base_docs_ordered, query_ids, qrels, k))
-        b_map.append(evaluator.meanAveragePrecision(base_docs_ordered, query_ids, qrels, k))
-        b_ndcg.append(evaluator.meanNDCG(base_docs_ordered, query_ids, qrels, k))
-        b_mrr.append(evaluator.meanReciprocalRank(base_docs_ordered, query_ids, qrels, k))
-        
-    plt.clf()
-    plt.figure(figsize=(12, 8))
-    
-    colors = ["b", "g", "r", "c", "m", "k"]
-    labels = ["Precision", "Recall", "F-score", "MAP", "nDCG", "MRR"]
-    proposed_metrics = [p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr]
-    baseline_metrics = [b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr]
-    
-    for i in range(6):
-        plt.plot(ks, proposed_metrics[i], label=f"Proposed {labels[i]}", color=colors[i], marker="o")
-        plt.plot(ks, baseline_metrics[i], label=f"Baseline {labels[i]}", color=colors[i], linestyle="--", marker="x")
-        
-    plt.title("Evaluation Metrics @k - Proposed vs Baseline")
-    plt.xlabel("k")
-    plt.ylabel("Score")
-    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
-    plt.xticks(ks)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
-    
-    if not os.path.exists("output"):
-        os.makedirs("output")
-        
-    script_name = os.path.basename(__file__).replace(".py", "")
-    plt.savefig(f"output/{script_name}_metrics_k.png")
+    summary_rows = [
+        {
+            "method": "baseline_tfidf",
+            "source": "baseline",
+            "source_label": "baseline_tfidf",
+            "primary_param": "-",
+            "primary_value": "-",
+            "precision@10": baseline_k10["precision"],
+            "recall@10": baseline_k10["recall"],
+            "fscore@10": baseline_k10["fscore"],
+            "map@10": baseline_k10["map"],
+            "ndcg@10": baseline_k10["ndcg"],
+            "mrr@10": baseline_k10["mrr"],
+            "runtime_seconds": baseline_source["baseline"]["runtime_seconds"],
+        }
+    ]
+    for row in source_results:
+        best_config = row["best_config"]
+        primary_param = row["primary_param"]
+        summary_rows.append(
+            {
+                "method": row["source"],
+                "source": row["source"],
+                "source_label": row["label"],
+                "primary_param": primary_param,
+                "primary_value": best_config[primary_param],
+                "precision@10": row["best_k10"]["precision"],
+                "recall@10": row["best_k10"]["recall"],
+                "fscore@10": row["best_k10"]["fscore"],
+                "map@10": row["best_k10"]["map"],
+                "ndcg@10": row["best_k10"]["ndcg"],
+                "mrr@10": row["best_k10"]["mrr"],
+                "runtime_seconds": row["best_runtime_seconds"],
+            }
+        )
 
-if __name__ == '__main__':
+    write_csv(
+        output_dir / "summary_k10.csv",
+        summary_rows,
+        [
+            "method",
+            "source",
+            "source_label",
+            "primary_param",
+            "primary_value",
+            "precision@10",
+            "recall@10",
+            "fscore@10",
+            "map@10",
+            "ndcg@10",
+            "mrr@10",
+            "runtime_seconds",
+        ],
+    )
+
+    comparison_summary = {
+        "dataset": str(CRANFIELD_DIR),
+        "sources": {
+            row["source"]: {
+                "label": row["label"],
+                "vectorizer": row["vectorizer"],
+                "baseline": row["baseline"],
+                "best_config": row["best_config"],
+                "best_k10": row["best_k10"],
+                "best_metrics_by_k": row["best_metrics_by_k"],
+                "best_runtime_seconds": row["best_runtime_seconds"],
+                "best_by_primary": row["best_by_primary"],
+                "significance": row["significance"],
+                "paths": row["paths"],
+            }
+            for row in source_results
+        },
+        "best_source": max(
+            source_results,
+            key=lambda row: (row["best_k10"]["map"], row["best_k10"]["ndcg"], row["best_k10"]["mrr"]),
+        )["source"],
+        "paths": {
+            "summary_json": str(output_dir / "summary.json"),
+            "summary_csv": str(output_dir / "summary_k10.csv"),
+            "comparison_summary_json": str(output_dir / "comparison_summary.json"),
+            "overlay_plot": str(output_dir / "eval_overlay.png"),
+        },
+    }
+    write_json(output_dir / "comparison_summary.json", comparison_summary)
+    write_json(
+        output_dir / "summary.json",
+        {
+            "dataset": str(CRANFIELD_DIR),
+            "baseline": {
+                "metrics_by_k": baseline_metrics,
+                "k10": baseline_k10,
+                "runtime_seconds": baseline_source["baseline"]["runtime_seconds"],
+            },
+            "sources": comparison_summary["sources"],
+            "best_source": comparison_summary["best_source"],
+            "paths": comparison_summary["paths"],
+        },
+    )
+
+    report_lines = [
+        "# Soft Cosine Source Comparison Report",
+        "",
+        "This humanised runner keeps the tuned soft-cosine comparison from the original project and skips WordNet.",
+        "",
+        "## Best Results",
+        "",
+        "| Source | Primary Param | Best Value | MAP@10 | nDCG@10 | MRR@10 |",
+        "| --- | --- | ---: | ---: | ---: | ---: |",
+    ]
+    for row in source_results:
+        report_lines.append(
+            f"| {row['label']} | {row['primary_param']} | {row['best_config'][row['primary_param']]} | "
+            f"{row['best_k10']['map']:.4f} | {row['best_k10']['ndcg']:.4f} | {row['best_k10']['mrr']:.4f} |"
+        )
+    report_lines.extend(
+        [
+            "",
+            "## Notes",
+            "",
+            "- TF-IDF, LSA, and ESA use the original sweep logic and the same Cranfield preprocessing.",
+            "- WordNet is intentionally omitted in this humanised version.",
+        ]
+    )
+    (output_dir / "experiment_report.md").write_text("\n".join(report_lines), encoding="utf-8")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Humanised soft cosine wrapper")
+    parser.add_argument("--dataset-dir", default=str(CRANFIELD_DIR))
+    parser.add_argument("--processed-docs", default=str(DEFAULT_PROCESSED_DOCS))
+    parser.add_argument("--processed-queries", default=str(DEFAULT_PROCESSED_QUERIES))
+    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
+    parser.add_argument("--sources", default="tfidf,lsa,esa", help="Comma-separated soft-cosine sources to run")
+    args = parser.parse_args()
+
+    module = load_original_module()
+    source_keys = {piece.strip() for piece in args.sources.split(",") if piece.strip()}
+    allowed_specs = [spec for spec in module.SOURCE_SPECS if spec["key"] in source_keys]
+    if not allowed_specs:
+        raise ValueError("No soft-cosine sources selected.")
+
+    dataset_dir = Path(args.dataset_dir).resolve()
+    output_dir = Path(args.output_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    docs_json = load_json(dataset_dir / "cran_docs.json")
+    queries_json = load_json(dataset_dir / "cran_queries.json")
+    qrels = load_json(dataset_dir / "cran_qrels.json")
+    processed_docs = load_json(Path(args.processed_docs))
+    processed_queries = load_json(Path(args.processed_queries))
+
+    doc_ids = [item["id"] for item in docs_json]
+    query_ids = [item["query number"] for item in queries_json]
+    doc_texts = module.flatten_collection(processed_docs)
+    query_texts = module.flatten_collection(processed_queries)
+
+    source_results = []
+    for source_spec in allowed_specs:
+        print(f"[{source_spec['key']}] running tuned sweep", flush=True)
+        source_results.append(
+            {
+                "primary_param": source_spec["primary_param"],
+                **module.run_source_sweep(
+                    source_spec=source_spec,
+                    docs_texts=doc_texts,
+                    queries_texts=query_texts,
+                    queries_json=queries_json,
+                    query_ids=query_ids,
+                    qrels=qrels,
+                    doc_ids=doc_ids,
+                    output_dir=output_dir,
+                ),
+            }
+        )
+
+    baseline_source = next((row for row in source_results if row["source"] == "tfidf"), source_results[0])
+    baseline_metrics = baseline_source["baseline"]["metrics_by_k"]
+    grouped_metrics = {row["source"]: row["best_metrics_by_k"] for row in source_results}
+    labels = {row["source"]: row["label"] for row in source_results}
+    ordered_keys = [row["source"] for row in source_results]
+    module.save_overlay_plot(
+        output_dir / "eval_overlay.png",
+        baseline_metrics,
+        grouped_metrics,
+        labels,
+        ordered_keys,
+        "Baseline vs Best Soft Cosine Sources",
+    )
+
+    build_tables(output_dir, source_results)
+    print("Soft-cosine outputs written to:", output_dir)
+
+
+if __name__ == "__main__":
     main()
