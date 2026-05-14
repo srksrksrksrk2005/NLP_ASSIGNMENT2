@@ -1,36 +1,38 @@
 import json
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity
+import os
 
-class LSAModel:
+class NgramRetriever:
     """
-    Retrieval model using Latent Semantic Analysis (SVD on TF-IDF).
+    N-gram Retrieval Model.
+    Utilizes multi-word sequences to capture exact phrase contexts that
+    single unigrams lose. Extends TF-IDF to bi-grams.
     """
-    def __init__(self, components=250):
-        self.components = components
-        self.vectorizer = TfidfVectorizer(sublinear_tf=True, max_df=0.95, min_df=2)
-        self.svd = TruncatedSVD(n_components=components, random_state=42)
-        self.doc_matrix = None
+    def __init__(self, n_range=(1, 2)):
+        self.n_range = n_range
+        self.vectorizer = TfidfVectorizer(
+            max_df=0.9, 
+            min_df=2, 
+            ngram_range=self.n_range,
+            sublinear_tf=True
+        )
+        self.tfidf_mtx = None
         self.doc_ids = []
-        
+
     def fit(self, docs):
         self.doc_ids = [d['id'] for d in docs]
         texts = [d['body'] for d in docs]
-        
-        tfidf_m = self.vectorizer.fit_transform(texts)
-        self.doc_matrix = self.svd.fit_transform(tfidf_m)
-        
+        self.tfidf_mtx = self.vectorizer.fit_transform(texts)
+
     def search(self, query):
-        q_vec = self.vectorizer.transform([query])
-        q_lsa = self.svd.transform(q_vec)
-        
-        sims = cosine_similarity(q_lsa, self.doc_matrix)[0]
-        res = list(zip(self.doc_ids, sims))
-        res.sort(key=lambda x: x[1], reverse=True)
-        return res
+        q_v = self.vectorizer.transform([query])
+        sims = cosine_similarity(q_v, self.tfidf_mtx)[0]
+        results = [(self.doc_ids[i], sims[i]) for i in range(len(self.doc_ids))]
+        results.sort(key=lambda x: x[1], reverse=True)
+        return results
 
 
 def main():
@@ -55,7 +57,7 @@ def main():
         pass
     qrels = json.load(open(os.path.join(base_dir, "cran_qrels.json")))
 
-    mdl = LSAModel()
+    mdl = NgramRetriever(n_range=(1, 2))
     mdl.fit(docs)
     
     doc_IDs_ordered = []

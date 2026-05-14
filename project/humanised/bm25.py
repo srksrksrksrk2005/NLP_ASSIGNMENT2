@@ -23,7 +23,7 @@ class BM25Retriever:
         df = Counter()
         for doc in docs:
             self.doc_ids.append(doc['id'])
-            tokens = doc['text'].split()
+            tokens = doc['body'].split()
             total_len += len(tokens)
             freqs = Counter(tokens)
             self.doc_freqs.append((len(tokens), freqs))
@@ -34,7 +34,7 @@ class BM25Retriever:
         for t, freq in df.items():
             self.idf[t] = math.log(1 + (self.N - freq + 0.5) / (freq + 0.5))
 
-    def evaluate_query(self, query_text):
+    def search(self, query_text):
         tokens = query_text.split()
         scores = []
         for i, (dl, freqs) in enumerate(self.doc_freqs):
@@ -49,39 +49,106 @@ class BM25Retriever:
         scores.sort(key=lambda x: x[1], reverse=True)
         return scores
 
+
 def main():
     import os
+    import sys
+    import json
+    import matplotlib.pyplot as plt
+    sys.path.append("../../")
+    from evaluation import Evaluation
+    
     base_dir = "../../cranfield"
-    with open(os.path.join(base_dir, "cran_docs.json")) as f:
-        docs = json.load(f)
-    with open(os.path.join(base_dir, "cran_queries.json")) as f:
-        queries = json.load(f)
-    with open(os.path.join(base_dir, "cran_qrels.json")) as f:
-        qrels = json.load(f)
+    docs = json.load(open(os.path.join(base_dir, "cran_docs.json")))
+    queries = json.load(open(os.path.join(base_dir, "cran_queries.json")))
+    
+    # Inject optimal dataset features
+    try:
+        prep_docs = json.load(open("../../output/stopword_removed_docs.txt"))
+        prep_queries = json.load(open("../../output/stopword_removed_queries.txt"))
+        for i, d in enumerate(docs): d['body'] = " ".join(t for s in prep_docs[i] for t in s)
+        for i, q in enumerate(queries): q['query'] = " ".join(t for s in prep_queries[i] for t in s)
+    except:
+        pass
+    qrels = json.load(open(os.path.join(base_dir, "cran_qrels.json")))
 
-    model = BM25Retriever()
-    model.fit(docs)
+    mdl = BM25Retriever()
+    mdl.fit(docs)
     
-    # minimal evaluation
-    aps = []
+    doc_IDs_ordered = []
+    query_ids = []
+    
     for q in queries:
-        ans = model.evaluate_query(q['query'])
-        rel_docs = [x['id'] for x in qrels if x['query_num'] == q['query_number']]
+        ranked = mdl.search(q['query'])
+        doc_IDs_ordered.append([str(did) for did, _ in ranked])
+        query_ids.append(q['query number'])
+
+    evaluator = Evaluation()
+    
+    ks = list(range(1, 11))
+    
+    # Metrics for Proposed Model
+    p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr = [], [], [], [], [], []
+    for k in ks:
+        p_prec.append(evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k))
+        p_rec.append(evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k))
+        p_f1.append(evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k))
+        p_map.append(evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k))
+        p_ndcg.append(evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k))
+        p_mrr.append(evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k))
         
-        hits = 0.0
-        sum_p = 0.0
-        for i, (did, _) in enumerate(ans[:10]):
-            if str(did) in rel_docs:
-                hits += 1
-                sum_p += hits / (i + 1)
-        aps.append(sum_p / min(len(rel_docs), 10) if rel_docs else 0)
+    print(f"Model MAP@10: {p_map[-1]:.4f}")
     
-    map10 = np.mean(aps)
-    print(f"BM25 MAP@10: {map10:.4f}")
+    # Baseline comparison (Simple TF-IDF)
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
     
-    plt.hist(aps, bins=20)
-    plt.title("BM25 AP@10 Distribution")
-    plt.savefig("bm25_results.png")
+    base_vec = TfidfVectorizer()
+    doc_mat = base_vec.fit_transform([d["body"] for d in docs])
+    
+    base_docs_ordered = []
+    for q in queries:
+        q_vec = base_vec.transform([q["query"]])
+        sims = cosine_similarity(q_vec, doc_mat)[0]
+        res = list(zip([d["id"] for d in docs], sims))
+        res.sort(key=lambda x: x[1], reverse=True)
+        base_docs_ordered.append([str(did) for did, _ in res])
+        
+    # Metrics for Baseline
+    b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr = [], [], [], [], [], []
+    for k in ks:
+        b_prec.append(evaluator.meanPrecision(base_docs_ordered, query_ids, qrels, k))
+        b_rec.append(evaluator.meanRecall(base_docs_ordered, query_ids, qrels, k))
+        b_f1.append(evaluator.meanFscore(base_docs_ordered, query_ids, qrels, k))
+        b_map.append(evaluator.meanAveragePrecision(base_docs_ordered, query_ids, qrels, k))
+        b_ndcg.append(evaluator.meanNDCG(base_docs_ordered, query_ids, qrels, k))
+        b_mrr.append(evaluator.meanReciprocalRank(base_docs_ordered, query_ids, qrels, k))
+        
+    plt.clf()
+    plt.figure(figsize=(12, 8))
+    
+    colors = ["b", "g", "r", "c", "m", "k"]
+    labels = ["Precision", "Recall", "F-score", "MAP", "nDCG", "MRR"]
+    proposed_metrics = [p_prec, p_rec, p_f1, p_map, p_ndcg, p_mrr]
+    baseline_metrics = [b_prec, b_rec, b_f1, b_map, b_ndcg, b_mrr]
+    
+    for i in range(6):
+        plt.plot(ks, proposed_metrics[i], label=f"Proposed {labels[i]}", color=colors[i], marker="o")
+        plt.plot(ks, baseline_metrics[i], label=f"Baseline {labels[i]}", color=colors[i], linestyle="--", marker="x")
+        
+    plt.title("Evaluation Metrics @k - Proposed vs Baseline")
+    plt.xlabel("k")
+    plt.ylabel("Score")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
+    plt.xticks(ks)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    if not os.path.exists("output"):
+        os.makedirs("output")
+        
+    script_name = os.path.basename(__file__).replace(".py", "")
+    plt.savefig(f"output/{script_name}_metrics_k.png")
 
 if __name__ == '__main__':
     main()
