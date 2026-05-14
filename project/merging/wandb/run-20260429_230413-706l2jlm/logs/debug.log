@@ -1,0 +1,24 @@
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_setup.py:_flush():81] Current SDK version is 0.25.1
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_setup.py:_flush():81] Configure stats pid to 280513
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_init.py:setup_run_log_directory():717] Logging user logs to /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging/wandb/run-20260429_230413-706l2jlm/logs/debug.log
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_init.py:setup_run_log_directory():718] Logging internal logs to /home/crimson/Projects/Acads/NLP/Project/NLP_ASSIGNMENT2/project/merging/wandb/run-20260429_230413-706l2jlm/logs/debug-internal.log
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_init.py:init():844] calling init triggers
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_init.py:init():849] wandb.init called with sweep_config: {}
+config: {'block1': {'expansion_mode': 'tfidf', 'reduction_enabled': False, 'segmenter': 'punkt', 'tokenizer': 'ptb', 'stemmer': True, 'stopword_removal': True, 'expansion_params': {'lsa': {'n_components': 100, 'random_state': 42}, 'esa': {'top_concepts': 25, 'concept_source': 'cranfield'}, 'wordnet': {'synset_limit': 3, 'pos_filter': None}, 'word2vec': {'model_path': 'path/to/word2vec/model', 'window': 5, 'vector_size': 100}, 'tfidf': {'max_features': 5000, 'max_df': 0.95, 'min_df': 2}}, 'reduction_params': {'method': 'keyword_extraction', 'top_k': 10, 'algorithm': 'tfidf'}}, 'block2': {'retrieval_type': 'local_bow', 'retrieval_params': {'tfidf': {'max_features': 5000, 'max_df': 0.95, 'min_df': 2, 'norm': 'l2', 'sublinear_tf': True}, 'ngram': {'ngram_range': [1, 2], 'analyzer': 'char'}, 'local_bow': {'window_size': 5, 'overlap': 2}}}, 'block3': {'ranking_type': 'tfidf', 'ranking_params': {'lsa': {'n_components': 250, 'random_state': 42, 'sublinear_tf': True, 'max_df': 0.95, 'min_df': 2, 'norm': 'l2'}, 'esa': {'top_concepts': 25, 'min_similarity': 0.0, 'max_df': 0.9, 'min_df': 1, 'concept_source': 'cranfield'}, 'tfidf': {'max_features': 5000, 'max_df': 0.95, 'min_df': 2, 'norm': 'l2'}}}, 'dataset': {'path': '../../cranfield', 'queries_file': 'cran_queries.json', 'docs_file': 'cran_docs.json', 'qrels_file': 'cran_qrels.json'}, 'output': {'output_dir': './output', 'save_plots': True, 'save_rankings': True, 'save_metrics': True}, 'logging': {'use_wandb': True, 'wandb_project': 'merges_0', 'wandb_entity': 'NLP_project_ByteStorm', 'wandb_api_key': '', 'log_level': 'INFO', 'log_file': True}, '_wandb': {}}
+2026-04-29 23:04:13,576 INFO    MainThread:280513 [wandb_init.py:init():892] starting backend
+2026-04-29 23:04:13,824 INFO    MainThread:280513 [wandb_init.py:init():895] sending inform_init request
+2026-04-29 23:04:13,829 INFO    MainThread:280513 [wandb_init.py:init():903] backend started and connected
+2026-04-29 23:04:13,840 INFO    MainThread:280513 [wandb_init.py:init():973] updated telemetry
+2026-04-29 23:04:13,843 INFO    MainThread:280513 [wandb_init.py:init():997] communicating run to backend with 90.0 second timeout
+2026-04-29 23:04:18,977 INFO    MainThread:280513 [wandb_init.py:init():1042] starting run threads in backend
+2026-04-29 23:04:19,100 INFO    MainThread:280513 [wandb_run.py:_console_start():2524] atexit reg
+2026-04-29 23:04:19,100 INFO    MainThread:280513 [wandb_run.py:_redirect():2373] redirect: wrap_raw
+2026-04-29 23:04:19,100 INFO    MainThread:280513 [wandb_run.py:_redirect():2442] Wrapping output streams.
+2026-04-29 23:04:19,100 INFO    MainThread:280513 [wandb_run.py:_redirect():2465] Redirects installed.
+2026-04-29 23:04:19,102 INFO    MainThread:280513 [wandb_init.py:init():1082] run started, returning control to user process
+2026-04-29 23:04:20,656 INFO    MainThread:280513 [wandb_run.py:_finish():2291] finishing run NLP_project_ByteStorm/merges_0/706l2jlm
+2026-04-29 23:04:20,657 INFO    MainThread:280513 [wandb_run.py:_atexit_cleanup():2490] got exitcode: 0
+2026-04-29 23:04:20,657 INFO    MainThread:280513 [wandb_run.py:_restore():2472] restore
+2026-04-29 23:04:20,657 INFO    MainThread:280513 [wandb_run.py:_restore():2478] restore done
+2026-04-29 23:04:29,894 INFO    MainThread:280513 [wandb_run.py:_footer_sync_info():3868] logging synced files

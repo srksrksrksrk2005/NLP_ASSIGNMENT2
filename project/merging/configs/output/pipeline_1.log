@@ -1,0 +1,5 @@
+2026-04-29 21:53:09,903 - MergingPipeline - INFO - Pipeline initialized with config from <in-memory-config>
+2026-04-29 21:53:09,903 - MergingPipeline - INFO - Block 1 (Query): mode=none, reduce=False
+2026-04-29 21:53:09,903 - MergingPipeline - INFO - Block 2 (Retrieval): tfidf
+2026-04-29 21:53:09,903 - MergingPipeline - INFO - Block 3 (Ranking): tfidf
+2026-04-29 21:53:09,903 - MergingPipeline - INFO - Loading dataset...
